@@ -47,7 +47,7 @@ def sine_law(theta_b, a, b):
 
     return theta_a1, theta_c1, c1
 
-    """theta_a2 = math.pi-np.arcsin(a*math.sin(b)/b) TO DO since SSA does not define an unique triangle
+    """theta_a2 = math.pi-np.arcsin(a*math.sin(b)/b) #TO DO since SSA does not define an unique triangle
     theta_c2 = math.pi-theta_a2-theta_b
     c2 = math.sin(theta_c2)*a/math.sin(a)
 
@@ -70,20 +70,20 @@ def length(x1, y1, z1, x2, y2, z2):
 
 
 x = 10
-y = 7
+y = 1
 z = 8
 theta_x = math.pi/4
-theta_y = math.pi/5
+theta_y = math.pi/4
 
-arm_lengths = [3, 3, -1, 3, -1, 1] #starting from origin, -1 means to be defined
+arm_lengths = [4, 4, -1, 4, -1, 1] #starting from origin, -1 means to be defined
 angles = [-1, -1, -1, -1, -1, -1, -1] 
-#7th: angle rotation of point 3
+#7th: angle rotation of point 2 (0 indexed)
 
 
 z0 = z-math.tan(theta_x)*y
 z1 = z-z0
 r = math.sqrt(z1**2+y**2) #distance to the relative origin of the point
-r = 3.01456
+print("R", r, z0)
 
 x_val = [-1, -1, -1, -1, -1, -1] #starting from target point to origin
 y_val = [-1, -1, -1, -1, -1, -1]
@@ -106,44 +106,44 @@ y_val[5] = 0
 z_val[5] = 0
 
 x_val[1] = abs(x)-math.cos(theta_y)*arm_lengths[0]
-z_val[1] = z+math.sin(theta_y)*arm_lengths[0] #could be negative but theta_y is given
-y_val[1] = (z_val[1]-z0)/math.tan(theta_y)
+z_val[1] = z0+math.sin(theta_x)*(r+arm_lengths[0]*math.sin(theta_y)) #could be negative but theta_y is given
+y_val[1] = (r+arm_lengths[0]*math.sin(theta_y))*math.cos(theta_x)
 
 if x < 0:
     x_val[1] *= -1
-
-for i in range(len(x_val)):
-    print(x_val[i], y_val[i], z_val[i])
-    ax.scatter(x_val[i], y_val[i], z_val[i])
 
 arm_lengths[4] = length(x_val[1], y_val[1], z_val[1], x_val[3], y_val[3], z_val[3])
 
 print(arm_lengths)
 
-"""angles[0] = cosine_law_angle(arm_lengths[0], arm_lengths[2], arm_lengths[1])
-angles[1] = cosine_law_angle(arm_lengths[0], arm_lengths[1], arm_lengths[2])
-angles[2] = cosine_law_angle(arm_lengths[1], arm_lengths[2], arm_lengths[0])
-
-#Temps the x and y components of the 2 points from the target
-temp_z = z+math.sin(theta_y)*arm_lengths[0] #TO DO: could be + or - sin(theta_y), it should be given though
-temp_x = abs(x)-math.cos(theta_y)*arm_lengths[0]
-arm_lengths[4] = math.sqrt(temp_z**2+temp_x**2)
-
 angles[3] = cosine_law_angle(arm_lengths[1], arm_lengths[4], arm_lengths[3])
 angles[4] = cosine_law_angle(arm_lengths[1], arm_lengths[3], arm_lengths[4])
 angles[5] = cosine_law_angle(arm_lengths[4], arm_lengths[3], arm_lengths[1])
 
-angles[6] = np.arctan(temp_z/temp_x)+angles[5]
+#Works up to here
+
+angles[6] = np.arccos((x_val[1]-x_val[3])/arm_lengths[4])
+temp_r = arm_lengths[3]*math.sin(angles[5]+angles[6])
+x_val[2] = arm_lengths[2]*math.cos(angles[5]+angles[6]) #FIX ME
+y_val[2] = temp_r*math.cos(theta_x)
+z_val[2] = z0+temp_r*math.sin(theta_x)
+
+arm_lengths[2] = length(x_val[0], y_val[0], z_val[0], x_val[2], y_val[2], z_val[2])
+
+for i in range(len(x_val)):
+    print(x_val[i], y_val[i], z_val[i])
+    ax.scatter(x_val[i], y_val[i], z_val[i])
+    ax.text(x_val[i], y_val[i], z_val[i], "%d" % i)
+
+print("Lengths")
+for i in range(3):
+    print(length(x_val[i], y_val[i], z_val[i], x_val[i+1], y_val[i+1], z_val[i+1]))
+
+angles[0] = cosine_law_angle(arm_lengths[0], arm_lengths[2], arm_lengths[1])
+angles[1] = cosine_law_angle(arm_lengths[0], arm_lengths[1], arm_lengths[2])
+angles[2] = cosine_law_angle(arm_lengths[1], arm_lengths[2], arm_lengths[0])
 
 if x <= 0:
     angles[6] = math.pi-angles[6]
-
-x_val[2] = math.cos(angles[6])*arm_lengths[3]
-z_val[2] = math.sin(angles[6])*arm_lengths[3]
-
-print(x_val)
-print(y_val)
-print(z_val)
-plt.plot(x_val, y_val, z_val)"""
 
 plt.show()

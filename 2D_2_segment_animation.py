@@ -54,9 +54,7 @@ def triangle_inequality(a, b, c):
             return 1
 
 
-arms_lengths = []
-arms_lengths.append(6)
-arms_lengths.append(4)
+arms_lengths = [5, 5]
 
 #equation: x^2+y^2 = 7^2
 r = 7
