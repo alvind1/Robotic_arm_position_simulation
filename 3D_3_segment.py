@@ -89,11 +89,6 @@ x_val = [-1, -1, -1, -1, -1, -1] #starting from target point to origin
 y_val = [-1, -1, -1, -1, -1, -1]
 z_val = [-1, -1, -1, -1, -1, -1]
 
-x = 6
-y = 2
-z = 7
-theta_y = math.pi/4
-
 x_val[0] = x
 y_val[0] = y
 z_val[0] = z
@@ -121,7 +116,7 @@ for i in range(len(x_val)):
     print(x_val[i], y_val[i], z_val[i])
     ax.scatter(x_val[i], y_val[i], z_val[i])
 
-arm_lengths[2] = length(x_val[1], y_val[1], z_val[1], x_val[3], y_val[3], z_val[3])
+arm_lengths[4] = length(x_val[1], y_val[1], z_val[1], x_val[3], y_val[3], z_val[3])
 
 print(arm_lengths)
 
