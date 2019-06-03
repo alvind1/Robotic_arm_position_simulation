@@ -110,6 +110,7 @@ z_val[1] = z0+math.sin(theta_x)*(r+arm_lengths[0]*math.sin(theta_y)) #could be n
 y_val[1] = (r+arm_lengths[0]*math.sin(theta_y))*math.cos(theta_x)
 
 if x < 0:
+    print("****")
     x_val[1] *= -1
 
 arm_lengths[4] = length(x_val[1], y_val[1], z_val[1], x_val[3], y_val[3], z_val[3])
@@ -123,8 +124,8 @@ angles[5] = cosine_law_angle(arm_lengths[4], arm_lengths[3], arm_lengths[1])
 #Works up to here
 
 angles[6] = np.arccos((x_val[1]-x_val[3])/arm_lengths[4])
-temp_r = arm_lengths[3]*math.sin(angles[5]+angles[6])
-x_val[2] = arm_lengths[2]*math.cos(angles[5]+angles[6]) #FIX ME
+temp_r = arm_lengths[3]*math.sin(angles[6]+angles[5])
+x_val[2] = arm_lengths[3]*math.cos(angles[6]+angles[5]) #FIX ME
 y_val[2] = temp_r*math.cos(theta_x)
 z_val[2] = z0+temp_r*math.sin(theta_x)
 
@@ -145,5 +146,7 @@ angles[2] = cosine_law_angle(arm_lengths[1], arm_lengths[2], arm_lengths[0])
 
 if x <= 0:
     angles[6] = math.pi-angles[6]
+
+ax.plot(x_val, y_val, z_val)
 
 plt.show()
