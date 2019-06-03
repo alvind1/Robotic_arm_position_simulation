@@ -150,3 +150,11 @@ if x <= 0:
 ax.plot(x_val, y_val, z_val)
 
 plt.show()
+
+
+"""
+TO DO:
+Works kind of
+Lengths of arm segments are off from given
+
+"""
