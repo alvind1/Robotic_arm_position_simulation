@@ -79,11 +79,10 @@ arm_lengths = [4, 4, -1, 4, -1, 1] #starting from origin, -1 means to be defined
 angles = [-1, -1, -1, -1, -1, -1, -1] 
 #7th: angle rotation of point 2 (0 indexed)
 
-
 z0 = z-math.tan(theta_x)*y
 z1 = z-z0
 r = math.sqrt(z1**2+y**2) #distance to the relative origin of the point
-print("R", r, z0)
+#print("R", r, z0)
 
 x_val = [-1, -1, -1, -1, -1, -1] #starting from target point to origin
 y_val = [-1, -1, -1, -1, -1, -1]
@@ -105,23 +104,27 @@ x_val[5] = 0
 y_val[5] = 0
 z_val[5] = 0
 
+#Everything is true up to this point
+for i in range(len(x_val)):
+    print(x_val[i], y_val[i], z_val[i])
+
+print(z0, z1, r)
+
 x_val[1] = abs(x)-math.cos(theta_y)*arm_lengths[0]
 z_val[1] = z0+math.sin(theta_x)*(r+arm_lengths[0]*math.sin(theta_y)) #could be negative but theta_y is given
-y_val[1] = (r+arm_lengths[0]*math.sin(theta_y))*math.cos(theta_x)
+y_val[1] = (r+arm_lengths[0]*math.sin(theta_y))*math.cos(theta_x) #FIX ME
 
 if x < 0:
-    print("****")
+    #print("****")
     x_val[1] *= -1
 
 arm_lengths[4] = length(x_val[1], y_val[1], z_val[1], x_val[3], y_val[3], z_val[3])
 
-print(arm_lengths)
+#print(arm_lengths)
 
 angles[3] = cosine_law_angle(arm_lengths[1], arm_lengths[4], arm_lengths[3])
 angles[4] = cosine_law_angle(arm_lengths[1], arm_lengths[3], arm_lengths[4])
 angles[5] = cosine_law_angle(arm_lengths[4], arm_lengths[3], arm_lengths[1])
-
-#Works up to here
 
 angles[6] = np.arccos((x_val[1]-x_val[3])/arm_lengths[4])
 temp_r = arm_lengths[3]*math.sin(angles[6]+angles[5])
@@ -132,13 +135,13 @@ z_val[2] = z0+temp_r*math.sin(theta_x)
 arm_lengths[2] = length(x_val[0], y_val[0], z_val[0], x_val[2], y_val[2], z_val[2])
 
 for i in range(len(x_val)):
-    print(x_val[i], y_val[i], z_val[i])
+    #print(x_val[i], y_val[i], z_val[i])
     ax.scatter(x_val[i], y_val[i], z_val[i])
     ax.text(x_val[i], y_val[i], z_val[i], "%d" % i)
 
-print("Lengths")
-for i in range(3):
-    print(length(x_val[i], y_val[i], z_val[i], x_val[i+1], y_val[i+1], z_val[i+1]))
+#print("Lengths")
+#for i in range(3):
+#    print(length(x_val[i], y_val[i], z_val[i], x_val[i+1], y_val[i+1], z_val[i+1]))
 
 angles[0] = cosine_law_angle(arm_lengths[0], arm_lengths[2], arm_lengths[1])
 angles[1] = cosine_law_angle(arm_lengths[0], arm_lengths[1], arm_lengths[2])
