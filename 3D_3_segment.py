@@ -69,86 +69,50 @@ def length(x1, y1, z1, x2, y2, z2):
     return math.sqrt((x1-x2)**2+(y1-y2)**2+(z1-z2)**2)
 
 
-x = 10
-y = 1
-z = 8
+x = 5
+y = 2
+z = 4
 theta_x = math.pi/4
-theta_y = math.pi/4
+theta_y = math.pi/6
 
-arm_lengths = [4, 4, -1, 4, -1, 1] #starting from origin, -1 means to be defined
+arm_lengths = [5, 5, -1, 5, -1] #starting from target, -1 means to be defined
 angles = [-1, -1, -1, -1, -1, -1, -1] 
 #7th: angle rotation of point 2 (0 indexed)
 
-z0 = z-math.tan(theta_x)*y
-z1 = z-z0
-r = math.sqrt(z1**2+y**2) #distance to the relative origin of the point
-#print("R", r, z0)
+if length(x, y, z, 0, 0, 0) > arm_lengths[0]+arm_lengths[1]+arm_lengths[3]:
+    print("NOT POSSIBLE")
+    quit()
 
-x_val = [-1, -1, -1, -1, -1, -1] #starting from target point to origin
-y_val = [-1, -1, -1, -1, -1, -1]
-z_val = [-1, -1, -1, -1, -1, -1]
+x_val = [-1, -1, -1, -1] #starting from target point to origin
+y_val = [-1, -1, -1, -1]
+z_val = [-1, -1, -1, -1]
 
 x_val[0] = x
 y_val[0] = y
 z_val[0] = z
 
-x_val[3] = arm_lengths[-1]
-y_val[3] = 0
-z_val[3] = z0
+z_val[1] = math.sin(theta_y)*arm_lengths[1]
+y_val[1] = math.cos(theta_x)*arm_lengths[1]
+x_val[1] = x-math.sqrt(arm_lengths[1]**2-y_val[1]**2-z_val[1]**2)
+z_val[1] += z
+y_val[1] += y
 
-x_val[4] = 0
-y_val[4] = 0
-z_val[4] = z0
-
-x_val[5] = 0
-y_val[5] = 0
-z_val[5] = 0
+x_val[-1] = 0
+y_val[-1] = 0
+z_val[-1] = 0
 
 #Everything is true up to this point
-for i in range(len(x_val)):
+for i in range(1, len(x_val)-1):
     print(x_val[i], y_val[i], z_val[i])
+    ax.scatter(x_val[i], y_val[i], z_val[i], c='blue')
+ax.scatter(x_val[0], y_val[0], z_val[0], c='red')
+ax.scatter(x_val[-1], y_val[-1], z_val[-1], c='red')
 
-print(z0, z1, r)
+print("LENGTH", length(x_val[1], y_val[1], z_val[1], 0, 0, 0))
 
-x_val[1] = abs(x)-math.cos(theta_y)*arm_lengths[0]
-z_val[1] = z0+math.sin(theta_x)*(r+arm_lengths[0]*math.sin(theta_y)) #could be negative but theta_y is given
-y_val[1] = (r+arm_lengths[0]*math.sin(theta_y))*math.cos(theta_x) #FIX ME
+arm_lengths[4] = length(0, 0, 0, x_val[1], y_val[1], z_val[1])
 
-if x < 0:
-    #print("****")
-    x_val[1] *= -1
-
-arm_lengths[4] = length(x_val[1], y_val[1], z_val[1], x_val[3], y_val[3], z_val[3])
-
-#print(arm_lengths)
-
-angles[3] = cosine_law_angle(arm_lengths[1], arm_lengths[4], arm_lengths[3])
-angles[4] = cosine_law_angle(arm_lengths[1], arm_lengths[3], arm_lengths[4])
-angles[5] = cosine_law_angle(arm_lengths[4], arm_lengths[3], arm_lengths[1])
-
-angles[6] = np.arccos((x_val[1]-x_val[3])/arm_lengths[4])
-temp_r = arm_lengths[3]*math.sin(angles[6]+angles[5])
-x_val[2] = arm_lengths[3]*math.cos(angles[6]+angles[5]) #FIX ME
-y_val[2] = temp_r*math.cos(theta_x)
-z_val[2] = z0+temp_r*math.sin(theta_x)
-
-arm_lengths[2] = length(x_val[0], y_val[0], z_val[0], x_val[2], y_val[2], z_val[2])
-
-for i in range(len(x_val)):
-    #print(x_val[i], y_val[i], z_val[i])
-    ax.scatter(x_val[i], y_val[i], z_val[i])
-    ax.text(x_val[i], y_val[i], z_val[i], "%d" % i)
-
-#print("Lengths")
-#for i in range(3):
-#    print(length(x_val[i], y_val[i], z_val[i], x_val[i+1], y_val[i+1], z_val[i+1]))
-
-angles[0] = cosine_law_angle(arm_lengths[0], arm_lengths[2], arm_lengths[1])
-angles[1] = cosine_law_angle(arm_lengths[0], arm_lengths[1], arm_lengths[2])
-angles[2] = cosine_law_angle(arm_lengths[1], arm_lengths[2], arm_lengths[0])
-
-if x <= 0:
-    angles[6] = math.pi-angles[6]
+print("ANGLE", np.arctan(z_val[1]/y_val[1]), math.pi/6)
 
 ax.plot(x_val, y_val, z_val)
 
