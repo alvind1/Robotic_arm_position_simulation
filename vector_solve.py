@@ -100,6 +100,9 @@ arm_lengths['OD'] = math.sqrt(arm_lengths['OC']**2-h**2)
 vectors['OD'] = arm_lengths['OD']*vectors['OB']/np.linalg.norm(vectors['OB'])
 
 vectors['OC'] = vectors['OD']+vectors['DC']
+points['C'] = vectors['OC']+points['O']
+
+graph(points['C'])
 
 plt.show()
 
