@@ -65,33 +65,41 @@ def cosine_law_angle(a, b, c):
     return np.arccos(num)
 
 
-def length(x1, y1, z1, x2, y2, z2):
-    return math.sqrt((x1-x2)**2+(y1-y2)**2+(z1-z2)**2)
+def length(pointA, pointB):
+    return math.sqrt((pointA[0]-pointB[0])**2+(pointA[1]-pointB[1])**2+(pointA[2]-pointB[2])**2)
 
 def heron(a, b, c):
     s = (a+b+c)/2
     area = math.sqrt(s*(s-a)*(s-b)*(s-c))
     return area
 
+def graph(point):
+    ax.scatter(point[0], point[1], point[2])
 
-"""x = 5
-y = 2
-z = 4
-theta_x = math.pi/4
-theta_y = math.pi/6"""
+points = {}
+points['O'] = np.array([0, 0, 0])
+points['A'] = np.array([4, 5, 4])
+points['B'] = np.array([2, 3, 7])
 
-arm_lengths = [5, 5, -1, 5, -1] #starting from target, -1 means to be defined
-angles = [-1, -1, -1, -1, -1, -1, -1] 
-#7th: angle rotation of point 2 (0 indexed)
+vectors = {}
+vectors['OA'] = points['A']-points['O']
+vectors['OB'] = points['B']-points['O']
 
-if length(x, y, z, 0, 0, 0) > arm_lengths[0]+arm_lengths[1]+arm_lengths[3]:
-    print("NOT POSSIBLE")
-    quit()
+arm_lengths = {}
+arm_lengths['OC'] = 4
+arm_lengths['CB'] = 4
+arm_lengths['OB'] = length(points['O'], points['B'])
 
-points = [None * 4]
-points[3] = ([0, 0, 0])
-points[0] = ([4, 6, 8])
-points[1] = ([2, 3, 4])
+cross_X = np.cross(vectors['OA'], vectors['OB'])
+cross_Y = np.cross(cross_X, vectors['OB'])
 
-arm_lengths[2] = length(*points[0][:2], *points[3][:2])
-print(arm_lengths[2])
+h = heron(arm_lengths['OC'], arm_lengths['OB'], arm_lengths['CB'])/arm_lengths['OB']
+vectors['DC'] = h*cross_Y/np.linalg.norm(cross_Y)
+
+arm_lengths['OD'] = math.sqrt(arm_lengths['OC']**2-h**2)
+vectors['OD'] = arm_lengths['OD']*vectors['OB']/np.linalg.norm(vectors['OB'])
+
+vectors['OC'] = vectors['OD']+vectors['DC']
+
+plt.show()
+
