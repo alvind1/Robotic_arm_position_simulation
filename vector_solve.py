@@ -74,7 +74,7 @@ def heron(a, b, c):
     return area
 
 def graph(point):
-    ax.scatter(point[0], point[1], point[2])
+    ax.scatter(point[0], point[1], point[2], c='red')
 
 points = {}
 points['O'] = np.array([0, 0, 0])
@@ -93,16 +93,21 @@ arm_lengths['OB'] = length(points['O'], points['B'])
 cross_X = np.cross(vectors['OA'], vectors['OB'])
 cross_Y = np.cross(cross_X, vectors['OB'])
 
-h = heron(arm_lengths['OC'], arm_lengths['OB'], arm_lengths['CB'])/arm_lengths['OB']
+h = 2*heron(arm_lengths['OC'], arm_lengths['OB'], arm_lengths['CB'])/arm_lengths['OB']
 vectors['DC'] = h*cross_Y/np.linalg.norm(cross_Y)
 
 arm_lengths['OD'] = math.sqrt(arm_lengths['OC']**2-h**2)
 vectors['OD'] = arm_lengths['OD']*vectors['OB']/np.linalg.norm(vectors['OB'])
+points['D'] = points['O']+vectors['OD']
+arm_lengths['DB'] = length(points['D'], points['B'])
 
 vectors['OC'] = vectors['OD']+vectors['DC']
 points['C'] = vectors['OC']+points['O']
 
+graph(points['O'])
 graph(points['C'])
+graph(points['B'])
+graph(points['A'])
 
 plt.show()
 
