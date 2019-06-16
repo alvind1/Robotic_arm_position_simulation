@@ -1,3 +1,5 @@
+#Some cases not considered (i.e. different quadrants)
+
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 import numpy as np
@@ -60,8 +62,8 @@ def length(x1, z1, x2, z2):
 x_val = [-1, -1, -1, -1] #starting from target point to origin
 z_val = [-1, -1, -1, -1]
 
-x = 5
-z = 6
+x = 4
+z = 10
 theta_y = math.pi/3
 plt.scatter(x, z, c='orange')
 
