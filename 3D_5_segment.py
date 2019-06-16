@@ -5,6 +5,9 @@ import math
 
 fig = plt.figure()
 ax = plt.axes(projection='3d')
+ax.set_xlabel('X')
+ax.set_ylabel('Y')
+ax.set_zlabel('Z')
 
 """"
 #Givens
@@ -85,13 +88,15 @@ def check_possibility():
     else:
         return 1
 
-x = 10
+x = 10 #Given
 y = 3
 z = 11
 theta_x = math.pi/4
 theta_y = math.pi/6
 z0 = z-math.tan(theta_x)*y
 z1 = z-z0
+
+#TO DO: Find relative angles
 
 arm_lengths = {}
 arm_lengths['OZ'] = z0
@@ -151,5 +156,6 @@ for key, val in points.items():
 
 print_length()
 ax.plot(x_val, y_val, z_val)
+ax.scatter(x, y, z, c='violet')
 
 plt.show()
