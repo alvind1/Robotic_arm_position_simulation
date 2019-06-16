@@ -85,9 +85,9 @@ def check_possibility():
     else:
         return 1
 
-x = 13
-y = 2
-z = 8
+x = 10
+y = 3
+z = 11
 theta_x = math.pi/4
 theta_y = math.pi/6
 z0 = z-math.tan(theta_x)*y
@@ -105,7 +105,7 @@ points['O'] = np.array([0, 0, 0]) #(x, y, z)
 points['Z'] = np.array([0, 0, z0])
 points['R'] = np.array([arm_lengths['ZR'], 0, z0])
 points['C'] = None
-points['B'] = np.array([2, 3, 4]) #TO DO: Find using thetas
+points['B'] = np.array([x-math.cos(theta_y)*arm_lengths['BA'], y+math.sin(theta_y)*arm_lengths['BA']*math.cos(theta_x), z+math.sin(theta_y)*arm_lengths['BA']*math.sin(theta_x)]) #TO DO: Find using thetas
 points['A'] = np.array([x, y, z])
 
 arm_lengths['RB'] = length(points['R'], points['B'])
@@ -118,7 +118,11 @@ vectors['RB'] = points['B']-points['R']
 
 #TO DO: Check if solve is possible through length and triangle inequality
 if check_possibility() == -1:
-    print("NOT POSSIBLE")
+    print("Length NOT POSSIBLE")
+    quit()
+
+if triangle_inequality(arm_lengths['RC'], arm_lengths['CB'], length(points['B'], points['R'])) == -1:
+    print("Triangle NOT POSSIBLE")
     quit()
 
 cross_X = np.cross(vectors['RA'], vectors['RB'])
