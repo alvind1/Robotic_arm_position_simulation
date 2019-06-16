@@ -65,99 +65,87 @@ def cosine_law_angle(a, b, c):
     return np.arccos(num)
 
 
-def length(x1, y1, z1, x2, y2, z2):
-    return math.sqrt((x1-x2)**2+(y1-y2)**2+(z1-z2)**2)
+def length(pointA, pointB):
+    return math.sqrt((pointA[0]-pointB[0])**2+(pointA[1]-pointB[1])**2+(pointA[2]-pointB[2])**2)
 
+def heron(a, b, c):
+    s = (a+b+c)/2
+    area = math.sqrt(s*(s-a)*(s-b)*(s-c))
+    return area
 
-x = 10
-y = 1
+def graph(point):
+    ax.scatter(point[0], point[1], point[2], c='red')
+
+def print_length():
+    print(length(points['R'], points['C']), length(points['C'], points['B']), length(points['B'], points['A']))
+
+def check_possibility():
+    if length(points['A'], points['R']) > arm_lengths['RC']+arm_lengths['CB']+arm_lengths['BA']:
+        return -1
+    else:
+        return 1
+
+x = 13
+y = 2
 z = 8
 theta_x = math.pi/4
-theta_y = math.pi/4
-
-arm_lengths = [4, 4, -1, 4, -1, 1] #starting from origin, -1 means to be defined
-angles = [-1, -1, -1, -1, -1, -1, -1] 
-#7th: angle rotation of point 2 (0 indexed)
-
+theta_y = math.pi/6
 z0 = z-math.tan(theta_x)*y
 z1 = z-z0
-r = math.sqrt(z1**2+y**2) #distance to the relative origin of the point
-#print("R", r, z0)
 
-x_val = [-1, -1, -1, -1, -1, -1] #starting from target point to origin
-y_val = [-1, -1, -1, -1, -1, -1]
-z_val = [-1, -1, -1, -1, -1, -1]
+arm_lengths = {}
+arm_lengths['OZ'] = z0
+arm_lengths['ZR'] = 3 #Given
+arm_lengths['RC'] = 4 #Given
+arm_lengths['CB'] = 4 #Given
+arm_lengths['BA'] = 4 #Given
 
-x_val[0] = x
-y_val[0] = y
-z_val[0] = z
+points = {}
+points['O'] = np.array([0, 0, 0]) #(x, y, z)
+points['Z'] = np.array([0, 0, z0])
+points['R'] = np.array([arm_lengths['ZR'], 0, z0])
+points['C'] = None
+points['B'] = np.array([2, 3, 4]) #TO DO: Find using thetas
+points['A'] = np.array([x, y, z])
 
-x_val[3] = arm_lengths[-1]
-y_val[3] = 0
-z_val[3] = z0
+arm_lengths['RB'] = length(points['R'], points['B'])
 
-x_val[4] = 0
-y_val[4] = 0
-z_val[4] = z0
+vectors = {}
+vectors['OZ'] = points['Z']-points['O']
+vectors['ZR'] = points['R']-points['Z']
+vectors['RA'] = points['A']-points['R']
+vectors['RB'] = points['B']-points['R']
 
-x_val[5] = 0
-y_val[5] = 0
-z_val[5] = 0
+#TO DO: Check if solve is possible through length and triangle inequality
+if check_possibility() == -1:
+    print("NOT POSSIBLE")
+    quit()
 
-#Everything is true up to this point
-for i in range(len(x_val)):
-    print(x_val[i], y_val[i], z_val[i])
+cross_X = np.cross(vectors['RA'], vectors['RB'])
+cross_Y = np.cross(cross_X, vectors['RB'])
 
-print(z0, z1, r)
+h = 2*heron(arm_lengths['RC'], arm_lengths['RB'], arm_lengths['CB'])/arm_lengths['RB']
+vectors['DC'] = h*cross_Y/np.linalg.norm(cross_Y)
 
-x_val[1] = abs(x)-math.cos(theta_y)*arm_lengths[0]
-z_val[1] = z0+math.sin(theta_x)*(r+arm_lengths[0]*math.sin(theta_y)) #could be negative but theta_y is given
-y_val[1] = (r+arm_lengths[0]*math.sin(theta_y))*math.cos(theta_x) #FIX ME
+arm_lengths['RD'] = math.sqrt(arm_lengths['RC']**2-h**2)
+vectors['RD'] = arm_lengths['RD']*vectors['RB']/np.linalg.norm(vectors['RB'])
+point_D = points['R']+vectors['RD']
+arm_lengths['DB'] = length(point_D, points['B'])
 
-if x < 0:
-    #print("****")
-    x_val[1] *= -1
+vectors['RC'] = vectors['RD']+vectors['DC']
+points['C'] = vectors['RC']+points['R']
 
-arm_lengths[4] = length(x_val[1], y_val[1], z_val[1], x_val[3], y_val[3], z_val[3])
+x_val = []
+y_val = []
+z_val = []
 
-#print(arm_lengths)
+for key, val in points.items():
+    x_val.append(val[0])
+    y_val.append(val[1])
+    z_val.append(val[2])
+    graph(points[key])
 
-angles[3] = cosine_law_angle(arm_lengths[1], arm_lengths[4], arm_lengths[3])
-angles[4] = cosine_law_angle(arm_lengths[1], arm_lengths[3], arm_lengths[4])
-angles[5] = cosine_law_angle(arm_lengths[4], arm_lengths[3], arm_lengths[1])
-
-angles[6] = np.arccos((x_val[1]-x_val[3])/arm_lengths[4])
-temp_r = arm_lengths[3]*math.sin(angles[6]+angles[5])
-x_val[2] = arm_lengths[3]*math.cos(angles[6]+angles[5]) #FIX ME
-y_val[2] = temp_r*math.cos(theta_x)
-z_val[2] = z0+temp_r*math.sin(theta_x)
-
-arm_lengths[2] = length(x_val[0], y_val[0], z_val[0], x_val[2], y_val[2], z_val[2])
-
-for i in range(len(x_val)):
-    #print(x_val[i], y_val[i], z_val[i])
-    ax.scatter(x_val[i], y_val[i], z_val[i])
-    ax.text(x_val[i], y_val[i], z_val[i], "%d" % i)
-
-print("Lengths")
-for i in range(3):
-    print(length(x_val[i], y_val[i], z_val[i], x_val[i+1], y_val[i+1], z_val[i+1]))
-
-angles[0] = cosine_law_angle(arm_lengths[0], arm_lengths[2], arm_lengths[1])
-angles[1] = cosine_law_angle(arm_lengths[0], arm_lengths[1], arm_lengths[2])
-angles[2] = cosine_law_angle(arm_lengths[1], arm_lengths[2], arm_lengths[0])
-
-if x <= 0:
-    angles[6] = math.pi-angles[6]
-
+print_length()
 ax.plot(x_val, y_val, z_val)
 
 plt.show()
-
-
-"""
-TO DO:
-Works kind of
-Lengths of arm segments are off from given
-
-"""

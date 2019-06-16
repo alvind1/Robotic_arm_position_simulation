@@ -116,11 +116,6 @@ arm_lengths['DB'] = length(point_D, points['B'])
 vectors['OC'] = vectors['OD']+vectors['DC']
 points['C'] = vectors['OC']+points['O']
 
-graph(points['O'])
-graph(points['C'])
-graph(points['B'])
-graph(points['A'])
-
 x_val = []
 y_val = []
 z_val = []
@@ -129,6 +124,7 @@ for key, val in points.items():
     x_val.append(val[0])
     y_val.append(val[1])
     z_val.append(val[2])
+    graph(points[key])
 
 print_length()
 ax.plot(x_val, y_val, z_val)
