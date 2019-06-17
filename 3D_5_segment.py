@@ -1,3 +1,4 @@
+#Works
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 import numpy as np
@@ -8,6 +9,9 @@ ax = plt.axes(projection='3d')
 ax.set_xlabel('X')
 ax.set_ylabel('Y')
 ax.set_zlabel('Z')
+ax.set_xlim([0, 10])
+ax.set_ylim([-5, 5])
+ax.set_zlim([0, 10])
 
 """"
 #Givens
@@ -88,9 +92,9 @@ def check_possibility():
     else:
         return 1
 
-x = 10 #Given
-y = 3
-z = 11
+x = 9 #Given
+y = 2
+z = 10
 theta_x = math.pi/4
 theta_y = math.pi/6
 z0 = z-math.tan(theta_x)*y
@@ -144,6 +148,12 @@ arm_lengths['DB'] = length(point_D, points['B'])
 vectors['RC'] = vectors['RD']+vectors['DC']
 points['C'] = vectors['RC']+points['R']
 
+angles = {}
+angles['R'] = None
+angles['C'] = cosine_law_angle(arm_lengths['RC'], arm_lengths['CB'], arm_lengths['RB'])
+angles['B'] = cosine_law_angle(arm_lengths['CB'], arm_lengths['BA'], length(points['A'], points['C']))
+angles['A'] = None
+
 x_val = []
 y_val = []
 z_val = []
@@ -153,6 +163,13 @@ for key, val in points.items():
     y_val.append(val[1])
     z_val.append(val[2])
     graph(points[key])
+
+    ax.text(x_val[-1]+0.1, y_val[-1]+0.1, z_val[-1]+0.1, key) #Print point
+
+    if key != 'O': #Print Length
+        ax.text((x_val[-1]+x_val[-2])/2, (y_val[-1]+y_val[-2])/2, (z_val[-1]+z_val[-2])/2, round(length(points[key], points[prev_key]), 3))
+
+    prev_key = key
 
 print_length()
 ax.plot(x_val, y_val, z_val)
