@@ -92,9 +92,9 @@ def check_possibility():
     else:
         return 1
 
-x = 9 #Given
+x = 7 #Given
 y = 2
-z = 10
+z = 11
 theta_x = math.pi/4
 theta_y = math.pi/6
 z0 = z-math.tan(theta_x)*y
