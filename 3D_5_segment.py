@@ -149,7 +149,7 @@ vectors['RC'] = vectors['RD']+vectors['DC']
 points['C'] = vectors['RC']+points['R']
 
 angles = {}
-angles['R'] = None
+angles['R'] = cosine_law_angle(arm_lengths['RC'], arm_lengths['ZR'], length(points['Z'], points['C']))
 angles['C'] = cosine_law_angle(arm_lengths['RC'], arm_lengths['CB'], arm_lengths['RB'])
 angles['B'] = cosine_law_angle(arm_lengths['CB'], arm_lengths['BA'], length(points['A'], points['C']))
 angles['A'] = None
@@ -168,8 +168,10 @@ for key, val in points.items():
 
     if key != 'O': #Print Length
         ax.text((x_val[-1]+x_val[-2])/2, (y_val[-1]+y_val[-2])/2, (z_val[-1]+z_val[-2])/2, round(length(points[key], points[prev_key]), 3))
-
     prev_key = key
+
+    if key != 'O' and key != 'Z' and key!='A':
+        ax.text(x_val[-1]-0.5, y_val[-1]-0.5, z_val[-1]-0.5, round(angles[key], 3), color='blue')
 
 print_length()
 ax.plot(x_val, y_val, z_val)
