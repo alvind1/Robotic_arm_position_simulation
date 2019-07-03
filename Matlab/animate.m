@@ -79,15 +79,19 @@ for j = 1:1000
 
     plot3(x_val, y_val, z_val); %Draw
     axis([0, 10, -5, 5, 0, 10]);
+    xlabel('X');
+    ylabel('Y');
+    zlabel('Z');
     
     r = 2;
     t = linspace(1, 100);
-    xcircle = r*cos(t);
-    ycircle = r*sin(t);
-    line(xcircle, ycircle);
+    xcircle = 9.*ones(size(t));
+    ycircle = r*cos(t);
+    zcircle = r*sin(t)+5;
+    line(xcircle, ycircle, zcircle);
     
     drawnow;
     hold off;
     
-    pause(1);
+    pause(0.2);
 end
