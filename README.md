@@ -1,1 +1,1 @@
-# Robotic_arm_position_simulation
+# Robotic_arm_simulation
