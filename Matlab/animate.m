@@ -1,4 +1,10 @@
 %% Constants
+grid on;
+xlim = ([0, 10]);
+ylim([-5, 5]);
+zlim = ([0, 10]);
+axis manual;
+
 theta_x = pi/4;
 theta_y = pi/6;
 %%
@@ -72,4 +78,6 @@ for j = 1:1000
     end
 
     plot3(x_val, y_val, z_val);
+    drawnow;
+    hold off;
 end
