@@ -66,18 +66,28 @@ for j = 1:1000
 
     k = keys(points);
     val = values(points);
-    
-    disp("DONE1");
+    length_val = values(arms_lengths);
     
     for i = 1:length(points)
         x_val(end+1) = val{i}(1);
         y_val(end+1) = val{i}(2);
         z_val(end+1) = val{i}(3);
-        scatter3(x_val, y_val, z_val);
+        scatter3(x_val, y_val, z_val); %Draw
+        
         hold on;
     end
 
-    plot3(x_val, y_val, z_val);
+    plot3(x_val, y_val, z_val); %Draw
+    axis([0, 10, -5, 5, 0, 10]);
+    
+    r = 2;
+    t = linspace(1, 100);
+    xcircle = r*cos(t);
+    ycircle = r*sin(t);
+    line(xcircle, ycircle);
+    
     drawnow;
     hold off;
+    
+    pause(1);
 end
