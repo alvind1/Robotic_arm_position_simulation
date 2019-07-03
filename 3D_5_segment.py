@@ -9,9 +9,9 @@ ax = plt.axes(projection='3d')
 ax.set_xlabel('X')
 ax.set_ylabel('Y')
 ax.set_zlabel('Z')
-ax.set_xlim([0, 10])
+ax.set_xlim([0, 12])
 ax.set_ylim([-5, 5])
-ax.set_zlim([0, 10])
+ax.set_zlim([0, 12])
 
 """"
 #Givens
@@ -134,8 +134,10 @@ if triangle_inequality(arm_lengths['RC'], arm_lengths['CB'], length(points['B'],
     print("Triangle NOT POSSIBLE")
     quit()
 
+#print('V', vectors['RA'], vectors['RB'])
 cross_X = np.cross(vectors['RA'], vectors['RB'])
 cross_Y = np.cross(cross_X, vectors['RB'])
+print("CROSS", cross_Y)
 
 h = 2*heron(arm_lengths['RC'], arm_lengths['RB'], arm_lengths['CB'])/arm_lengths['RB']
 vectors['DC'] = h*cross_Y/np.linalg.norm(cross_Y)
@@ -163,6 +165,8 @@ for key, val in points.items():
     y_val.append(val[1])
     z_val.append(val[2])
     graph(points[key])
+
+    #print(round(x_val[-1], 3), round(y_val[-1], 3), round(z_val[-1], 3))
 
     ax.text(x_val[-1]+0.1, y_val[-1]+0.1, z_val[-1]+0.1, key) #Print point
 

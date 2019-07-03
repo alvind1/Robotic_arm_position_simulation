@@ -1,0 +1,63 @@
+x = 6;
+y = 7;
+z = 8;
+
+theta_y = pi/5;
+theta_x = pi/5;
+
+z1 = y*tan(theta_x);
+z0 = z-z1;
+
+arms_lengths = containers.Map();
+arms_lengths('BC') = 2;
+arms_lengths('CD') = 4;
+arms_lengths('DE') = 5;
+arms_lengths('EF') = 6;
+
+points = containers.Map();
+points('A') = [0, 0, 0];
+points('B') = [0, 0, z0];
+points('C') = [arms_lengths('BC'), 0, z0];
+points('D') = [-1, -1, -1];
+points('E') = [x-cos(theta_y)*arms_lengths('CD'), sin(theta_y)*arms_lengths('CD')*sin(theta_x)+y, sin(theta_y)*arms_lengths('CD')*sin(theta_x)+z];
+points('F') = [x, y, z];
+
+arms_lengths('CE') = norm(points('E')-points('C'));
+
+if(norm(points('F')-points('C')) > arms_lengths('CD')+arms_lengths('DE')+arms_lengths('EF'))
+    error("Not possible 1");
+end 
+
+if(triang
+
+vectors = containers.Map();
+vectors('CE') = points('E') - points('C');
+vectors('CF') = points('F') - points('C');
+vectors('cross1') = cross(vectors('CE'), vectors('CF'));
+vectors('cross2') = cross(vectors('cross1'), vectors('CE'));
+
+height = heron(arms_lengths('CD'), arms_lengths('DE'), arms_lengths('CE'));
+
+vectors('CG') = sqrt(arms_lengths('CD')^2-height^2)*vectors('CE')/norm(vectors('CE'));
+vectors('GD') = height*vectors('cross2')/norm(vectors('cross2'));
+vectors('CD') = vectors('CG')+vectors('GD');
+
+points('D') = points('C')+vectors('CD');
+
+x_val = [];
+y_val = [];
+z_val = [];
+
+k = keys(points);
+val = values(points);
+
+for i = 1:length(points)
+    scatter3(x_val, y_val, z_val);
+    hold on;
+    x_val(end+1) = val{i}(1);
+    y_val(end+1) = val{i}(2);
+    z_val(end+1) = val{i}(3);
+end
+
+plot3(x_val, y_val, z_val);
+
