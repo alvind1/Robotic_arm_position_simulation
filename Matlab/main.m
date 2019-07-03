@@ -1,6 +1,8 @@
-x = 7;
+grid on;
+
+x = 8;
 y = 2;
-z = 11;
+z = 7;
 
 theta_x = pi/4;
 theta_y = pi/6;
@@ -65,8 +67,24 @@ for i = 1:length(points)
     x_val(end+1) = val{i}(1);
     y_val(end+1) = val{i}(2);
     z_val(end+1) = val{i}(3);
-    scatter3(x_val, y_val, z_val);
+    scatter3(val{i}(1), val{i}(2), val{i}(3));
+    text(val{i}(1), val{i}(2), val{i}(3), k(i));
+    
+    if(i ~= 1) %Print lengths
+        text((val{i}(1)+val{i-1}(1))/2, (val{i}(2)+val{i-1}(2))/2, (val{i}(3)+val{i-1}(3))/2, num2str(norm(points(k{i})-points(k{i-1}))));
+    end
+    
+    if(i ~= 1 && i ~= 2 && i ~= 6)
+        text(val{i}(1)+0.5, val{i}(2)+0.5, val{i}(3)+0.5, num2str(angles(k{i})));
+    end 
+    
+    if (i == 3)
+        txt = ["Plane rotation", num2str(angles('T'))];
+        text(val{i}(1)-1, val{i}(2)-1, val{i}(3)-1, txt);
+    end 
+    
     hold on;
 end
 
 plot3(x_val, y_val, z_val);
+axis([0, 10, -5, 5, 0, 10]);
