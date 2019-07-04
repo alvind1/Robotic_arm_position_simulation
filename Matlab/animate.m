@@ -8,8 +8,8 @@ axis manual;
 theta_x = pi/4;
 theta_y = pi/6;
 %%
-for j = 1:1000
-    [x, y, z] = get_points(j);
+for j = 1:10000
+    [x, y, z] = get_points(j/10);
     
     z1 = y*tan(theta_x);
     z0 = z-z1;
@@ -54,11 +54,11 @@ for j = 1:1000
     points('D') = points('C')+vectors('CD');
 
     angles = containers.Map();
-    angles('C') = cosine_law_angle(norm(points('C')-points('B')), arms_lengths('CD'), norm(points('D')-points('B')));
-    angles('D') = cosine_law_angle(arms_lengths('CD'), arms_lengths('DE'), norm(points('E')-points('C')));
-    angles('E') = cosine_law_angle(arms_lengths('DE'), arms_lengths('EF'), norm(points('F')-points('D')));
+    angles('C') = pi-cosine_law_angle(norm(points('C')-points('B')), arms_lengths('CD'), norm(points('D')-points('B')));
+    angles('D') = pi-cosine_law_angle(arms_lengths('CD'), arms_lengths('DE'), norm(points('E')-points('C')));
+    angles('E') = pi-cosine_law_angle(arms_lengths('DE'), arms_lengths('EF'), norm(points('F')-points('D')));
     temp = points('D');
-    angles('T') = atan((temp(3)-z0)/temp(2));
+    angles('T') = pi-atan((temp(3)-z0)/temp(2));
 
     x_val = [];
     y_val = [];
@@ -74,14 +74,30 @@ for j = 1:1000
         z_val(end+1) = val{i}(3);
         scatter3(x_val, y_val, z_val); %Draw
         
+        if(i ~= 1) %Print lengths
+            text((val{i}(1)+val{i-1}(1))/2, (val{i}(2)+val{i-1}(2))/2, (val{i}(3)+val{i-1}(3))/2, num2str(norm(points(k{i})-points(k{i-1}))));
+        end
+
+        if(i ~= 1 && i ~= 2 && i ~= 6)
+            text(val{i}(1)+0.5, val{i}(2)+0.5, val{i}(3)+0.5, num2str(angles(k{i})));
+        end 
+
+        if (i == 3)
+            txt = ["Plane rotation", num2str(angles('T'))];
+            text(val{i}(1)-1, val{i}(2)-1, val{i}(3)-1, txt);
+        end 
+        
         hold on;
     end
 
     plot3(x_val, y_val, z_val); %Draw
-    axis([0, 10, -5, 5, 0, 10]);
+    axis([0, 12, -7, 7, 0, 12]);
+    
     xlabel('X');
     ylabel('Y');
     zlabel('Z');
+
+
     
     r = 2;
     t = linspace(1, 100);
@@ -93,5 +109,5 @@ for j = 1:1000
     drawnow;
     hold off;
     
-    pause(0.2);
+    pause(0.1);
 end
