@@ -84,77 +84,76 @@ def graph(point):
     ax.scatter(point[0], point[1], point[2], c='red')
 
 def print_length():
-    print(length(points['R'], points['C']), length(points['C'], points['B']), length(points['B'], points['A']))
+    print(length(points['C'], points['D']), length(points['D'], points['E']), length(points['E'], points['F']))
 
 def check_possibility():
-    if length(points['A'], points['R']) > arm_lengths['RC']+arm_lengths['CB']+arm_lengths['BA']:
+    if length(points['C'], points['F']) > arm_lengths['CD']+arm_lengths['DE']+arm_lengths['EF']:
         return -1
     else:
         return 1
 
-x = 7 #Given
-y = 2
-z = 11
+x = 11 #Given
+y = 0.995
+z = 5.0998
 theta_x = math.pi/4
-theta_y = math.pi/6
-z0 = z-math.tan(theta_x)*y
+theta_y = 0.1
+z0 = z-math.tan(theta_x)*abs(y)
 z1 = z-z0
 
 #TO DO: Find relative angles
 
 arm_lengths = {}
-arm_lengths['OZ'] = z0
-arm_lengths['ZR'] = 3 #Given
-arm_lengths['RC'] = 4 #Given
-arm_lengths['CB'] = 4 #Given
-arm_lengths['BA'] = 4 #Given
+arm_lengths['AB'] = z0
+arm_lengths['BC'] = 3 #Given
+arm_lengths['CD'] = 4 #Given
+arm_lengths['DE'] = 5 #Given
+arm_lengths['EF'] = 6 #Given
 
 points = {}
-points['O'] = np.array([0, 0, 0]) #(x, y, z)
-points['Z'] = np.array([0, 0, z0])
-points['R'] = np.array([arm_lengths['ZR'], 0, z0])
-points['C'] = None
-points['B'] = np.array([x-math.cos(theta_y)*arm_lengths['BA'], y+math.sin(theta_y)*arm_lengths['BA']*math.cos(theta_x), z+math.sin(theta_y)*arm_lengths['BA']*math.sin(theta_x)]) #TO DO: Find using thetas
-points['A'] = np.array([x, y, z])
+points['A'] = np.array([0, 0, 0]) #(x, y, z)
+points['B'] = np.array([0, 0, z0])
+points['C'] = np.array([arm_lengths['BC'], 0, z0])
+points['D'] = None
+points['E'] = np.array([x-math.cos(theta_y)*arm_lengths['EF'], y+math.sin(theta_y)*arm_lengths['EF']*math.cos(theta_x), z+math.sin(theta_y)*arm_lengths['EF']*math.sin(theta_x)]) #TO DO: Find using thetas
+points['F'] = np.array([x, y, z])
 
-arm_lengths['RB'] = length(points['R'], points['B'])
+arm_lengths['CE'] = length(points['C'], points['E'])
 
 vectors = {}
-vectors['OZ'] = points['Z']-points['O']
-vectors['ZR'] = points['R']-points['Z']
-vectors['RA'] = points['A']-points['R']
-vectors['RB'] = points['B']-points['R']
+vectors['CF'] = points['F']-points['C']
+vectors['CE'] = points['E']-points['C']
 
 #TO DO: Check if solve is possible through length and triangle inequality
 if check_possibility() == -1:
     print("Length NOT POSSIBLE")
     quit()
 
-if triangle_inequality(arm_lengths['RC'], arm_lengths['CB'], length(points['B'], points['R'])) == -1:
+if triangle_inequality(arm_lengths['CD'], arm_lengths['DE'], arm_lengths['CE']) == -1:
     print("Triangle NOT POSSIBLE")
     quit()
 
 #print('V', vectors['RA'], vectors['RB'])
-cross_X = np.cross(vectors['RA'], vectors['RB'])
-cross_Y = np.cross(cross_X, vectors['RB'])
-print("CROSS", cross_Y)
+cross_X = np.cross(vectors['CF'], vectors['CE']) #TODO: Check sign
+cross_Y = np.cross(cross_X, vectors['CE'])
+print("CROSS", cross_X, cross_Y) 
 
-h = 2*heron(arm_lengths['RC'], arm_lengths['RB'], arm_lengths['CB'])/arm_lengths['RB']
-vectors['DC'] = h*cross_Y/np.linalg.norm(cross_Y)
+h = 2*heron(arm_lengths['CE'], arm_lengths['CD'], arm_lengths['DE'])/arm_lengths['CE']
+vectors['GD'] = h*cross_Y/np.linalg.norm(cross_Y)
 
-arm_lengths['RD'] = math.sqrt(arm_lengths['RC']**2-h**2)
-vectors['RD'] = arm_lengths['RD']*vectors['RB']/np.linalg.norm(vectors['RB'])
-point_D = points['R']+vectors['RD']
-arm_lengths['DB'] = length(point_D, points['B'])
+arm_lengths['CG'] = math.sqrt(arm_lengths['CD']**2-h**2)
+vectors['CG'] = arm_lengths['CG']*vectors['CE']/np.linalg.norm(vectors['CE'])
 
-vectors['RC'] = vectors['RD']+vectors['DC']
-points['C'] = vectors['RC']+points['R']
+if math.sqrt(arm_lengths['DE']**2-h**2) >= arm_lengths['CE']:
+    vectors['CG'] *= -1
+
+vectors['CD'] = vectors['CG']+vectors['GD'] #Check add or subtract depending on triangle type
+points['D'] = vectors['CD']+points['C']
 
 angles = {}
-angles['R'] = cosine_law_angle(arm_lengths['RC'], arm_lengths['ZR'], length(points['Z'], points['C']))
-angles['C'] = cosine_law_angle(arm_lengths['RC'], arm_lengths['CB'], arm_lengths['RB'])
-angles['B'] = cosine_law_angle(arm_lengths['CB'], arm_lengths['BA'], length(points['A'], points['C']))
-angles['A'] = None
+angles['C'] = cosine_law_angle(arm_lengths['BC'], arm_lengths['CD'], length(points['B'], points['D']))
+angles['D'] = cosine_law_angle(arm_lengths['CD'], arm_lengths['DE'], arm_lengths['CE'])
+angles['E'] = cosine_law_angle(arm_lengths['DE'], arm_lengths['EF'], length(points['D'], points['F']))
+angles['F'] = None
 
 x_val = []
 y_val = []
@@ -166,15 +165,15 @@ for key, val in points.items():
     z_val.append(val[2])
     graph(points[key])
 
-    #print(round(x_val[-1], 3), round(y_val[-1], 3), round(z_val[-1], 3))
+    print(round(x_val[-1], 3), round(y_val[-1], 3), round(z_val[-1], 3))
 
     ax.text(x_val[-1]+0.1, y_val[-1]+0.1, z_val[-1]+0.1, key) #Print point
 
-    if key != 'O': #Print Length
+    if key != 'A': #Print Length
         ax.text((x_val[-1]+x_val[-2])/2, (y_val[-1]+y_val[-2])/2, (z_val[-1]+z_val[-2])/2, round(length(points[key], points[prev_key]), 3))
     prev_key = key
 
-    if key != 'O' and key != 'Z' and key!='A':
+    if key != 'A' and key != 'B' and key!='F':
         ax.text(x_val[-1]-0.5, y_val[-1]-0.5, z_val[-1]-0.5, round(angles[key], 3), color='blue')
 
 print_length()
@@ -182,3 +181,4 @@ ax.plot(x_val, y_val, z_val)
 ax.scatter(x, y, z, c='violet')
 
 plt.show()
+print("A")
