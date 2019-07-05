@@ -87,17 +87,17 @@ def print_length():
     print(length(points['C'], points['D']), length(points['D'], points['E']), length(points['E'], points['F']))
 
 def check_possibility():
-    if length(points['C'], points['F']) > arm_lengths['CD']+arm_lengths['DE']+arm_lengths['EF']:
+    if length(points['C'], points['F']) >= arm_lengths['CD']+arm_lengths['DE']+arm_lengths['EF']:
         return -1
     else:
         return 1
 
 x = 11 #Given
-y = 0.995
-z = 5.0998
-theta_x = math.pi/4
-theta_y = 0.1
-z0 = z-math.tan(theta_x)*abs(y)
+y = 2
+z = 8
+theta_x = 0.5
+theta_y = 0.2
+z0 = z-math.tan(theta_x)*y
 z1 = z-z0
 
 #TO DO: Find relative angles
@@ -150,9 +150,9 @@ vectors['CD'] = vectors['CG']+vectors['GD'] #Check add or subtract depending on 
 points['D'] = vectors['CD']+points['C']
 
 angles = {}
-angles['C'] = cosine_law_angle(arm_lengths['BC'], arm_lengths['CD'], length(points['B'], points['D']))
-angles['D'] = cosine_law_angle(arm_lengths['CD'], arm_lengths['DE'], arm_lengths['CE'])
-angles['E'] = cosine_law_angle(arm_lengths['DE'], arm_lengths['EF'], length(points['D'], points['F']))
+angles['C'] = math.pi-cosine_law_angle(arm_lengths['BC'], arm_lengths['CD'], length(points['B'], points['D']))
+angles['D'] = math.pi-cosine_law_angle(arm_lengths['CD'], arm_lengths['DE'], arm_lengths['CE'])
+angles['E'] = math.pi-cosine_law_angle(arm_lengths['DE'], arm_lengths['EF'], length(points['D'], points['F']))
 angles['F'] = None
 
 x_val = []
@@ -173,8 +173,8 @@ for key, val in points.items():
         ax.text((x_val[-1]+x_val[-2])/2, (y_val[-1]+y_val[-2])/2, (z_val[-1]+z_val[-2])/2, round(length(points[key], points[prev_key]), 3))
     prev_key = key
 
-    if key != 'A' and key != 'B' and key!='F':
-        ax.text(x_val[-1]-0.5, y_val[-1]-0.5, z_val[-1]-0.5, round(angles[key], 3), color='blue')
+    if key != 'A' and key != 'B' and key!='F': #Print angles
+        ax.text(x_val[-1]-0.8, y_val[-1]-0.8, z_val[-1]-0.8, round(angles[key], 3), color='blue')
 
 print_length()
 ax.plot(x_val, y_val, z_val)
