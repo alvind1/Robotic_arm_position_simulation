@@ -1,17 +1,12 @@
 grid on;
 
-xmin = 0;
-xmax = 12;
-ymin = -6;
-ymax = 6;
-zmin = 0;
-zmax = 12;
+axis_dim = [0, 18, -6, 6, 0, 15];
 
-x = 11;
-y = -1.6023;
-z = 6.1969;
-theta_x = pi/10;
-theta_y = pi/6;
+x = 1.9337;
+y = 0.12396;
+z = 4.6611;
+theta_x = 1.4834; %May not be given
+theta_y = 1.5290; 
 
 z1 = y*tan(theta_x);
 z0 = z-z1;
@@ -33,18 +28,20 @@ points('F') = [x, y, z];
 
 arms_lengths('CE') = norm(points('E')-points('C'));
 
-if(norm(points('F')-points('C')) > arms_lengths('CD')+arms_lengths('DE')+arms_lengths('EF'))
-    error("Not possible 1");
+if(norm(points('F')-points('C')) >= arms_lengths('CD')+arms_lengths('DE')+arms_lengths('EF'))
+    %error("Not possible 1");
+    disp("Not possible 1");
 end 
 
 if(triangle_inequality(arms_lengths('CD'), arms_lengths('DE'), arms_lengths('CE'))==-1)
-    error("Not possible 2");
+    %error("Not possible 2");
+    disp("Not possible 2");
 end 
 
 vectors = containers.Map();
 vectors('CE') = points('E') - points('C');
 vectors('CF') = points('F') - points('C');
-vectors('cross1') = cross(vectors('CE'), vectors('CF'));
+vectors('cross1') = -cross(vectors('CE'), vectors('CF'));
 vectors('cross2') = cross(vectors('CE'), vectors('cross1'));
 
 height = 2*heron(arms_lengths('CD'), arms_lengths('DE'), arms_lengths('CE'))/arms_lengths('CE');
@@ -54,7 +51,12 @@ if sqrt(arms_lengths('DE')^2-height^2) >= norm(points('E')-points('C'))
     vectors('CG') = -vectors('CG');
 end 
 
-vectors('GD') = height*vectors('cross2')/norm(vectors('cross2'));
+if norm(vectors('cross2')) ~= 0
+    vectors('GD') = height*vectors('cross2')/norm(vectors('cross2'));
+else
+    vectors('GD') = 0;
+end
+
 vectors('CD') = vectors('CG')+vectors('GD');
 
 points('D') = points('C')+vectors('CD');
@@ -64,37 +66,18 @@ angles('C') = pi-cosine_law_angle(norm(points('C')-points('B')), arms_lengths('C
 angles('D') = pi-cosine_law_angle(arms_lengths('CD'), arms_lengths('DE'), norm(points('E')-points('C')));
 angles('E') = pi-cosine_law_angle(arms_lengths('DE'), arms_lengths('EF'), norm(points('F')-points('D')));
 temp = points('D');
-angles('T') = atan((temp(3)-z0)/temp(2));
 
-x_val = [];
-y_val = [];
-z_val = [];
-
-k = keys(points);
-val = values(points);
-
-for i = 1:length(points)
-    x_val(end+1) = val{i}(1);
-    y_val(end+1) = val{i}(2);
-    z_val(end+1) = val{i}(3);
-    scatter3(val{i}(1), val{i}(2), val{i}(3));
-    text(val{i}(1), val{i}(2), val{i}(3), k(i));
-    
-    if(i ~= 1) %Print lengths
-        text((val{i}(1)+val{i-1}(1))/2, (val{i}(2)+val{i-1}(2))/2, (val{i}(3)+val{i-1}(3))/2, num2str(norm(points(k{i})-points(k{i-1}))));
-    end
-    
-    if(i ~= 1 && i ~= 2 && i ~= 6)
-        text(val{i}(1)+0.5, val{i}(2)+0.5, val{i}(3)+0.5, num2str(angles(k{i})), 'Color', 'r');
-    end 
-    
-    if (i == 3)
-        txt = ["Plane rotation", num2str(angles('T'))];
-        text(val{i}(1)-1, val{i}(2)-1, val{i}(3)-1, txt);
-    end 
-    
-    hold on;
+if temp(2) ~= 0
+    angles('T') = atan((temp(3)-z0)/temp(2));
+else
+    angles('T') = 0;
 end
 
-plot3(x_val, y_val, z_val);
-axis([xmin, xmax, ymin, ymax, zmin, zmax]);
+figure(1);
+plot_points(points, angles, 'IK', axis_dim);
+
+txt_points = [points('A'); points('B'); points('C'); points('D'); points('E'); points('F')];
+disp(txt_points);
+
+%% TODO
+% Fix some cases in IK using givens from FK

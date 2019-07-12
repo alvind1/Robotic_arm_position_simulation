@@ -3,16 +3,16 @@ grid on;
 axis manual;
 
 xmin = 0;
-xmax = 15;
+xmax = 19;
 ymin = -8;
 ymax = 8;
 zmin = 0;
 zmax = 15;
 
-x = 11;
-y = 0;
+x = 8;
+y = 3;
 z = 8;
-theta_x = 0; %May not be given
+theta_x = 0.4; %May not be given
 theta_y = 0.7; 
 
 z1 = y*tan(theta_x);
@@ -38,8 +38,8 @@ n = 200;
 %%
 for j = 0:n
     temp_angles = get_angles(j, n, angles);
-    temp_angles('C')
-    points = FK(temp_angles, z0);
+    temp_angles('T')
+    points = FK(temp_angles, z0, arms_lengths);
         
     x_val = [];
     y_val = [];
@@ -60,11 +60,11 @@ for j = 0:n
         end
 
         if(i ~= 1 && i ~= 2 && i ~= 6)
-            text(val{i}(1)+0.5, val{i}(2)+0.5, val{i}(3)+0.5, num2str(angles(k{i})), 'Color', 'r');
+            text(val{i}(1)+0.5, val{i}(2)+0.5, val{i}(3)+0.5, num2str(temp_angles(k{i})), 'Color', 'r');
         end 
 
         if (i == 3)
-            txt = ["Plane rotation", num2str(angles('T'))];
+            txt = ["Plane rotation", num2str(temp_angles('T'))];
             text(val{i}(1)-1, val{i}(2)-1, val{i}(3)-1, txt, 'Color', 'r');
         end 
         

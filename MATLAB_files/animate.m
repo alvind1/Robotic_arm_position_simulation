@@ -1,29 +1,34 @@
 %% Constants
 grid on;
-xlim = ([0, 10]);
-ylim([-5, 5]);
-zlim = ([0, 10]);
 axis manual;
 
 xmin = 0;
-xmax = 12;
-ymin = -6;
-ymax = 6;
+xmax = 15;
+ymin = -8;
+ymax = 8;
 zmin = 0;
-zmax = 12;
+zmax = 15;
 
+sign = 1;
+x = 11;
+y = 2;
+z = 8;
+z0 = z;
 theta_y = pi/8;
 
 %%
-for j = 1:10000
-    r = 1;
-    xdist = 11;
-    zdist = 3;
+for j = 0:100000
+%     r = 2;
+%     xdist = 13;
+%     zdist = 8;
+%     [x, y, z, theta_x] = get_points(-j/10, r, xdist, zdist);
+    z0 = z0+sign/5;
+
+    z1 = z-z0;
+    theta_x = abs(atan(y/z1));
     
-    [x, y, z, theta_x] = get_points(j/10, r, xdist, zdist);
-    
-    z1 = abs(y)*tan(theta_x); %Weird jump 
-    z0 = z-z1;
+    %z1 = abs(y*tan(theta_x)); %Turned to abs to smooth movement, not sure if correct
+    %z0 = z-z1;
     
     arms_lengths = containers.Map();
     arms_lengths('AB') = z0;
@@ -43,11 +48,17 @@ for j = 1:10000
     arms_lengths('CE') = norm(points('E')-points('C'));
 
     if(norm(points('F')-points('C')) > arms_lengths('CD')+arms_lengths('DE')+arms_lengths('EF'))
-        error("Not possible 1");
-    end 
-
-    if(triangle_inequality(arms_lengths('CD'), arms_lengths('DE'), arms_lengths('CE'))==-1)
-        error("Not possible 2");
+        %error("Not possible 1");
+        disp("Not possible 0");
+        disp(sign);
+        sign = sign*(-1);
+        disp(sign);
+        continue;
+    elseif(triangle_inequality(arms_lengths('CD'), arms_lengths('DE'), arms_lengths('CE'))==-1)
+        %error("Not possible 2");
+        disp("Not possible 2");
+        sign = sign*(-1);
+        continue;
     end 
 
     vectors = containers.Map();
@@ -73,8 +84,21 @@ for j = 1:10000
     angles('D') = pi-cosine_law_angle(arms_lengths('CD'), arms_lengths('DE'), norm(points('E')-points('C')));
     angles('E') = pi-cosine_law_angle(arms_lengths('DE'), arms_lengths('EF'), norm(points('F')-points('D')));
     temp = points('D');
-    angles('T') = atan((temp(3)-z0)/temp(2));
+    angles('T') = atan(temp(2)/(temp(3)-z0));
 
+    if temp(2) >= 0 && angles('T') < 0
+        angles('T') = pi+angles('T');
+    else
+        text(5, 5, 5, "!!!!!");
+        if temp(3) < z0
+            text(1, 1, 1, "hello");
+            disp("hello");
+            angles('T') = angles('T')+pi;
+        elseif temp(3) >= z0 && angles('T') < 0
+            angles('T') = 2*pi+angles('T');
+        end
+    end
+             
     x_val = [];
     y_val = [];
     z_val = [];
@@ -116,11 +140,11 @@ for j = 1:10000
     plot3(x_val, y_val, z_val); %Draw
     axis([xmin, xmax, ymin, ymax, zmin, zmax]);
     
-    t = linspace(1, 100);
-    xcircle = xdist.*ones(size(t));
-    ycircle = r*cos(t);
-    zcircle = r*sin(t)+zdist;
-    line(xcircle, ycircle, zcircle);
+%     t = linspace(1, 100);
+%     xcircle = xdist.*ones(size(t));
+%     ycircle = r*cos(t);
+%     zcircle = r*sin(t)+zdist;
+%     line(xcircle, ycircle, zcircle);
     
     xlabel('X');
     ylabel('Y');
@@ -129,5 +153,5 @@ for j = 1:10000
     drawnow;
     hold off;
     
-    pause(0.1);
+    pause(0.02);
 end

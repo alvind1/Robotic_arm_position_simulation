@@ -1,4 +1,4 @@
-function[angles] = IK(x, y, z, theta_x, theta_y, z0)
+function[angles, points] = IK(x, y, z, theta_x, theta_y, z0, sign)
     arms_lengths = containers.Map();
     arms_lengths('AB') = z0;
     arms_lengths('BC') = 3;
@@ -27,7 +27,7 @@ function[angles] = IK(x, y, z, theta_x, theta_y, z0)
     vectors = containers.Map();
     vectors('CE') = points('E') - points('C');
     vectors('CF') = points('F') - points('C');
-    vectors('cross1') = cross(vectors('CE'), vectors('CF'));
+    vectors('cross1') = sign*cross(vectors('CE'), vectors('CF'));
     vectors('cross2') = cross(vectors('CE'), vectors('cross1'));
 
     height = 2*heron(arms_lengths('CD'), arms_lengths('DE'), arms_lengths('CE'))/arms_lengths('CE');
