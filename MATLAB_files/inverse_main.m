@@ -2,9 +2,9 @@ grid on;
 
 axis_dim = [0, 18, -6, 6, 0, 15];
 
-x = 1.9337;
-y = 0.12396;
-z = 4.6611;
+x = 11;
+y = 5;
+z = 5;
 theta_x = 1.4834; %May not be given
 theta_y = 1.5290; 
 
@@ -28,15 +28,9 @@ points('F') = [x, y, z];
 
 arms_lengths('CE') = norm(points('E')-points('C'));
 
-if(norm(points('F')-points('C')) >= arms_lengths('CD')+arms_lengths('DE')+arms_lengths('EF'))
-    %error("Not possible 1");
-    disp("Not possible 1");
-end 
-
-if(triangle_inequality(arms_lengths('CD'), arms_lengths('DE'), arms_lengths('CE'))==-1)
-    %error("Not possible 2");
-    disp("Not possible 2");
-end 
+if(IK_conditions(points, arms_lengths) ~= 1)
+    error("NOT POSSIBLE");
+end
 
 vectors = containers.Map();
 vectors('CE') = points('E') - points('C');

@@ -9,13 +9,11 @@ function[angles, points] = IK(x, y, z, theta_x, theta_y, z0, sign, arms_lengths)
 
     arms_lengths('CE') = norm(points('E')-points('C'));
 
-    if(norm(points('F')-points('C')) > arms_lengths('CD')+arms_lengths('DE')+arms_lengths('EF'))
-        error("Not possible 1");
-    end 
-
-    if(triangle_inequality(arms_lengths('CD'), arms_lengths('DE'), arms_lengths('CE'))==-1)
-        error("Not possible 2");
-    end 
+    if(IK_conditions(points, arms_lengths) ~= 1)
+        points = -1;
+        angles = -1;
+        return;
+    end
 
     vectors = containers.Map();
     vectors('CE') = points('E') - points('C');
@@ -51,5 +49,5 @@ function[angles, points] = IK(x, y, z, theta_x, theta_y, z0, sign, arms_lengths)
     else
         angles('T') = 0;
     end
-
+    disp("IK_DONE");
 end 

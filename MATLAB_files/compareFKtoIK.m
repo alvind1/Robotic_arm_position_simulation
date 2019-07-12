@@ -53,4 +53,5 @@ for i = 1:n
     end
 end
 
+disp("PROGRAM_DONE");
 %% Bugs
