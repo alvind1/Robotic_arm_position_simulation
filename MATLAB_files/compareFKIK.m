@@ -27,7 +27,7 @@ for i = 1:n
         theta_y = -theta_y;
     end 
     
-    [got_angles, got_points] = IK(f(1), f(2), f(3), angles('T'), theta_y, z0, 1);
+    [got_angles, got_points] = IK(f(1), f(2), f(3), angles('T'), theta_y, z0, 1, arms_lengths);
     
     k = keys(got_angles);
     v = values(got_angles);
@@ -58,7 +58,7 @@ for i = 1:n
         continue;
     end
     
-    [got_angles, got_points] = IK(f(1), f(2), f(3), angles('T'), theta_y, z0, -1);
+    [got_angles, got_points] = IK(f(1), f(2), f(3), angles('T'), theta_y, z0, -1, arms_lengths);
     
     k = keys(got_angles);
     v = values(got_angles);
@@ -86,5 +86,3 @@ end
 disp("DONE");
 
 %% Bugs
-%C: (3, 0, 4.3286)
-%D: 

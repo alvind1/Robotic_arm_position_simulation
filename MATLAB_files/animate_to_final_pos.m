@@ -31,7 +31,7 @@ start_z = 7; %Arbitrary
 start_theta_y = 0;
 start_theta_x = 0;
 
-[angles] = IK(x, y, z, theta_x, theta_y, z0);
+[angles] = IK(x, y, z, theta_x, theta_y, z0, 1, arms_lengths);
 
 n = 200;
 

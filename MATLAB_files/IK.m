@@ -1,11 +1,4 @@
-function[angles, points] = IK(x, y, z, theta_x, theta_y, z0, sign)
-    arms_lengths = containers.Map();
-    arms_lengths('AB') = z0;
-    arms_lengths('BC') = 3;
-    arms_lengths('CD') = 4;
-    arms_lengths('DE') = 5;
-    arms_lengths('EF') = 6;
-
+function[angles, points] = IK(x, y, z, theta_x, theta_y, z0, sign, arms_lengths)
     points = containers.Map();
     points('A') = [0, 0, 0];
     points('B') = [0, 0, z0];
