@@ -2,12 +2,13 @@ axis_dim = [0, 18, -6, 6, 0, 16];
 
 %Givens
 angles = containers.Map();
-angles('C') = 2.4033;
-angles('D') = 1.1670;
-angles('E') = 2.7653;
-angles('T') = 1.4834;
-z0 = 3.2463;
-scenario = 0;
+angles('C') = pi/4;
+angles('D') = pi/4;
+angles('E') = pi/4;
+angles('T') = 0;
+z0 = 3.0844;
+
+scenario = 0; %Not given
 
 arms_lengths = containers.Map();
 arms_lengths('AB') = z0;
@@ -51,7 +52,7 @@ end
 
 output = [points('F'), angles('T'), theta_y]
 grid on;
-%figure(2);
+figure(2);
 plot_points(points, angles,'FK', axis_dim); 
 
 remove(arms_lengths, 'CE');

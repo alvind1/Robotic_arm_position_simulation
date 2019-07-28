@@ -43,11 +43,23 @@ function[angles, points] = IK(x, y, z, theta_x, theta_y, z0, sign, arms_lengths)
     angles('D') = pi-cosine_law_angle(arms_lengths('CD'), arms_lengths('DE'), norm(points('E')-points('C')));
     angles('E') = pi-cosine_law_angle(arms_lengths('DE'), arms_lengths('EF'), norm(points('F')-points('D')));
     temp = points('D');
+    
+    v = values(points);
+    
+    for i=1:length(v)
+        temp = v{i};
+        if(temp(1) < -0.1 < temp(3) < -0.1)
+            points = -1;
+            angles = -1;
+            return;
+        end
+    end
 
     if temp(2) ~= 0
         angles('T') = atan((temp(3)-z0)/temp(2));
     else
         angles('T') = 0;
     end
+    
     disp("IK_DONE");
 end 

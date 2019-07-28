@@ -1,12 +1,12 @@
 grid on;
 
-axis_dim = [0, 18, -6, 6, 0, 15];
+axis_dim = [-3, 18, -6, 6, 0, 15];
 
-x = 11;
-y = 5;
-z = 5;
-theta_x = 1.4834; %May not be given
-theta_y = 1.5290; 
+x = 10;
+y = 2;
+z = 8;
+theta_x = 0.8; 
+theta_y = 0.3; 
 
 z1 = y*tan(theta_x);
 z0 = z-z1;
@@ -35,7 +35,7 @@ end
 vectors = containers.Map();
 vectors('CE') = points('E') - points('C');
 vectors('CF') = points('F') - points('C');
-vectors('cross1') = -cross(vectors('CE'), vectors('CF'));
+vectors('cross1') = cross(vectors('CE'), vectors('CF'));
 vectors('cross2') = cross(vectors('CE'), vectors('cross1'));
 
 height = 2*heron(arms_lengths('CD'), arms_lengths('DE'), arms_lengths('CE'))/arms_lengths('CE');
@@ -56,9 +56,14 @@ vectors('CD') = vectors('CG')+vectors('GD');
 points('D') = points('C')+vectors('CD');
 
 angles = containers.Map();
+
 angles('C') = pi-cosine_law_angle(norm(points('C')-points('B')), arms_lengths('CD'), norm(points('D')-points('B')));
+       
 angles('D') = pi-cosine_law_angle(arms_lengths('CD'), arms_lengths('DE'), norm(points('E')-points('C')));
+angles('D') = angles('D')*angle_direction(vectors('CE'), vectors('CD'), theta_y);
 angles('E') = pi-cosine_law_angle(arms_lengths('DE'), arms_lengths('EF'), norm(points('F')-points('D')));
+angles('E') = angles('E')*angle_direction(vectors('CF'), vectors('CE'), theta_y);
+
 temp = points('D');
 
 if temp(2) ~= 0
