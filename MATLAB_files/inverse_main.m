@@ -2,11 +2,11 @@ grid on;
 
 axis_dim = [-3, 18, -6, 6, 0, 15];
 
-x = 10;
-y = 2;
-z = 8;
-theta_x = 0.8; 
-theta_y = 0.3; 
+x = 13;
+y = 3;
+z = 9;
+theta_x = 0.6750; 
+theta_y = 0.0585; 
 
 z1 = y*tan(theta_x);
 z0 = z-z1;
@@ -28,7 +28,9 @@ points('F') = [x, y, z];
 
 arms_lengths('CE') = norm(points('E')-points('C'));
 
-if(IK_conditions(points, arms_lengths) ~= 1)
+check = IK_conditions(points, arms_lengths);
+if check ~= 1
+    disp(check);
     error("NOT POSSIBLE");
 end
 
@@ -56,16 +58,16 @@ vectors('CD') = vectors('CG')+vectors('GD');
 points('D') = points('C')+vectors('CD');
 
 angles = containers.Map();
+signs = angle_direction(points, z0);
 
 angles('C') = pi-cosine_law_angle(norm(points('C')-points('B')), arms_lengths('CD'), norm(points('D')-points('B')));
-       
+angles('C') = angles('C')*signs('C');
 angles('D') = pi-cosine_law_angle(arms_lengths('CD'), arms_lengths('DE'), norm(points('E')-points('C')));
-angles('D') = angles('D')*angle_direction(vectors('CE'), vectors('CD'), theta_y);
+angles('D') = angles('D')*signs('D');
 angles('E') = pi-cosine_law_angle(arms_lengths('DE'), arms_lengths('EF'), norm(points('F')-points('D')));
-angles('E') = angles('E')*angle_direction(vectors('CF'), vectors('CE'), theta_y);
+angles('E') = angles('E')*signs('E');
 
 temp = points('D');
-
 if temp(2) ~= 0
     angles('T') = atan((temp(3)-z0)/temp(2));
 else

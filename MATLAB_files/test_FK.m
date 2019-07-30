@@ -9,9 +9,9 @@ mx = 0;
 
 for i = 1:10000
     z0 = 8*rand(1, 1)+2;
-    angles('C') = (pi)*rand(1, 1);
-    angles('D') = (pi)*rand(1, 1);
-    angles('E') = (pi)*rand(1, 1);
+    angles('C') = -(pi)*rand(1, 1);
+    angles('D') = -(pi)*rand(1, 1);
+    angles('E') = -(pi)*rand(1, 1);
     angles('T') = (pi)*rand(1, 1);
     
     arms_lengths('AB') = z0;

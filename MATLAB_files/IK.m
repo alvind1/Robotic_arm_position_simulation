@@ -9,7 +9,7 @@ function[angles, points] = IK(x, y, z, theta_x, theta_y, z0, sign, arms_lengths)
 
     arms_lengths('CE') = norm(points('E')-points('C'));
 
-    if(IK_conditions(points, arms_lengths) ~= 1)
+    if(IK_conditions(points, arms_lengths) ~= 1) %Checks if the givens are possible
         points = -1;
         angles = -1;
         return;
@@ -39,27 +39,32 @@ function[angles, points] = IK(x, y, z, theta_x, theta_y, z0, sign, arms_lengths)
     points('D') = points('C')+vectors('CD');
 
     angles = containers.Map();
+    signs = angle_direction(points, z0);
+
     angles('C') = pi-cosine_law_angle(norm(points('C')-points('B')), arms_lengths('CD'), norm(points('D')-points('B')));
+    angles('C') = angles('C')*signs('C');
     angles('D') = pi-cosine_law_angle(arms_lengths('CD'), arms_lengths('DE'), norm(points('E')-points('C')));
+    angles('D') = angles('D')*signs('D');
     angles('E') = pi-cosine_law_angle(arms_lengths('DE'), arms_lengths('EF'), norm(points('F')-points('D')));
-    temp = points('D');
+    angles('E') = angles('E')*signs('E');
     
     v = values(points);
     
-    for i=1:length(v)
+    for i=1:length(v) %Checks if x or z components are negative
         temp = v{i};
-        if(temp(1) < -0.1 < temp(3) < -0.1)
+        if(temp(1) < -0.1 || temp(3) < -0.1)
             points = -1;
             angles = -1;
             return;
         end
     end
-
+    
+    temp = points('D');
     if temp(2) ~= 0
         angles('T') = atan((temp(3)-z0)/temp(2));
     else
         angles('T') = 0;
     end
     
-    disp("IK_DONE");
+    %disp("IK_DONE");
 end 

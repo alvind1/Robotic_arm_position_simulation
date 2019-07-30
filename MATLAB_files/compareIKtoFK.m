@@ -11,10 +11,14 @@ max_y = 5;
 max_z = 12;
 
 i = 1;
-
+c = 0;
 %[got_angles, got_points] = IK(x, y, z, theta_x, theta_y, z0, 1, arms_lengths);
 
-while(i <= 1000)
+while(i <= 100)
+    c = c+1;
+    if c >= 2000
+        break;
+    end
     x = 3+max_x*rand(1, 1);
     y = max_y*rand(1, 1);
     z = 2+max_z*rand(1, 1);
@@ -33,24 +37,7 @@ while(i <= 1000)
     end
    
     got_val = values(got_points);
-    k = keys(got_points);
-    
-    for j = 2:length(k) %Checks if arm segments overlap
-        for m = j+1:length(k)
-            [check] = check_line_intersection(got_val{j-1}, got_val{j}, got_val{m-1}, got_val{m});
-            if check == -1
-                break;
-            end
-        end
-        if check == -1
-            break;
-        end
-    end
-    if check == -1
-        continue;
-    end
-    
-    
+    k = keys(got_points);    
     [target_points, scenario] = FK(got_angles, z0, arms_lengths);
     target_val = values(target_points);
     
@@ -75,3 +62,4 @@ while(i <= 1000)
 end
 
 disp("PROGRAM_DONE");
+disp(c);

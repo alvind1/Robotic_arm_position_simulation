@@ -2,11 +2,14 @@ axis_dim = [0, 18, -6, 6, 0, 16];
 
 %Givens
 angles = containers.Map();
-angles('C') = pi/4;
-angles('D') = pi/4;
-angles('E') = pi/4;
-angles('T') = 0;
-z0 = 3.0844;
+angles('C') = 1.8183; %Range: 0 <= theta <= pi
+angles('D') = -1.7552; %Range: 0 <= theta <= pi
+angles('E') = -0.12161; %Range: 0 <= theta <= pi
+angles('T') = 0.675;  %Range: 0 <= theta <= pi
+z0 = 6.5987;
+
+%All positive angles works
+%All positive & angles('E') < 0 works
 
 scenario = 0; %Not given
 
@@ -17,32 +20,115 @@ arms_lengths('CD') = 4;
 arms_lengths('DE') = 5;
 arms_lengths('EF') = 6;
 
+%% Start of FK Function
 points = containers.Map();
 points('A') = [0, 0, 0];
 points('B') = [0, 0, z0];
 points('C') = [arms_lengths('BC'), 0, z0];
 points('D') = [arms_lengths('CD')*cos(angles('C'))+arms_lengths('BC'), sin(angles('C'))*arms_lengths('CD')*cos(angles('T')), arms_lengths('CD')*sin(angles('C'))*sin(angles('T'))+z0];
 
-arms_lengths('CE') = cosine_law_side(arms_lengths('CD'), arms_lengths('DE'), pi-angles('D'));
-angles('temp1') = angles('C')-cosine_law_angle(arms_lengths('CD'), arms_lengths('CE'), arms_lengths('DE'));
+arms_lengths('CE') = cosine_law_side(arms_lengths('CD'), arms_lengths('DE'), pi-abs(angles('D')));
+angles('temp1') = angles('C')+cosine_law_angle(arms_lengths('CD'), arms_lengths('CE'), arms_lengths('DE'))*angles('D')/abs(angles('D')); %Angle C to E
 points('E') = [arms_lengths('CE')*cos(angles('temp1'))+arms_lengths('BC'), arms_lengths('CE')*sin(angles('temp1'))*cos(angles('T')), arms_lengths('CE')*sin(angles('temp1'))*sin(angles('T'))+z0];
+%DONE up to here
 
-if angles('E')+cosine_law_angle(arms_lengths('CE'), arms_lengths('DE'), arms_lengths('CD')) < pi
-    temp3_angle =  pi-angles('E')-cosine_law_angle(arms_lengths('CE'), arms_lengths('DE'), arms_lengths('CD'));
-    scenario = 1;
+%Should all work
+if angles('C') >= 0 %Works
+    if angles('D') >= 0 %Works
+        if angles('E') >= 0
+            if abs(angles('E'))+cosine_law_angle(arms_lengths('CE'), arms_lengths('DE'), arms_lengths('CD')) < pi
+                temp3_angle =  pi-abs(angles('E'))-cosine_law_angle(arms_lengths('CE'), arms_lengths('DE'), arms_lengths('CD'));
+                scenario = 1;
+            else
+                temp3_angle = abs(angles('E'))+cosine_law_angle(arms_lengths('CE'), arms_lengths('DE'), arms_lengths('CD')) - pi;
+                scenario = 2;
+            end
+        elseif angles('E') < 0
+            if abs(angles('E')) <= cosine_law_angle(arms_lengths('CE'), arms_lengths('DE'), arms_lengths('CD'))
+                temp3_angle = pi+angles('E')-cosine_law_angle(arms_lengths('CE'), arms_lengths('DE'), arms_lengths('CD'));
+                scenario = 1;
+            elseif abs(angles('E'))+cosine_law_angle(arms_lengths('CE'), arms_lengths('DE'), arms_lengths('CD')) > pi
+                temp3_angle = -abs(angles('E'))+cosine_law_angle(arms_lengths('CE'), arms_lengths('DE'), arms_lengths('CD')) + pi;
+                scenario = 2;
+            else %in between previous cases
+                temp3_angle = pi-abs(angles('E'))+cosine_law_angle(arms_lengths('CE'), arms_lengths('DE'), arms_lengths('CD'));
+                scenario = 2;
+            end
+        end
+    else
+        if angles('E') >= 0 %Works
+            if angles('E') <= cosine_law_angle(arms_lengths('CE'), arms_lengths('DE'), arms_lengths('CD'))
+                temp3_angle = pi-cosine_law_angle(arms_lengths('CE'), arms_lengths('DE'), arms_lengths('CD'))+abs(angles('E'));
+                scenario = 2;
+            else
+                temp3_angle = pi-abs(angles('E'))+cosine_law_angle(arms_lengths('CE'), arms_lengths('DE'), arms_lengths('CD'));
+                scenario = 1;
+            end
+        else %Works
+            if abs(angles('E'))+cosine_law_angle(arms_lengths('CE'), arms_lengths('DE'), arms_lengths('CD')) <= pi
+                temp3_angle = pi-abs(angles('E'))-cosine_law_angle(arms_lengths('CE'), arms_lengths('DE'), arms_lengths('CD'));
+                scenario = 2;
+            else
+                temp3_angle = abs(angles('E'))+cosine_law_angle(arms_lengths('CE'), arms_lengths('DE'), arms_lengths('CD'))-pi;
+                scenario = 1;
+            end
+        end
+    end
 else
-    temp3_angle = angles('E')+cosine_law_angle(arms_lengths('CE'), arms_lengths('DE'), arms_lengths('CD')) - pi;
-    scenario = 2;
+    if angles('D') >= 0 
+        if angles('E') >= 0
+            if abs(angles('E'))+cosine_law_angle(arms_lengths('CE'), arms_lengths('DE'), arms_lengths('CD')) < pi
+                temp3_angle =  pi-abs(angles('E'))-cosine_law_angle(arms_lengths('CE'), arms_lengths('DE'), arms_lengths('CD'));
+                scenario = 1;
+            else
+                temp3_angle = abs(angles('E'))+cosine_law_angle(arms_lengths('CE'), arms_lengths('DE'), arms_lengths('CD')) - pi;
+                scenario = 2;
+            end
+        elseif angles('E') < 0
+            if abs(angles('E')) <= cosine_law_angle(arms_lengths('CE'), arms_lengths('DE'), arms_lengths('CD'))
+                temp3_angle = pi+angles('E')-cosine_law_angle(arms_lengths('CE'), arms_lengths('DE'), arms_lengths('CD'));
+                scenario = 1;
+            elseif abs(angles('E'))+cosine_law_angle(arms_lengths('CE'), arms_lengths('DE'), arms_lengths('CD')) > pi
+                temp3_angle = -abs(angles('E'))+cosine_law_angle(arms_lengths('CE'), arms_lengths('DE'), arms_lengths('CD')) + pi;
+                scenario = 2;
+            else %in between previous cases
+                temp3_angle = pi-abs(angles('E'))+cosine_law_angle(arms_lengths('CE'), arms_lengths('DE'), arms_lengths('CD'));
+                scenario = 2;
+            end
+        end
+    else
+        if angles('E') >= 0 
+            if angles('E') <= cosine_law_angle(arms_lengths('CE'), arms_lengths('DE'), arms_lengths('CD'))
+                temp3_angle = pi-cosine_law_angle(arms_lengths('CE'), arms_lengths('DE'), arms_lengths('CD'))+abs(angles('E'));
+                scenario = 2;
+            else
+                temp3_angle = pi-abs(angles('E'))+cosine_law_angle(arms_lengths('CE'), arms_lengths('DE'), arms_lengths('CD'));
+                scenario = 1;
+            end
+        else 
+            if abs(angles('E'))+cosine_law_angle(arms_lengths('CE'), arms_lengths('DE'), arms_lengths('CD')) <= pi
+                temp3_angle = pi-abs(angles('E'))-cosine_law_angle(arms_lengths('CE'), arms_lengths('DE'), arms_lengths('CD'));
+                scenario = 2;
+            else
+                temp3_angle = abs(angles('E'))+cosine_law_angle(arms_lengths('CE'), arms_lengths('DE'), arms_lengths('CD'))-pi;
+                scenario = 1;
+            end
+        end
+    end
 end
-
+    
 arms_lengths('CF') = cosine_law_side(arms_lengths('CE'), arms_lengths('EF'), temp3_angle);
-if scenario == 1
-    angles('temp2') = angles('C')-cosine_law_angle(arms_lengths('CD'), arms_lengths('CE'), arms_lengths('DE'))-cosine_law_angle(arms_lengths('CE'), arms_lengths('CF'), arms_lengths('EF'));
-elseif scenario == 2
-    angles('temp2') = angles('C')-cosine_law_angle(arms_lengths('CD'), arms_lengths('CE'), arms_lengths('DE'))+cosine_law_angle(arms_lengths('CE'), arms_lengths('CF'), arms_lengths('EF'));
-end
-points('F') = [arms_lengths('CF')*cos(angles('temp2'))+arms_lengths('BC'), arms_lengths('CF')*sin(angles('temp2'))*cos(angles('T')), arms_lengths('CF')*sin(angles('temp2'))*sin(angles('T'))+z0];
 
+if scenario == 1
+    angles('temp2') = angles('temp1')+cosine_law_angle(arms_lengths('CE'), arms_lengths('CF'), arms_lengths('EF'));
+elseif scenario == 2
+    angles('temp2') = angles('temp1')-cosine_law_angle(arms_lengths('CE'), arms_lengths('CF'), arms_lengths('EF'));
+end
+
+points('F') = [arms_lengths('CF')*cos(angles('temp2'))+arms_lengths('BC'), arms_lengths('CF')*sin(angles('temp2'))*cos(angles('T')), arms_lengths('CF')*sin(angles('temp2'))*sin(angles('T'))+z0];
+%End of FK function
+
+%% 
 e = points('E');
 f = points('F');
 theta_y = acos((f(1)-e(1))/arms_lengths('EF'));
@@ -61,7 +147,6 @@ remove(arms_lengths, 'CF');
 checkFK(points, angles, arms_lengths);
 txt_points = [points('A'); points('B'); points('C'); points('D'); points('E'); points('F')];
 disp(txt_points);
-disp(abs(f(3)-z0-f(2)*tan(angles('T'))));
 
 %% TODO
 %Check if angles match
