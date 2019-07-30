@@ -12,6 +12,6 @@ function [check] = check_line_intersection(pointA, pointB, pointC, pointD)
      if sv(1) <= 0 || sv(1) >= 1 || sv(2) <= 0 || sv(2) >= 1
          check = 1;
      else
-         check = -1;
+         check = -3;
      end  
 end

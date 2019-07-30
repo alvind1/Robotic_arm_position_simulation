@@ -1,12 +1,12 @@
 grid on;
 
-axis_dim = [-3, 18, -6, 6, 0, 15];
+axis_dim = [-3, 18, -6, 6, 0, 18];
 
-x = 13;
-y = 3;
-z = 9;
-theta_x = 0.6750; 
-theta_y = 0.0585; 
+x = 5.005;
+y = -5.4763;
+z = 1.1182;
+theta_x = 0.7213; 
+theta_y = 1.7017; 
 
 z1 = y*tan(theta_x);
 z0 = z-z1;
@@ -28,9 +28,8 @@ points('F') = [x, y, z];
 
 arms_lengths('CE') = norm(points('E')-points('C'));
 
-check = IK_conditions(points, arms_lengths);
-if check ~= 1
-    disp(check);
+check = IK_conditions(points, arms_lengths, 0);
+if check ~= 1 %Checks triangle inequality
     error("NOT POSSIBLE");
 end
 
@@ -38,7 +37,7 @@ vectors = containers.Map();
 vectors('CE') = points('E') - points('C');
 vectors('CF') = points('F') - points('C');
 vectors('cross1') = cross(vectors('CE'), vectors('CF'));
-vectors('cross2') = cross(vectors('CE'), vectors('cross1'));
+vectors('cross2') = -cross(vectors('CE'), vectors('cross1'));
 
 height = 2*heron(arms_lengths('CD'), arms_lengths('DE'), arms_lengths('CE'))/arms_lengths('CE');
 
@@ -57,8 +56,14 @@ vectors('CD') = vectors('CG')+vectors('GD');
 
 points('D') = points('C')+vectors('CD');
 
+if IK_conditions(points, arms_lengths, 1) ~= 1 %Checks line intersection and negative points
+    txt = [points('A'); points('B'); points('C'); points('D'); points('E'); points('F')];
+    disp(txt);
+    error("NOT POSSIBLE 2");
+end
+
 angles = containers.Map();
-signs = angle_direction(points, z0);
+signs = angle_direction(points, z0, 1);
 
 angles('C') = pi-cosine_law_angle(norm(points('C')-points('B')), arms_lengths('CD'), norm(points('D')-points('B')));
 angles('C') = angles('C')*signs('C');
@@ -67,16 +72,13 @@ angles('D') = angles('D')*signs('D');
 angles('E') = pi-cosine_law_angle(arms_lengths('DE'), arms_lengths('EF'), norm(points('F')-points('D')));
 angles('E') = angles('E')*signs('E');
 
-temp = points('D');
-if temp(2) ~= 0
-    angles('T') = atan((temp(3)-z0)/temp(2));
-else
-    angles('T') = 0;
-end
+angles('T') = theta_x;
 
 figure(1);
 plot_points(points, angles, 'IK', axis_dim);
 
+txt = [angles('C'), angles('D'), angles('E'), angles('T'), z0];
+disp(txt);
 txt_points = [points('A'); points('B'); points('C'); points('D'); points('E'); points('F')];
 disp(txt_points);
 

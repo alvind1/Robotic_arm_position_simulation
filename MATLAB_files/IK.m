@@ -8,10 +8,11 @@ function[angles, points] = IK(x, y, z, theta_x, theta_y, z0, sign, arms_lengths)
     points('F') = [x, y, z];
 
     arms_lengths('CE') = norm(points('E')-points('C'));
-
-    if(IK_conditions(points, arms_lengths) ~= 1) %Checks if the givens are possible
-        points = -1;
-        angles = -1;
+    
+    check = IK_conditions(points, arms_lengths, 0);
+    if(check ~= 1) %Checks if the givens are possible
+        points = check*100;
+        angles = check*100;
         return;
     end
 
@@ -39,7 +40,7 @@ function[angles, points] = IK(x, y, z, theta_x, theta_y, z0, sign, arms_lengths)
     points('D') = points('C')+vectors('CD');
 
     angles = containers.Map();
-    signs = angle_direction(points, z0);
+    signs = angle_direction(points, z0, 1);
 
     angles('C') = pi-cosine_law_angle(norm(points('C')-points('B')), arms_lengths('CD'), norm(points('D')-points('B')));
     angles('C') = angles('C')*signs('C');
@@ -48,23 +49,22 @@ function[angles, points] = IK(x, y, z, theta_x, theta_y, z0, sign, arms_lengths)
     angles('E') = pi-cosine_law_angle(arms_lengths('DE'), arms_lengths('EF'), norm(points('F')-points('D')));
     angles('E') = angles('E')*signs('E');
     
-    v = values(points);
+    angles('T') = theta_x;
     
-    for i=1:length(v) %Checks if x or z components are negative
-        temp = v{i};
-        if(temp(1) < -0.1 || temp(3) < -0.1)
-            points = -1;
-            angles = -1;
-            return;
-        end
+    check = IK_conditions(points, arms_lengths, 1);
+    if check ~= 1
+        %txt = [points('A'); points('B'); points('C'); points('D'); points('E'); points('F')];
+        %disp(txt);
+        points = check*100;
+        angles = check*100;
+        %disp("B");
     end
-    
-    temp = points('D');
-    if temp(2) ~= 0
-        angles('T') = atan((temp(3)-z0)/temp(2));
-    else
-        angles('T') = 0;
-    end
+%     temp = points('D');
+%     if temp(2) ~= 0
+%         angles('T') = atan((temp(3)-z0)/temp(2));
+%     else
+%         angles('T') = 0;
+%     end
     
     %disp("IK_DONE");
 end 

@@ -1,12 +1,12 @@
-axis_dim = [0, 18, -6, 6, 0, 16];
+axis_dim = [0, 18, -9, 6, 0, 16];
 
 %Givens
 angles = containers.Map();
-angles('C') = 1.8183; %Range: 0 <= theta <= pi
-angles('D') = -1.7552; %Range: 0 <= theta <= pi
-angles('E') = -0.12161; %Range: 0 <= theta <= pi
-angles('T') = 0.675;  %Range: 0 <= theta <= pi
-z0 = 6.5987;
+angles('C') = 2.2752; %Range: 0 <= theta <= pi
+angles('D') = -1.7993; %Range: 0 <= theta <= pi
+angles('E') = 2.7688; %Range: 0 <= theta <= pi
+angles('T') = -0.0137;  %Range: 0 <= theta <= pi/2
+z0 = 7.5794;
 
 %All positive angles works
 %All positive & angles('E') < 0 works
@@ -45,7 +45,7 @@ if angles('C') >= 0 %Works
             end
         elseif angles('E') < 0
             if abs(angles('E')) <= cosine_law_angle(arms_lengths('CE'), arms_lengths('DE'), arms_lengths('CD'))
-                temp3_angle = pi+angles('E')-cosine_law_angle(arms_lengths('CE'), arms_lengths('DE'), arms_lengths('CD'));
+                temp3_angle = pi+abs(angles('E'))-cosine_law_angle(arms_lengths('CE'), arms_lengths('DE'), arms_lengths('CD'));
                 scenario = 1;
             elseif abs(angles('E'))+cosine_law_angle(arms_lengths('CE'), arms_lengths('DE'), arms_lengths('CD')) > pi
                 temp3_angle = -abs(angles('E'))+cosine_law_angle(arms_lengths('CE'), arms_lengths('DE'), arms_lengths('CD')) + pi;
@@ -85,8 +85,9 @@ else
                 scenario = 2;
             end
         elseif angles('E') < 0
+            disp("A");
             if abs(angles('E')) <= cosine_law_angle(arms_lengths('CE'), arms_lengths('DE'), arms_lengths('CD'))
-                temp3_angle = pi+angles('E')-cosine_law_angle(arms_lengths('CE'), arms_lengths('DE'), arms_lengths('CD'));
+                temp3_angle = pi+abs(angles('E'))-cosine_law_angle(arms_lengths('CE'), arms_lengths('DE'), arms_lengths('CD'));
                 scenario = 1;
             elseif abs(angles('E'))+cosine_law_angle(arms_lengths('CE'), arms_lengths('DE'), arms_lengths('CD')) > pi
                 temp3_angle = -abs(angles('E'))+cosine_law_angle(arms_lengths('CE'), arms_lengths('DE'), arms_lengths('CD')) + pi;
@@ -131,10 +132,17 @@ points('F') = [arms_lengths('CF')*cos(angles('temp2'))+arms_lengths('BC'), arms_
 %% 
 e = points('E');
 f = points('F');
-theta_y = acos((f(1)-e(1))/arms_lengths('EF'));
-if e(3) < f(3)
+theta_y = acos(abs((f(1)-e(1)))/arms_lengths('EF'));
+sign = angle_direction(points, z0, 2);
+txt = ["sign", sign];
+disp(txt);
+if sign == 2
+    theta_y = pi-theta_y;
+elseif sign == 3
+    theta_y = -pi+theta_y;
+elseif sign == 4
     theta_y = -theta_y;
-end 
+end
 
 output = [points('F'), angles('T'), theta_y]
 grid on;
