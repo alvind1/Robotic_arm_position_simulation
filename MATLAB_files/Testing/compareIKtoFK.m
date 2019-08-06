@@ -14,7 +14,7 @@ i = 1;
 c = 0;
 errors = [0, 0, 0, 0];
 
-%To Do
+%ToDo
 
 while(i <= 100)
     c = c+1;

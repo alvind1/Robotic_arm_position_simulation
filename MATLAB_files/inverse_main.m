@@ -2,11 +2,11 @@ grid on;
 
 axis_dim = [-3, 18, -6, 6, 0, 18];
 
-x = 5.005;
-y = -5.4763;
-z = 1.1182;
-theta_x = 0.7213; 
-theta_y = 1.7017; 
+x = 14;
+y = 2;
+z = 11;
+theta_x = 0.3; 
+theta_y = 0.4; 
 
 z1 = y*tan(theta_x);
 z0 = z-z1;
@@ -76,6 +76,7 @@ angles('T') = theta_x;
 
 figure(1);
 plot_points(points, angles, 'IK', axis_dim);
+plot_board(points);
 
 txt = [angles('C'), angles('D'), angles('E'), angles('T'), z0];
 disp(txt);

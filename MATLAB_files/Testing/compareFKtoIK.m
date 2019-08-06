@@ -22,7 +22,7 @@ while (i<100)
     angles('T') = (pi)*rand(1, 1)-pi/2;
     arms_lengths('AB') = z0;
     
-    %To DO
+    %TODO
     %Calibrate scenario
     %Fix IK_condition(line intersection)
     

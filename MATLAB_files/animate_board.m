@@ -9,15 +9,7 @@ ymax = 8;
 zmin = 0;
 zmax = 15;
 
-x = 8;
-y = 3;
-z = 8;
-theta_x = 0.4; %May not be given
-theta_y = 0.7; 
-
-z1 = y*tan(theta_x);
-z0 = z-z1;
-
+n = 200;
 arms_lengths = containers.Map();
 arms_lengths('AB') = z0;
 arms_lengths('BC') = 3;
@@ -33,9 +25,14 @@ start_theta_x = 0;
 
 [angles] = IK(x, y, z, theta_x, theta_y, z0, 1, arms_lengths);
 
-%TODO: Check if animation can start from any given position
+x = 8;
+y = 3;
+z = 8;
+theta_x = 0.4; 
+theta_y = 0.7; 
 
-n = 200;
+z1 = y*tan(theta_x);
+z0 = z-z1;
 
 %%
 for j = 0:n

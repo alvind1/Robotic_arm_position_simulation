@@ -2,11 +2,11 @@ axis_dim = [0, 18, -9, 6, 0, 16];
 
 %Givens
 angles = containers.Map();
-angles('C') = 2.2752; %Range: 0 <= theta <= pi
-angles('D') = -1.7993; %Range: 0 <= theta <= pi
-angles('E') = 2.7688; %Range: 0 <= theta <= pi
-angles('T') = -0.0137;  %Range: 0 <= theta <= pi/2
-z0 = 7.5794;
+angles('C') = -1.9965; %Range: 0 <= theta <= pi
+angles('D') = 2.4743; %Range: 0 <= theta <= pi
+angles('E') = -2.1795; %Range: 0 <= theta <= pi
+angles('T') = 0.7213;  %Range: 0 <= theta <= pi/2
+z0 = 5.9339;
 
 %All positive angles works
 %All positive & angles('E') < 0 works
@@ -134,8 +134,6 @@ e = points('E');
 f = points('F');
 theta_y = acos(abs((f(1)-e(1)))/arms_lengths('EF'));
 sign = angle_direction(points, z0, 2);
-txt = ["sign", sign];
-disp(txt);
 if sign == 2
     theta_y = pi-theta_y;
 elseif sign == 3
