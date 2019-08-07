@@ -9,7 +9,7 @@ function[angles, points] = IK(x, y, z, theta_x, theta_y, z0, sign, arms_lengths)
 
     arms_lengths('CE') = norm(points('E')-points('C'));
     
-    check = IK_conditions(points, arms_lengths, 0);
+    check = IK_conditions(points, arms_lengths, 0, 0, 0, 0, -1);
     if(check ~= 1) %Checks if the givens are possible
         points = check*100;
         angles = check*100;
@@ -51,7 +51,7 @@ function[angles, points] = IK(x, y, z, theta_x, theta_y, z0, sign, arms_lengths)
     
     angles('T') = theta_x;
     
-    check = IK_conditions(points, arms_lengths, 1);
+    check = IK_conditions(points, arms_lengths, 1, 0, 0, 0, -1);
     if check ~= 1
         %txt = [points('A'); points('B'); points('C'); points('D'); points('E'); points('F')];
         %disp(txt);

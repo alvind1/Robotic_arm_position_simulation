@@ -4,12 +4,20 @@ axis manual;
 
 xmin = 0;
 xmax = 19;
-ymin = -8;
-ymax = 8;
+ymin = -10;
+ymax = 10;
 zmin = 0;
 zmax = 15;
 
-n = 200;
+x = 12.5;
+y = 2;
+z = 11;
+theta_x = 0.3; 
+theta_y = 0.2;
+
+z1 = y*tan(theta_x);
+z0 = z-z1;
+
 arms_lengths = containers.Map();
 arms_lengths('AB') = z0;
 arms_lengths('BC') = 3;
@@ -17,28 +25,30 @@ arms_lengths('CD') = 4;
 arms_lengths('DE') = 5;
 arms_lengths('EF') = 6;
 
-start_x = arms_lengths('BC')+arms_lengths('CD')+arms_lengths('DE')+arms_lengths('EF');
-start_y = 0;
-start_z = 7; %Arbitrary
-start_theta_y = 0;
+start_x = arms_lengths('BC');
+start_y = 15;
+start_z = 5; 
 start_theta_x = 0;
+start_theta_y = -pi/2;
+start_z0 = start_z-start_y*tan(start_theta_x);
 
-[angles] = IK(x, y, z, theta_x, theta_y, z0, 1, arms_lengths);
+[initial_angles]  = IK(start_x, start_y, start_z, start_theta_x, start_theta_y, start_z0, 1, arms_lengths); 
+[angles, points] = IK(x, y, z, theta_x, theta_y, z0, 1, arms_lengths);
 
-x = 8;
-y = 3;
-z = 8;
-theta_x = 0.4; 
-theta_y = 0.7; 
+%TODO: Check if animation can start from any given position
 
-z1 = y*tan(theta_x);
-z0 = z-z1;
+n = 100;
+
+[plane, board, ppoint, r] = plot_board();
+
+hold on;
 
 %%
 for j = 0:n
-    temp_angles = get_angles(j, n, angles);
-    temp_angles('T')
-    points = FK(temp_angles, z0, arms_lengths);
+    [temp_angles, temp_z0] = get_angles(j, n, angles, initial_angles, z0, start_z0);
+    %txt = [temp_angles('C'), temp_angles('D'), temp_angles('E'), temp_angles('T')];
+    %disp(txt);
+    [points, scenario] = FK(temp_angles, temp_z0, arms_lengths);
         
     x_val = [];
     y_val = [];
@@ -49,22 +59,30 @@ for j = 0:n
     length_val = values(arms_lengths);
     
     for i = 1:length(points)
+        if ismissing(points(k{i}))
+            txt = [temp_angles('C'), temp_angles('D'), temp_angles('E'), temp_angles('T'), temp_z0, i];
+            disp(txt);
+            txt = [points('A'); points('B'); points('C'); points('D'); points('E'); points('F')];
+            disp(txt);
+            error("A");
+        end
+        
         x_val(end+1) = val{i}(1);
         y_val(end+1) = val{i}(2);
         z_val(end+1) = val{i}(3);
-        scatter3(x_val, y_val, z_val); %Draw
+        splt(i) = scatter3(x_val, y_val, z_val); %Draw
         
         if(i ~= 1) %Print lengths
-            text((val{i}(1)+val{i-1}(1))/2, (val{i}(2)+val{i-1}(2))/2, (val{i}(3)+val{i-1}(3))/2, num2str(norm(points(k{i})-points(k{i-1}))));
+            tplt(1, i) = text((val{i}(1)+val{i-1}(1))/2, (val{i}(2)+val{i-1}(2))/2, (val{i}(3)+val{i-1}(3))/2, num2str(norm(points(k{i})-points(k{i-1}))));
         end
 
         if(i ~= 1 && i ~= 2 && i ~= 6)
-            text(val{i}(1)+0.5, val{i}(2)+0.5, val{i}(3)+0.5, num2str(temp_angles(k{i})), 'Color', 'r');
+            tplt(2,  i) = text(val{i}(1)+0.5, val{i}(2)+0.5, val{i}(3)+0.5, num2str(temp_angles(k{i})), 'Color', 'r');
         end 
 
         if (i == 3)
             txt = ["Plane rotation", num2str(temp_angles('T'))];
-            text(val{i}(1)-1, val{i}(2)-1, val{i}(3)-1, txt, 'Color', 'r');
+            tplt(3, i) = text(val{i}(1)-1, val{i}(2)-1, val{i}(3)-1, txt, 'Color', 'r');
         end 
         
         if(abs(arms_lengths('EF')-norm(points('F')-points('E'))) > 0.1)
@@ -74,11 +92,18 @@ for j = 0:n
         if(abs(norm(points('E')-points('D'))-arms_lengths('DE')) > 0.1)
             error("DE OFF");
         end 
+       
+        if i ~= 6 && check_segmentboard_intersection(plane, ppoint, points(k{i}), points(k{i+1})-points(k{i}), board, r) == -1
+%             txt = [plane, "B", ppoint, "B",  points(k{i}), "B", points(k{i+1})-points(k{i}), "B", board, "B", i, k{i+1}, "B", points('E')];
+%             disp(txt);
+%             txt = [points('A'); points('B'); points('C'); points('D'); points('E'); points('F')];
+%             disp(txt);
+            error("BOARD INTERSECTION");
+        end
         
-        hold on;
     end
-
-    plot3(x_val, y_val, z_val); %Draw
+    
+    plt = plot3(x_val, y_val, z_val); %Draw
     axis([xmin, xmax, ymin, ymax, zmin, zmax]);
     
     xlabel('X');
@@ -86,9 +111,13 @@ for j = 0:n
     zlabel('Z');
     
     drawnow;
-    hold off;
     
-    pause(0.02);
+    if j ~= n
+        delete(plt);
+        delete(splt);
+        delete(tplt);
+    end
+    
 end
 
 disp("DONE");

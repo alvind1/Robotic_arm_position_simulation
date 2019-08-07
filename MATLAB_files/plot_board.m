@@ -1,4 +1,4 @@
-function[] = plot_board(points)
+function[plane, board, ppoint, r] = plot_board()
     x0 = 13;
     y0 = 0;
     z0 = 15;
@@ -19,22 +19,12 @@ function[] = plot_board(points)
     cz = r*sin(t)+holez;
     patch(cx, cy, cz, 'Green'); 
     %pc.FaceAlpha = 0.3;
-    
-    plot_rivets(x0, y0, 3, theta);
-    
+
     plane = [1*cos(theta), 1*sin(theta), 0];
     ppoint = [x0, y0, holez];
     board = [abs(sin(theta)*w), abs(w*cos(theta)), z0];
     
-    k = keys(points);
-    
-    for i = 2:length(points)
-        check = check_segmentboard_intersection(plane, ppoint, points(k{i-1}), points(k{i})-points(k{i-1}), board, r);
-        if check == -1
-            disp("ERROR");
-            return;
-        end
-    end
+    plot_rivets(x0, y0, 3, theta);
    
     view(3);
     
@@ -42,4 +32,6 @@ function[] = plot_board(points)
     xlabel('X');
     ylabel('Y');
     zlabel('Z');
+    
+    hold on;
 end 

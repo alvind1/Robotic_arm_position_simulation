@@ -1,4 +1,4 @@
-function[check] = IK_conditions(points, arms_lengths, num)
+function[check] = IK_conditions(points, arms_lengths, num, plane, board, ppoint, r)
     check = 1;
     if(norm(points('F')-points('C')) > arms_lengths('CD')+arms_lengths('DE')+arms_lengths('EF'))
         check = -1;
@@ -16,26 +16,30 @@ function[check] = IK_conditions(points, arms_lengths, num)
         got_val = values(points);
         k = keys(points);
 
-        for j = 2:length(k) %Checks if arm segments overlap
-            for m = j+1:length(k)
-                check = check_line_intersection(got_val{j-1}, got_val{j}, got_val{m-1}, got_val{m});
-                if check == -3
-                    %disp("B.1");
-                    return;
-                end
-            end
-        end
-       
-        v = values(points);
-    
-        for i=1:length(v) %Checks if x or z components are negative
-            temp = v{i};
+        for i=1:length(k) %Checks if x or z components are negative
+            temp = got_val{i};
             %disp(points(k{i}));
             if(temp(1) < -0.01 || temp(3) < -0.01)
                 %disp("B.2");
                 check = -4;
                 return;
             end
+            
+            for m = i+1:length(k)-1 %Check if arm segments over lap
+                if check_line_intersection(got_val{i}, got_val{i+1}, got_val{m}, got_val{m+1})  == -3
+                    return;
+                end
+            end
+            
+            if i ~= 6 && r ~= -1
+                if check_segmentboard_intersection(plane, ppoint, points(k{i}), points(k{i+1})-points(k{i}), board, r) == -1
+                    check = -5;
+                    disp(i);
+                    disp("PLANE INTERSECTION");
+                    return;
+                end
+            end
+            
         end
     end
 end

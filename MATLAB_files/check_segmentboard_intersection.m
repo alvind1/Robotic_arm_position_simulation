@@ -1,19 +1,16 @@
-function[check] = check_segmentboard_intersection(plane, ppoint, lpoint, v, board, holer)
-
+function[check] = check_segmentboard_intersection(plane, ppoint, lpoint, v, board, r)
     a = plane(1);
     b = plane(2);
     c = plane(3);
         
-    syms t;
-    eqn = a*(lpoint(1)+v(1)*t-ppoint(1))+b*(lpoint(2)+v(2)*t-ppoint(2))+c*(lpoint(3)+v(3)*t-ppoint(3)) == 0;
-    solt = solve(eqn, t);
+    t = (a*(ppoint(1)-lpoint(1))+b*(ppoint(2)-lpoint(2))+c*(ppoint(3)-lpoint(3)))/(a*v(1)+b*v(2)+c*v(3));
     
-    if isempty(solt)
+    if t == Inf
         check = 1;
-    elseif solt < 0 || solt > 1
+    elseif t < 0 || t > 1
         check = 1;
     else
-        p = lpoint+v*double(solt);
+        p = lpoint+v*t;
         
         if p(3) > board(3) || p(3) < 0
             check = 1;
@@ -21,10 +18,12 @@ function[check] = check_segmentboard_intersection(plane, ppoint, lpoint, v, boar
             check = 1;
         elseif p(1) > ppoint(1)+board(1) || p(1) < ppoint(1)-board(1)
             check = 1;
-        elseif norm(p-ppoint) <= holer
+        elseif norm(p-ppoint) <= r
             check = 1;
         else
             check = -1;
+            %txt = [t, (a*(ppoint(1)-lpoint(1))+b*(ppoint(2)-lpoint(2))+c*(ppoint(3)-lpoint(3))), (a*v(1)+b*v(2)+c*v(3)), "A", plane, "A", ppoint, "A", lpoint, "A", v];
+            %disp(txt);
         end
     end
 end

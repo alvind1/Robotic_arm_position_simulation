@@ -2,11 +2,11 @@ axis_dim = [0, 18, -9, 6, 0, 16];
 
 %Givens
 angles = containers.Map();
-angles('C') = -1.9965; %Range: 0 <= theta <= pi
-angles('D') = 2.4743; %Range: 0 <= theta <= pi
-angles('E') = -2.1795; %Range: 0 <= theta <= pi
-angles('T') = 0.7213;  %Range: 0 <= theta <= pi/2
-z0 = 5.9339;
+angles('C') = 1.5708; %Range: 0 <= theta <= pi
+angles('D') = 0; %Range: 0 <= theta <= pi
+angles('E') = 0; %Range: 0 <= theta <= pi
+angles('T') = 0;  %Range: 0 <= theta <= pi/2
+z0 = 5;
 
 %All positive angles works
 %All positive & angles('E') < 0 works
@@ -29,6 +29,9 @@ points('D') = [arms_lengths('CD')*cos(angles('C'))+arms_lengths('BC'), sin(angle
 
 arms_lengths('CE') = cosine_law_side(arms_lengths('CD'), arms_lengths('DE'), pi-abs(angles('D')));
 angles('temp1') = angles('C')+cosine_law_angle(arms_lengths('CD'), arms_lengths('CE'), arms_lengths('DE'))*angles('D')/abs(angles('D')); %Angle C to E
+if angles('D') == 0
+    angles('temp1') = angles('C');
+end
 points('E') = [arms_lengths('CE')*cos(angles('temp1'))+arms_lengths('BC'), arms_lengths('CE')*sin(angles('temp1'))*cos(angles('T')), arms_lengths('CE')*sin(angles('temp1'))*sin(angles('T'))+z0];
 %DONE up to here
 

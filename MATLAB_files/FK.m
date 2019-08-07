@@ -7,6 +7,9 @@ function[points, scenario] = FK(angles, z0, arms_lengths)
 
     arms_lengths('CE') = cosine_law_side(arms_lengths('CD'), arms_lengths('DE'), pi-abs(angles('D')));
     angles('temp1') = angles('C')+cosine_law_angle(arms_lengths('CD'), arms_lengths('CE'), arms_lengths('DE'))*angles('D')/abs(angles('D')); %Angle C to E
+    if angles('D') == 0
+        angles('temp1') = angles('C');
+    end
     points('E') = [arms_lengths('CE')*cos(angles('temp1'))+arms_lengths('BC'), arms_lengths('CE')*sin(angles('temp1'))*cos(angles('T')), arms_lengths('CE')*sin(angles('temp1'))*sin(angles('T'))+z0];
     
     %Should all work
