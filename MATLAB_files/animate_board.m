@@ -8,9 +8,10 @@ ymin = -10;
 ymax = 10;
 zmin = 0;
 zmax = 15;
+ax = ([xmin, xmax, ymin, ymax, zmin, zmax]);
 
-x = 12.5;
-y = 2;
+x = 14; %Target Coordinates
+y = -3;
 z = 11;
 theta_x = 0.3; 
 theta_y = 0.2;
@@ -25,99 +26,47 @@ arms_lengths('CD') = 4;
 arms_lengths('DE') = 5;
 arms_lengths('EF') = 6;
 
-start_x = arms_lengths('BC');
+start_x = arms_lengths('BC'); %Starting Position
 start_y = 15;
 start_z = 5; 
 start_theta_x = 0;
 start_theta_y = -pi/2;
 start_z0 = start_z-start_y*tan(start_theta_x);
 
-[initial_angles]  = IK(start_x, start_y, start_z, start_theta_x, start_theta_y, start_z0, 1, arms_lengths); 
-[angles, points] = IK(x, y, z, theta_x, theta_y, z0, 1, arms_lengths);
+cx = 13; %Hole coordinates
+cy = 0;
+cz = 10;
+cr = 2; %Hole radius
 
-%TODO: Check if animation can start from any given position
 
-n = 100;
 
-[plane, board, ppoint, r] = plot_board();
+[initial_angles, initial_points]  = IK(start_x, start_y, start_z, start_theta_x, start_theta_y, start_z0, 1, arms_lengths); 
 
-hold on;
-
-%%
-for j = 0:n
-    [temp_angles, temp_z0] = get_angles(j, n, angles, initial_angles, z0, start_z0);
-    %txt = [temp_angles('C'), temp_angles('D'), temp_angles('E'), temp_angles('T')];
-    %disp(txt);
-    [points, scenario] = FK(temp_angles, temp_z0, arms_lengths);
-        
-    x_val = [];
-    y_val = [];
-    z_val = [];
-
-    k = keys(points);
-    val = values(points);
-    length_val = values(arms_lengths);
-    
-    for i = 1:length(points)
-        if ismissing(points(k{i}))
-            txt = [temp_angles('C'), temp_angles('D'), temp_angles('E'), temp_angles('T'), temp_z0, i];
-            disp(txt);
-            txt = [points('A'); points('B'); points('C'); points('D'); points('E'); points('F')];
-            disp(txt);
-            error("A");
-        end
-        
-        x_val(end+1) = val{i}(1);
-        y_val(end+1) = val{i}(2);
-        z_val(end+1) = val{i}(3);
-        splt(i) = scatter3(x_val, y_val, z_val); %Draw
-        
-        if(i ~= 1) %Print lengths
-            tplt(1, i) = text((val{i}(1)+val{i-1}(1))/2, (val{i}(2)+val{i-1}(2))/2, (val{i}(3)+val{i-1}(3))/2, num2str(norm(points(k{i})-points(k{i-1}))));
-        end
-
-        if(i ~= 1 && i ~= 2 && i ~= 6)
-            tplt(2,  i) = text(val{i}(1)+0.5, val{i}(2)+0.5, val{i}(3)+0.5, num2str(temp_angles(k{i})), 'Color', 'r');
-        end 
-
-        if (i == 3)
-            txt = ["Plane rotation", num2str(temp_angles('T'))];
-            tplt(3, i) = text(val{i}(1)-1, val{i}(2)-1, val{i}(3)-1, txt, 'Color', 'r');
-        end 
-        
-        if(abs(arms_lengths('EF')-norm(points('F')-points('E'))) > 0.1)
-            error("EF OFF");
-        end 
-        
-        if(abs(norm(points('E')-points('D'))-arms_lengths('DE')) > 0.1)
-            error("DE OFF");
-        end 
-       
-        if i ~= 6 && check_segmentboard_intersection(plane, ppoint, points(k{i}), points(k{i+1})-points(k{i}), board, r) == -1
-%             txt = [plane, "B", ppoint, "B",  points(k{i}), "B", points(k{i+1})-points(k{i}), "B", board, "B", i, k{i+1}, "B", points('E')];
-%             disp(txt);
-%             txt = [points('A'); points('B'); points('C'); points('D'); points('E'); points('F')];
-%             disp(txt);
-            error("BOARD INTERSECTION");
-        end
-        
-    end
-    
-    plt = plot3(x_val, y_val, z_val); %Draw
-    axis([xmin, xmax, ymin, ymax, zmin, zmax]);
-    
-    xlabel('X');
-    ylabel('Y');
-    zlabel('Z');
-    
-    drawnow;
-    
-    if j ~= n
-        delete(plt);
-        delete(splt);
-        delete(tplt);
-    end
-    
+xs1 = cx-2;
+ys1 = cy;
+zs1 = cz;
+theta_xs1 = 0;
+theta_ys1 = pi/4;
+z0s1 = zs1-ys1*tan(theta_xs1);
+[s1_angles, s1_points] = IK(xs1, ys1, zs1, theta_xs1, theta_ys1, z0s1, 1, arms_lengths);
+if(s1_angles <= -100 && s1_points <= -100)
+    error("S1");
 end
 
-disp("DONE");
+xs2 = cx;
+ys2 = cy;
+zs2 = cz;
+theta_xs2 = 0;
+theta_ys2 = pi/4;
+z0s2 = zs2-ys2*tan(theta_xs2);
+[s2_angles, s2_points] = IK(xs2, ys2, zs2, theta_xs2, theta_ys2, z0s2, 1, arms_lengths);
+
+[angles, points] = IK(x, y, z, theta_x, theta_y, z0, 1, arms_lengths);
+if angles <= -100 && points <= -100
+    error("TARGET");
+end
+
+
+f_animate(initial_angles, s1_angles, start_z0, z0s1, ax, arms_lengths, 0);
+f_animate(s1_angles, s2_angles, z0s1, z0s2, ax, arms_lengths, 0);
+f_animate(s2_angles, angles, z0s2, z0, ax, arms_lengths, 1);

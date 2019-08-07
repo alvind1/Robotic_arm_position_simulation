@@ -21,6 +21,7 @@ function[check] = check_segmentboard_intersection(plane, ppoint, lpoint, v, boar
         elseif norm(p-ppoint) <= r
             check = 1;
         else
+            disp(ppoint);
             check = -1;
             %txt = [t, (a*(ppoint(1)-lpoint(1))+b*(ppoint(2)-lpoint(2))+c*(ppoint(3)-lpoint(3))), (a*v(1)+b*v(2)+c*v(3)), "A", plane, "A", ppoint, "A", lpoint, "A", v];
             %disp(txt);
