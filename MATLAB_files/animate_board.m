@@ -5,26 +5,21 @@ axis manual;
 xmin = 0;
 xmax = 19;
 ymin = -10;
-ymax = 10;
+ymax = 20;
 zmin = 0;
 zmax = 15;
 ax = ([xmin, xmax, ymin, ymax, zmin, zmax]);
 
-x = 14; %Target Coordinates
-y = -3;
-z = 11;
-theta_x = 0.3; 
-theta_y = 0.2;
+[cx, cy, cz, w, board_theta, holez, r, plane, ppoint, board] = get_boardhole_coords();
 
-z1 = y*tan(theta_x);
-z0 = z-z1;
+[x, y, z, theta_x, theta_y, z0] = get_inverse_inputs();
 
-arms_lengths = containers.Map();
-arms_lengths('AB') = z0;
-arms_lengths('BC') = 3;
-arms_lengths('CD') = 4;
-arms_lengths('DE') = 5;
-arms_lengths('EF') = 6;
+get_arms_lengths(z0);
+
+[angles, points] = IK(x, y, z, theta_x, theta_y, z0, 1, arms_lengths);
+if angles <= -100 && points <= -100
+    error("TARGET ERROR");
+end
 
 start_x = arms_lengths('BC'); %Starting Position
 start_y = 15;
@@ -33,40 +28,32 @@ start_theta_x = 0;
 start_theta_y = -pi/2;
 start_z0 = start_z-start_y*tan(start_theta_x);
 
-cx = 13; %Hole coordinates
-cy = 0;
-cz = 10;
-cr = 2; %Hole radius
+stage_angles = {};
+stage_points = {};
+target_points = {};
+target_theta_x = {};
+target_theta_y = {};
 
 
+%% Algo
+[stage_angles{1}, stage_points{1}]  = IK(start_x, start_y, start_z, start_theta_x, start_theta_y, start_z0, 1, arms_lengths); %FIXME: z0 is off
 
-[initial_angles, initial_points]  = IK(start_x, start_y, start_z, start_theta_x, start_theta_y, start_z0, 1, arms_lengths); 
+[target_points{1}, target_theta_x{1}, target_theta_y{1}] = get_s1_points(board_theta, ppoint);
+[stage_angles{2}, stage_points{2}] = IK(target_points{1}(1), target_points{1}(2), target_points{1}(3), target_theta_x{1}, target_theta_y{1}, z0, 1, arms_lengths);
 
-xs1 = cx-2;
-ys1 = cy;
-zs1 = cz;
-theta_xs1 = 0;
-theta_ys1 = pi/4;
-z0s1 = zs1-ys1*tan(theta_xs1);
-[s1_angles, s1_points] = IK(xs1, ys1, zs1, theta_xs1, theta_ys1, z0s1, 1, arms_lengths);
-if(s1_angles <= -100 && s1_points <= -100)
+if(stage_angles{2} <= -100 && stage_points{2} <= -100)
     error("S1");
 end
 
-xs2 = cx;
-ys2 = cy;
-zs2 = cz;
-theta_xs2 = 0;
-theta_ys2 = pi/4;
-z0s2 = zs2-ys2*tan(theta_xs2);
-[s2_angles, s2_points] = IK(xs2, ys2, zs2, theta_xs2, theta_ys2, z0s2, 1, arms_lengths);
+f_animate(stage_angles{1}, stage_angles{2}, start_z0, z0, ax, arms_lengths, 1, 100);
 
-[angles, points] = IK(x, y, z, theta_x, theta_y, z0, 1, arms_lengths);
-if angles <= -100 && points <= -100
-    error("TARGET");
-end
-
-
-f_animate(initial_angles, s1_angles, start_z0, z0s1, ax, arms_lengths, 0);
-f_animate(s1_angles, s2_angles, z0s1, z0s2, ax, arms_lengths, 0);
-f_animate(s2_angles, angles, z0s2, z0, ax, arms_lengths, 1);
+% xs2 = cx;
+% ys2 = cy;
+% zs2 = cz;
+% theta_xs2 = 0;
+% theta_ys2 = pi/4;
+% z0s2 = zs2-ys2*tan(theta_xs2);
+% [s2_angles, s2_points] = IK(xs2, ys2, zs2, theta_xs2, theta_ys2, z0s2, 1, arms_lengths);
+% 
+% f_animate(s1_angles, s2_angles, z0s1, z0s2, ax, arms_lengths, 0, round(norm(s1_points('F')-s2_points('F')))*10);
+% f_animate(s2_angles, angles, z0s2, z0, ax, arms_lengths, 1, round(norm(s2_points('F')-points('F')))*10);

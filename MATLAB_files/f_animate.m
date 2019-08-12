@@ -1,11 +1,10 @@
-function[] = f_animate(start_angles, end_angles, start_z0, z0, ax, arms_lengths, p)
+function[] = f_animate(start_angles, end_angles, start_z0, z0, ax, arms_lengths, p, n)
     %% Constants
     grid on;
     axis manual;
-    
-    n = 100;
 
-    [plane, board, ppoint, r] = plot_board();
+    [cx, cy, cz, w, board_theta, holez, r, plane, ppoint, board] = get_boardhole_coords();
+    plot_board(cx, cy, cz, w, board_theta, holez, r);
 
     hold on;
 
@@ -14,7 +13,7 @@ function[] = f_animate(start_angles, end_angles, start_z0, z0, ax, arms_lengths,
         [temp_angles, temp_z0] = get_angles(j, n, end_angles, start_angles, z0, start_z0);
         %txt = [temp_angles('C'), temp_angles('D'), temp_angles('E'), temp_angles('T')];
         %disp(txt);
-        [points, scenario] = FK(temp_angles, temp_z0, arms_lengths);
+        [points, ~] = FK(temp_angles, temp_z0, arms_lengths);
 
         x_val = [];
         y_val = [];
@@ -48,7 +47,7 @@ function[] = f_animate(start_angles, end_angles, start_z0, z0, ax, arms_lengths,
 
             if (i == 3)
                 txt = ["Plane rotation", num2str(temp_angles('T'))];
-                tplt(3, i) = text(val{i}(1)-1, val{i}(2)-1, val{i}(3)-1, txt, 'Color', 'r');
+                tplt(3, i) = text(val{i}(1)-1, val{i}(2)-1, val{i}(3)-1, txt, 'Color', 'black');
             end 
 
             if(abs(arms_lengths('EF')-norm(points('F')-points('E'))) > 0.1)
@@ -60,10 +59,10 @@ function[] = f_animate(start_angles, end_angles, start_z0, z0, ax, arms_lengths,
             end 
 
             if i ~= 6 && check_segmentboard_intersection(plane, ppoint, points(k{i}), points(k{i+1})-points(k{i}), board, r) == -1
-                  txt = [points(k{i}), "B", points(k{i+1})-points(k{i}), "B", i, k{i+1}];
-                  disp(txt);
-    %             txt = [points('A'); points('B'); points('C'); points('D'); points('E'); points('F')];
-    %             disp(txt);
+                txt = [points(k{i}), "B", points(k{i+1})-points(k{i}), "B", i, k{i+1}];
+                disp(txt);
+                txt = [points('A'); points('B'); points('C'); points('D'); points('E'); points('F')];
+                disp(txt);
                 disp("BOARD INTERSECTION");
             end
 
@@ -78,11 +77,11 @@ function[] = f_animate(start_angles, end_angles, start_z0, z0, ax, arms_lengths,
 
         drawnow;
 
-        if j ~= n || (p == 0 && j == n)
-            delete(plt);
-            delete(splt);
-            delete(tplt);
-        end
+         if j ~= n || (p == 0 && j == n)
+             delete(plt);
+             delete(splt);
+             delete(tplt);
+         end
     end
 
     disp("DONE");

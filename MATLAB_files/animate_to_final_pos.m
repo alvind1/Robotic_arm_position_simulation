@@ -39,7 +39,7 @@ start_z0 = start_z-start_y*tan(start_theta_x);
 
 n = 100;
 
-[plane, board, ppoint, r] = plot_board();
+[plane, board, ppoint, r] = plot_board(1);
 
 hold on;
 

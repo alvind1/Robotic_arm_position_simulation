@@ -5,7 +5,7 @@ function[check] = check_segmentboard_intersection(plane, ppoint, lpoint, v, boar
         
     t = (a*(ppoint(1)-lpoint(1))+b*(ppoint(2)-lpoint(2))+c*(ppoint(3)-lpoint(3)))/(a*v(1)+b*v(2)+c*v(3));
     
-    if t == Inf
+    if t == Inf || isnan(t)
         check = 1;
     elseif t < 0 || t > 1
         check = 1;

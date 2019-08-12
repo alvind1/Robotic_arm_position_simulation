@@ -1,23 +1,24 @@
+%% GIVENS
 grid on;
 
 axis_dim = [-3, 18, -6, 6, 0, 18];
 
-x = 13;
-y = 0;
-z = 11;
-theta_x = 0.3; 
-theta_y = 0.2; 
+cx = 100; %Board and hole coordinates
+cy = 0;
+cz = 15;
+w = 3;
+theta = 0;
+holez = 10;
+r = 2;
 
-z1 = y*tan(theta_x);
-z0 = z-z1;
+plane = [1*cos(theta), 1*sin(theta), 0];
+ppoint = [cx, cy, holez];
+board = [abs(sin(theta)*w), abs(w*cos(theta)), cz];
 
-arms_lengths = containers.Map();
-arms_lengths('AB') = z0;
-arms_lengths('BC') = 3;
-arms_lengths('CD') = 4;
-arms_lengths('DE') = 5;
-arms_lengths('EF') = 6;
+[x, y, z, theta_x, theta_y, z0] = get_inverse_inputs();
+arms_lengths = get_arms_lengths(z0);
 
+%% CALCULATIONS
 points = containers.Map();
 points('A') = [0, 0, 0];
 points('B') = [0, 0, z0];
@@ -30,13 +31,24 @@ arms_lengths('CE') = norm(points('E')-points('C'));
 
 check = IK_conditions(points, arms_lengths, 0, 0, 0, 0, 0);
 if check ~= 1 %Checks triangle inequality
-    error("NOT POSSIBLE");
+    print_points(points);
+    if check == -1
+        error("LENGTH");
+    elseif check == -2
+        error("TRIANGLE INEQUALITY");
+    elseif check == -3
+        error("OVERLAP SEGMENTS");
+    elseif check == -4
+        error("NEGATIVE");
+    elseif check == -5
+        error("BOARD INTERSECTION");
+    end
 end
 
 vectors = containers.Map();
 vectors('CE') = points('E') - points('C');
 vectors('CF') = points('F') - points('C');
-vectors('cross1') = cross(vectors('CE'), vectors('CF'));
+vectors('cross1') = [0, cos(pi/2+theta_x), sin(pi/2+theta_x)]; %cross(vectors('CE'), vectors('CF'));
 vectors('cross2') = cross(vectors('CE'), vectors('cross1'));
 
 height = 2*heron(arms_lengths('CD'), arms_lengths('DE'), arms_lengths('CE'))/arms_lengths('CE');
@@ -56,7 +68,7 @@ vectors('CD') = vectors('CG')+vectors('GD');
 
 points('D') = points('C')+vectors('CD');
 
-[plane, board, ppoint, r] = plot_board();
+plot_board(cx, cy, cz, w, holez, theta, r);
 if IK_conditions(points, arms_lengths, 1, plane, board, ppoint, r) ~= 1 %Checks line intersection and negative points
     txt = [points('A'); points('B'); points('C'); points('D'); points('E'); points('F')];
     disp(txt);

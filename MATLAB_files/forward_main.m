@@ -2,11 +2,11 @@ axis_dim = [0, 18, -9, 6, 0, 16];
 
 %Givens
 angles = containers.Map();
-angles('C') = 1.5708; %Range: 0 <= theta <= pi
-angles('D') = 0; %Range: 0 <= theta <= pi
-angles('E') = 0; %Range: 0 <= theta <= pi
-angles('T') = 0;  %Range: 0 <= theta <= pi/2
-z0 = 5;
+angles('C') = pi/2; %Range: 0 <= theta <= pi
+angles('D') = pi; %Range: 0 <= theta <= pi
+angles('E') = pi/2; %Range: 0 <= theta <= pi
+angles('T') = pi/2;  %Range: 0 <= theta <= pi/2
+z0 =11;
 
 %All positive angles works
 %All positive & angles('E') < 0 works

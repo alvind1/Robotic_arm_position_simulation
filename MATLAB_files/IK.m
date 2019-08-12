@@ -1,4 +1,16 @@
 function[angles, points] = IK(x, y, z, theta_x, theta_y, z0, sign, arms_lengths)
+    cx = 100; %Board and hole coordinates
+    cy = 0;
+    cz = 15;
+    w = 3;
+    theta = 0;
+    holez = 10;
+    r = 2;
+
+    plane = [1*cos(theta), 1*sin(theta), 0];
+    ppoint = [cx, cy, holez];
+    board = [abs(sin(theta)*w), abs(w*cos(theta)), cz];
+    
     points = containers.Map();
     points('A') = [0, 0, 0];
     points('B') = [0, 0, z0];
@@ -19,8 +31,8 @@ function[angles, points] = IK(x, y, z, theta_x, theta_y, z0, sign, arms_lengths)
     vectors = containers.Map();
     vectors('CE') = points('E') - points('C');
     vectors('CF') = points('F') - points('C');
-    vectors('cross1') = sign*cross(vectors('CE'), vectors('CF'));
-    vectors('cross2') = cross(vectors('CE'), vectors('cross1'));
+    vectors('cross1') = [0, cos(pi/2+theta_x), sin(pi/2+theta_x)];
+    vectors('cross2') = sign*cross(vectors('CE'), vectors('cross1'));
 
     height = 2*heron(arms_lengths('CD'), arms_lengths('DE'), arms_lengths('CE'))/arms_lengths('CE');
 
@@ -51,7 +63,7 @@ function[angles, points] = IK(x, y, z, theta_x, theta_y, z0, sign, arms_lengths)
     
     angles('T') = theta_x;
     
-    check = IK_conditions(points, arms_lengths, 1, 0, 0, 0, -1);
+    check = IK_conditions(points, arms_lengths, 1, plane, board, ppoint, r);
     if check ~= 1
         %txt = [points('A'); points('B'); points('C'); points('D'); points('E'); points('F')];
         %disp(txt);
