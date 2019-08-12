@@ -3,18 +3,7 @@ grid on;
 
 axis_dim = [-3, 18, -6, 6, 0, 18];
 
-cx = 100; %Board and hole coordinates
-cy = 0;
-cz = 15;
-w = 3;
-theta = 0;
-holez = 10;
-r = 2;
-
-plane = [1*cos(theta), 1*sin(theta), 0];
-ppoint = [cx, cy, holez];
-board = [abs(sin(theta)*w), abs(w*cos(theta)), cz];
-
+[cx, cy, cz, w, board_theta, holez, r, plane, ppoint, board] = get_boardhole_coords();
 [x, y, z, theta_x, theta_y, z0] = get_inverse_inputs();
 arms_lengths = get_arms_lengths(z0);
 
@@ -68,7 +57,7 @@ vectors('CD') = vectors('CG')+vectors('GD');
 
 points('D') = points('C')+vectors('CD');
 
-plot_board(cx, cy, cz, w, holez, theta, r);
+plot_board(cx, cy, cz, w, board_theta, holez, r);
 if IK_conditions(points, arms_lengths, 1, plane, board, ppoint, r) ~= 1 %Checks line intersection and negative points
     txt = [points('A'); points('B'); points('C'); points('D'); points('E'); points('F')];
     disp(txt);
@@ -95,5 +84,5 @@ disp(txt);
 txt_points = [points('A'); points('B'); points('C'); points('D'); points('E'); points('F')];
 disp(txt_points);
 
-%% TODO
-% Fix some cases in IK using givens from FK
+%% To Dos
+%TODO: Fix some cases in IK using givens from FK
