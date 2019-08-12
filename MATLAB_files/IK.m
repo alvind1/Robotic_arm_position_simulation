@@ -1,4 +1,6 @@
-function[angles, points] = IK(x, y, z, theta_x, theta_y, z0, sign, arms_lengths)
+function[angles, points] = IK(x, y, z, theta_x, theta_y, z0, sign)
+    global arms_lengths;
+    
     cx = 100; %Board and hole coordinates
     cy = 0;
     cz = 15;

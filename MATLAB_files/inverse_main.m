@@ -5,7 +5,8 @@ axis_dim = [-3, 18, -6, 6, 0, 18];
 
 [cx, cy, cz, w, board_theta, holez, r, plane, ppoint, board] = get_boardhole_coords();
 [x, y, z, theta_x, theta_y, z0] = get_inverse_inputs();
-arms_lengths = get_arms_lengths(z0);
+set_arms_lengths(z0);
+global arms_lengths;
 
 %% CALCULATIONS
 points = containers.Map();

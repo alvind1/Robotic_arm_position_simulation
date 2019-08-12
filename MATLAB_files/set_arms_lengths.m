@@ -1,4 +1,5 @@
-function[arms_lengths] = get_arms_lengths(z0)
+function[arms_lengths] = set_arms_lengths(z0)
+    global  arms_lengths; 
     arms_lengths = containers.Map();
     arms_lengths('AB') = z0;
     arms_lengths('BC') = 3;

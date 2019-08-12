@@ -1,4 +1,5 @@
-function[points, scenario] = FK(angles, z0, arms_lengths)
+function[points, scenario] = FK(angles, z0)
+    global arms_lengths;
     points = containers.Map();
     points('A') = [0, 0, 0];
     points('B') = [0, 0, z0];

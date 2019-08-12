@@ -1,7 +1,9 @@
-function[] = f_animate(start_angles, end_angles, start_z0, z0, ax, arms_lengths, p, n)
+function[] = f_animate(start_angles, end_angles, start_z0, z0, ax, p, n)
     %% Constants
     grid on;
     axis manual;
+    
+    global arms_lengths;
 
     [cx, cy, cz, w, board_theta, holez, r, plane, ppoint, board] = get_boardhole_coords();
     plot_board(cx, cy, cz, w, board_theta, holez, r);
@@ -13,7 +15,7 @@ function[] = f_animate(start_angles, end_angles, start_z0, z0, ax, arms_lengths,
         [temp_angles, temp_z0] = get_angles(j, n, end_angles, start_angles, z0, start_z0);
         %txt = [temp_angles('C'), temp_angles('D'), temp_angles('E'), temp_angles('T')];
         %disp(txt);
-        [points, ~] = FK(temp_angles, temp_z0, arms_lengths);
+        [points, ~] = FK(temp_angles, temp_z0);
 
         x_val = [];
         y_val = [];

@@ -13,7 +13,8 @@ z0 =11;
 
 scenario = 0; %Not given
 
-arms_lengths = get_arms_lengths(z0);
+set_arms_lengths(z0);
+global arms_lengths;
 
 %% Start of FK Function
 points = containers.Map();
