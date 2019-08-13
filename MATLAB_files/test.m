@@ -1,4 +1,5 @@
 test_function();
-global xyz;
+global xyz abc;
 
 disp(xyz);
+disp(abc);

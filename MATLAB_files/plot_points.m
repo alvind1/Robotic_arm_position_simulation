@@ -1,4 +1,5 @@
-function[] = plot_points(points, angles, words, axis_dim)
+function[] = plot_points(points, angles, words)
+    global ax;
     x_val = [];
     y_val = [];
     z_val = [];
@@ -30,7 +31,7 @@ function[] = plot_points(points, angles, words, axis_dim)
     end
 
     plot3(x_val, y_val, z_val);
-    axis(axis_dim);
+    axis(ax);
     xlabel('X');
     ylabel('Y');
     zlabel('Z');

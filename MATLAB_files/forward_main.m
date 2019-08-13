@@ -1,5 +1,3 @@
-axis_dim = [0, 18, -9, 6, 0, 16];
-
 %Givens
 angles = containers.Map();
 angles('C') = pi/2; %Range: 0 <= theta <= pi
@@ -14,7 +12,7 @@ z0 =11;
 scenario = 0; %Not given
 
 set_arms_lengths(z0);
-global arms_lengths;
+global arms_lengths ax;
 
 %% Start of FK Function
 points = containers.Map();
@@ -144,7 +142,7 @@ end
 output = [points('F'), angles('T'), theta_y]
 grid on;
 figure(2);
-plot_points(points, angles,'FK', axis_dim); 
+plot_points(points, angles,'FK'); 
 
 remove(arms_lengths, 'CE');
 remove(arms_lengths, 'CF');

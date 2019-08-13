@@ -2,14 +2,6 @@
 grid on;
 axis manual;
 
-xmin = 0;
-xmax = 19;
-ymin = -10;
-ymax = 20;
-zmin = 0;
-zmax = 15;
-ax = ([xmin, xmax, ymin, ymax, zmin, zmax]);
-
 stage_angles = {};
 stage_points = {};
 target_points = {};
@@ -19,7 +11,7 @@ target_theta_y = {};
 [cx, cy, cz, w, board_theta, holez, r, plane, ppoint, board] = get_boardhole_coords();
 [x, y, z, theta_x, theta_y, z0] = get_inverse_inputs();
 set_arms_lengths(z0);
-global arms_lengths;
+global arms_lengths ax;
 
 [angles, points] = IK(x, y, z, theta_x, theta_y, z0, 1);
 if angles <= -100 && points <= -100
@@ -42,10 +34,10 @@ if(stage_angles{2} <= -100 && stage_points{2} <= -100)
     error("S1");
 end
 
-f_animate(stage_angles{1}, stage_angles{2}, start_z0, z0, ax, 0, 10);
+animate_by_angle(stage_angles{1}, stage_angles{2}, start_z0, z0, 0, 10);
 
 [target_points{3}, target_theta_x{3}, target_theta_y{3}] = get_s2_points(board_theta, ppoint);
 [stage_angles{3}, stage_points{3}] = IK(target_points{3}(1), target_points{3}(2), target_points{3}(3), target_theta_x{3}, target_theta_y{3}, z0, 1);
  
-f_animate(stage_angles{2}, stage_angles{3}, z0, z0, ax, 0, 10);
-f_animate(stage_angles{3}, angles, z0, z0, ax, 1, 10);
+animate_by_angle(stage_angles{2}, stage_angles{3}, z0, z0, 0, 10);
+animate_by_angle(stage_angles{3}, angles, z0, z0, 1, 10);

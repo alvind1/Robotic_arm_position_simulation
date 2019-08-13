@@ -1,12 +1,10 @@
 %% GIVENS
 grid on;
 
-axis_dim = [-3, 18, -6, 6, 0, 18];
-
 [cx, cy, cz, w, board_theta, holez, r, plane, ppoint, board] = get_boardhole_coords();
 [x, y, z, theta_x, theta_y, z0] = get_inverse_inputs();
 set_arms_lengths(z0);
-global arms_lengths;
+global arms_lengths ax;
 
 %% CALCULATIONS
 points = containers.Map();
@@ -78,7 +76,7 @@ angles('E') = angles('E')*signs('E');
 angles('T') = theta_x;
 
 figure(1);
-plot_points(points, angles, 'IK', axis_dim);
+plot_points(points, angles, 'IK');
 
 txt = [angles('C'), angles('D'), angles('E'), angles('T'), z0];
 disp(txt);
