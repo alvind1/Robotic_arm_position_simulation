@@ -1,4 +1,4 @@
-function[] = move_specific_angle(start_angles, target, k, start_z0, z0, p, n)
+function[start_angles, start_points] = move_specific_angle(start_angles, start_points, target, k, start_z0, z0, p, n)
     %% Constants 
     grid on ;
     axis manual;
@@ -18,4 +18,5 @@ function[] = move_specific_angle(start_angles, target, k, start_z0, z0, p, n)
     end
     
     start_angles(k) = target;
+    start_points = containers.Map(points.keys, points.values);
 end

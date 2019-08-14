@@ -1,5 +1,24 @@
-function[] = move_z0(points, new_z0, z0, theta_x, theta_y, p, n)
-    end_pointF = [pointF(1), pointF(2), pointF(3)-(z0-new_z0)];
-    animate_by_point(pointF, theta_x, theta_y, end_pointF, theta_x, theta_y, p, n);
-    points('F') = [pointF(1), pointF(2), pointF(3)-(z0-new_z0)];
+function[] = move_z0(points, z0, new_z0, angles, p, n)
+    %% Constants 
+    grid on ;
+    axis manual;
+    global arms_lengths;
+    
+    hold on;
+    
+    dist = new_z0-z0;
+    
+    k = keys(points);
+    val = values(points);
+    
+    for j = 1:n
+        for i = 2:length(points)
+            points(k{i}) = [val{i}(1), val{i}(2), val{i}(3)+dist*j/n];
+        end
+        
+        arms_lengths('AB') = z0 + dist*j/n;
+        
+        animate_func(angles, points, arms_lengths('AB'), j, p, n);
+    end
+    
 end
