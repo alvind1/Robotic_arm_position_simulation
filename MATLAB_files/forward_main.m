@@ -147,7 +147,7 @@ plot_points(points, angles,'FK');
 remove(arms_lengths, 'CE');
 remove(arms_lengths, 'CF');
 
-checkFK(points, angles, arms_lengths);
+checkFK(points, angles);
 txt_points = [points('A'); points('B'); points('C'); points('D'); points('E'); points('F')];
 disp(txt_points);
 

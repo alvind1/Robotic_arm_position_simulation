@@ -1,4 +1,5 @@
-function[check] = checkFK(points, angles, arms_lengths)
+function[check] = checkFK(points, angles)
+    global arms_lengths;
     check = 1;
     k = keys(points);
     v_points = values(points);

@@ -1,5 +1,3 @@
-function[] = test_function()
-    global xyz abc;
-    abc = 5;
-    xyz = 10;
+function[abc] = test_function(abc)
+    abc = 10;
 end

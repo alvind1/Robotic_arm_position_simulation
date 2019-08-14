@@ -16,7 +16,8 @@ function[] = animate_by_angle(start_angles, end_angles, start_z0, z0, p, n)
         %txt = [temp_angles('C'), temp_angles('D'), temp_angles('E'), temp_angles('T')];
         %disp(txt);
         [points, ~] = FK(temp_angles, temp_z0);
-
+        arms_lengths('AB') = temp_z0;
+        
         x_val = [];
         y_val = [];
         z_val = [];
@@ -26,14 +27,8 @@ function[] = animate_by_angle(start_angles, end_angles, start_z0, z0, p, n)
         length_val = values(arms_lengths);
 
         for i = 1:length(points)
-            if ismissing(points(k{i}))
-                txt = [temp_angles('C'), temp_angles('D'), temp_angles('E'), temp_angles('T'), temp_z0, i];
-                disp(txt);
-                txt = [points('A'); points('B'); points('C'); points('D'); points('E'); points('F')];
-                disp(txt);
-                error("A");
-            end
-
+            check_animation_errors(temp_angles, points, temp_z0, i, k);
+            
             x_val(end+1) = val{i}(1);
             y_val(end+1) = val{i}(2);
             z_val(end+1) = val{i}(3);
@@ -43,7 +38,7 @@ function[] = animate_by_angle(start_angles, end_angles, start_z0, z0, p, n)
                 tplt(1, i) = text((val{i}(1)+val{i-1}(1))/2, (val{i}(2)+val{i-1}(2))/2, (val{i}(3)+val{i-1}(3))/2, num2str(norm(points(k{i})-points(k{i-1}))));
             end
 
-            if(i ~= 1 && i ~= 2 && i ~= 6)
+            if(i ~= 1 && i ~= 2 && i ~= 6) %Print angles
                 tplt(2,  i) = text(val{i}(1)+0.5, val{i}(2)+0.5, val{i}(3)+0.5, num2str(temp_angles(k{i})), 'Color', 'r');
             end 
 
@@ -52,22 +47,7 @@ function[] = animate_by_angle(start_angles, end_angles, start_z0, z0, p, n)
                 tplt(3, i) = text(val{i}(1)-1, val{i}(2)-1, val{i}(3)-1, txt, 'Color', 'black');
             end 
 
-            if(abs(arms_lengths('EF')-norm(points('F')-points('E'))) > 0.1)
-                error("EF OFF");
-            end 
-
-            if(abs(norm(points('E')-points('D'))-arms_lengths('DE')) > 0.1)
-                error("DE OFF");
-            end 
-
-            if i ~= 6 && check_segmentboard_intersection(plane, ppoint, points(k{i}), points(k{i+1})-points(k{i}), board, r) == -1
-                txt = [points(k{i}), "B", points(k{i+1})-points(k{i}), "B", i, k{i+1}];
-                disp(txt);
-                txt = [points('A'); points('B'); points('C'); points('D'); points('E'); points('F')];
-                disp(txt);
-                disp("BOARD INTERSECTION");
-            end
-
+            
         end
 
         plt = plot3(x_val, y_val, z_val); %Draw

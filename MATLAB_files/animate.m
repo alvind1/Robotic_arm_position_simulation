@@ -16,6 +16,8 @@ z = 8;
 z0 = z;
 theta_y = pi/8;
 
+set_arms_lengths(z0);
+
 %%
 for j = 0:100000
 %     r = 2;
@@ -30,12 +32,7 @@ for j = 0:100000
     %z1 = abs(y*tan(theta_x)); %Turned to abs to smooth movement, not sure if correct
     %z0 = z-z1;
     
-    arms_lengths = containers.Map();
-    arms_lengths('AB') = z0;
-    arms_lengths('BC') = 3;
-    arms_lengths('CD') = 4;
-    arms_lengths('DE') = 5;
-    arms_lengths('EF') = 6;
+    arms_lenghts('AB') = z0;
     
     points = containers.Map();
     points('A') = [0, 0, 0];

@@ -1,6 +1,6 @@
-function[ax] = get_ax_dim()
+function[] = get_ax_dim()
     global ax;
-    xmin = 0;
+    xmin = -10;
     xmax = 19;
     ymin = -10;
     ymax = 20;
