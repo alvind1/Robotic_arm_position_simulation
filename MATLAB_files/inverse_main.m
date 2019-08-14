@@ -37,7 +37,7 @@ vectors = containers.Map();
 vectors('CE') = points('E') - points('C');
 vectors('CF') = points('F') - points('C');
 vectors('cross1') = [0, cos(pi/2+theta_x), sin(pi/2+theta_x)]; %cross(vectors('CE'), vectors('CF'));
-vectors('cross2') = cross(vectors('CE'), vectors('cross1'));
+vectors('cross2') = -cross(vectors('CE'), vectors('cross1'));
 
 height = 2*heron(arms_lengths('CD'), arms_lengths('DE'), arms_lengths('CE'))/arms_lengths('CE');
 

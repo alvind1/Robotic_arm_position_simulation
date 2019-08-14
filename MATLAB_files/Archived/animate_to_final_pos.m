@@ -18,12 +18,8 @@ theta_y = 0.2;
 z1 = y*tan(theta_x);
 z0 = z-z1;
 
-arms_lengths = containers.Map();
-arms_lengths('AB') = z0;
-arms_lengths('BC') = 3;
-arms_lengths('CD') = 4;
-arms_lengths('DE') = 5;
-arms_lengths('EF') = 6;
+set_arms_lengths(z0);
+global arms_lengths;
 
 start_x = arms_lengths('BC');
 start_y = 15;
@@ -32,23 +28,25 @@ start_theta_x = 0;
 start_theta_y = -pi/2;
 start_z0 = start_z-start_y*tan(start_theta_x);
 
-[initial_angles]  = IK(start_x, start_y, start_z, start_theta_x, start_theta_y, start_z0, 1, arms_lengths); 
-[angles, points] = IK(x, y, z, theta_x, theta_y, z0, 1, arms_lengths);
+[initial_angles]  = IK(start_x, start_y, start_z, start_theta_x, start_theta_y, start_z0, 1); 
+[angles, points] = IK(x, y, z, theta_x, theta_y, z0, 1);
 
 %TODO: Check if animation can start from any given position
 
 n = 100;
 
-[plane, board, ppoint, r] = plot_board(1);
+[cx, cy, cz, w, board_theta, holez, r, plane, ppoint, board] = get_boardhole_coords();
+plot_board(cx, cy, cz, w, board_theta, holez, r);
+
 
 hold on;
 
 %%
 for j = 0:n
-    [temp_angles, temp_z0] = get_angles(j, n, angles, initial_angles, z0, start_z0);
+    [temp_angles, temp_z0] = get_angles_naive(j, n, angles, initial_angles, z0, start_z0);
     %txt = [temp_angles('C'), temp_angles('D'), temp_angles('E'), temp_angles('T')];
     %disp(txt);
-    [points, scenario] = FK(temp_angles, temp_z0, arms_lengths);
+    [points, scenario] = FK(temp_angles, temp_z0);
         
     x_val = [];
     y_val = [];

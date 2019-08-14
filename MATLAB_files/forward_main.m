@@ -1,7 +1,7 @@
 %Givens
 angles = containers.Map();
 angles('C') = pi/2; %Range: 0 <= theta <= pi
-angles('D') = pi; %Range: 0 <= theta <= pi
+angles('D') = -pi/2; %Range: 0 <= theta <= pi
 angles('E') = pi/2; %Range: 0 <= theta <= pi
 angles('T') = pi/2;  %Range: 0 <= theta <= pi/2
 z0 =11;

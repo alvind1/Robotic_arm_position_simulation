@@ -33,13 +33,7 @@ function[] = animate_by_point(start_point, start_theta_x, start_theta_y, end_poi
         length_val = values(arms_lengths);
 
         for i = 1:length(points)
-            if ismissing(points(k{i}))
-                txt = [temp_angles('C'), temp_angles('D'), temp_angles('E'), temp_angles('T'), temp_z0, i];
-                disp(txt);
-                txt = [points('A'); points('B'); points('C'); points('D'); points('E'); points('F')];
-                disp(txt);
-                error("A");
-            end
+            check_animation_errors(temp_angles, points, temp_z0, i, k);
 
             x_val(end+1) = val{i}(1);
             y_val(end+1) = val{i}(2);
@@ -58,22 +52,6 @@ function[] = animate_by_point(start_point, start_theta_x, start_theta_y, end_poi
                 txt = ["Plane rotation", num2str(temp_angles('T'))];
                 tplt(3, i) = text(val{i}(1)-1, val{i}(2)-1, val{i}(3)-1, txt, 'Color', 'black');
             end 
-
-            if(abs(arms_lengths('EF')-norm(points('F')-points('E'))) > 0.1)
-                error("EF OFF");
-            end 
-
-            if(abs(norm(points('E')-points('D'))-arms_lengths('DE')) > 0.1)
-                error("DE OFF");
-            end 
-
-            if i ~= 6 && check_segmentboard_intersection(plane, ppoint, points(k{i}), points(k{i+1})-points(k{i}), board, r) == -1
-                txt = [points(k{i}), "B", points(k{i+1})-points(k{i}), "B", i, k{i+1}];
-                disp(txt);
-                txt = [points('A'); points('B'); points('C'); points('D'); points('E'); points('F')];
-                disp(txt);
-                disp("BOARD INTERSECTION");
-            end
 
         end
 

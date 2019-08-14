@@ -5,9 +5,6 @@ function[] = animate_by_angle(start_angles, end_angles, start_z0, z0, p, n)
     
     global arms_lengths ax;
 
-    [cx, cy, cz, w, board_theta, holez, r, plane, ppoint, board] = get_boardhole_coords();
-    plot_board(cx, cy, cz, w, board_theta, holez, r);
-
     hold on;
 
     %%
@@ -18,10 +15,10 @@ function[] = animate_by_angle(start_angles, end_angles, start_z0, z0, p, n)
         [points, ~] = FK(temp_angles, temp_z0);
         arms_lengths('AB') = temp_z0;
         
-        x_val = [];
-        y_val = [];
-        z_val = [];
-
+        x_val = zeros(1, 6);
+        y_val = zeros(1, 6);
+        z_val = zeros(1, 6);
+        
         k = keys(points);
         val = values(points);
         length_val = values(arms_lengths);

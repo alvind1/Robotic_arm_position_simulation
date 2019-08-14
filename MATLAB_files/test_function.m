@@ -1,3 +1,3 @@
-function[abc] = test_function(abc)
-    abc = 10;
+function[abcd] = test_function(abcd)
+    abcd('A') = 10;
 end
