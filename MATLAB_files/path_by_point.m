@@ -9,13 +9,26 @@ target_theta_x = {};
 target_theta_y = {};
 
 [cx, cy, cz, w, board_theta, holez, r, plane, ppoint, board] = get_boardhole_coords();
+plot_board();
 [x, y, z, theta_x, theta_y, z0] = get_inverse_inputs();
 set_arms_lengths(z0);
-global arms_lengths ax;
+get_ax_dim();
+global arms_lengths;
 
 [angles, points] = IK(x, y, z, theta_x, theta_y, z0, 1);
-if angles <= -100 && points <= -100
-    error("TARGET ERROR");
+if(points <= -100 && angles <= -100)
+    error("TARGET");
+    if(points == -100 && angles == -100)
+        error("LENGTH");
+    elseif(points == -200 && angles == -200)
+        error("TRIANGLE_INEQUALITY");
+    elseif(points == -300 && angles == -300)
+        error("OVERLAP SEGMENTS");
+    elseif(points == -400 && angles == -400)
+        error("NEGATIVE");
+    elseif(points == -500 && angles == -500)
+        error("BOARD INTERSECTION");
+    end
 end
 
 target_points{1} = [arms_lengths('BC'), 15, 5]; %Starting Position
@@ -30,7 +43,15 @@ start_point = [10, 11, 11];
 start_theta_x = 0;
 start_theta_y = -0.4; 
 
-end_point = [10, -11, 11];
+end_point = [cx-2, cy, holez];
 end_theta_x = 0;
 end_theta_y = 0.4;
-animate_by_point(start_point, start_theta_x, start_theta_y, end_point, end_theta_x, end_theta_y, 1, 100); %BUGS, PROBABLY WILL NOT WORK
+follow_line(start_point, start_theta_x, start_theta_y, end_point, end_theta_x, end_theta_y, 0, 10); %Slow
+
+start_point = end_point;
+start_theta_x = end_theta_x;
+start_theta_y = end_theta_y;
+end_point = [cx+2, cy, holez];
+end_theta_x = 0;
+end_theta_y = 0.4;
+follow_line(start_point, start_theta_x, start_theta_y, end_point, end_theta_x, end_theta_y, 1, 10); %Slow

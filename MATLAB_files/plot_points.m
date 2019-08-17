@@ -1,16 +1,17 @@
 function[] = plot_points(points, angles, words)
     global ax;
-    x_val = [];
-    y_val = [];
-    z_val = [];
-    
+
     k = keys(points);
     val = values(points); 
     
+    x_val = zeros(1, 6);
+    y_val = zeros(1, 6);
+    z_val = zeros(1, 6);
+    
     for i = 1:length(points)
-        x_val(end+1) = val{i}(1);
-        y_val(end+1) = val{i}(2);
-        z_val(end+1) = val{i}(3);
+        x_val(i) = val{i}(1);
+        y_val(i) = val{i}(2);
+        z_val(i) = val{i}(3);
         scatter3(val{i}(1), val{i}(2), val{i}(3));
         text(val{i}(1), val{i}(2), val{i}(3), k(i));
 

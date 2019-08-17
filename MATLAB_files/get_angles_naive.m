@@ -1,4 +1,4 @@
-function[temp_angles, temp_z0] = get_angles_naive(j, n, angles, initial_angles, z0, start_z0)
+function[temp_angles, temp_z0] = get_angles_naive(j, n, angles, initial_angles, start_z0, z0)
     temp_angles = containers.Map();
     k = keys(angles);
     v1 = values(angles);

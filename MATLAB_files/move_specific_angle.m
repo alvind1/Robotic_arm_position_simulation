@@ -7,10 +7,12 @@ function[start_angles, start_points] = move_specific_angle(start_angles, start_p
     hold on;
     
     end_angles = containers.Map(start_angles.keys, start_angles.values);
-    end_angles(k) = target;
+    for i=1:length(k)
+        end_angles(k(i)) = target(i);
+    end
     
     for j = 1:n
-        [temp_angles, temp_z0] = get_angles_naive(j, n, end_angles, start_angles, start_z0, start_z0);
+        [temp_angles, temp_z0] = get_angles_naive(j, n, end_angles, start_angles, start_z0, z0);
         [points, ~] = FK(temp_angles, temp_z0);
         arms_lengths('AB') = temp_z0;
         

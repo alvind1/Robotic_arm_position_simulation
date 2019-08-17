@@ -3,8 +3,11 @@ grid on;
 
 [cx, cy, cz, w, board_theta, holez, r, plane, ppoint, board] = get_boardhole_coords();
 [x, y, z, theta_x, theta_y, z0] = get_inverse_inputs();
+plot_board();
 set_arms_lengths(z0);
-global arms_lengths ax;
+get_ax_dim();
+sign = 1;
+global arms_lengths;
 
 %% CALCULATIONS
 points = containers.Map();
@@ -17,8 +20,8 @@ points('F') = [x, y, z];
 
 arms_lengths('CE') = norm(points('E')-points('C'));
 
-check = IK_conditions(points, arms_lengths, 0, 0, 0, 0, 0);
-if check ~= 1 %Checks triangle inequality
+check = IK_conditions(points, arms_lengths, 0);
+if check ~= 1
     print_points(points);
     if check == -1
         error("LENGTH");
@@ -37,7 +40,7 @@ vectors = containers.Map();
 vectors('CE') = points('E') - points('C');
 vectors('CF') = points('F') - points('C');
 vectors('cross1') = [0, cos(pi/2+theta_x), sin(pi/2+theta_x)]; %cross(vectors('CE'), vectors('CF'));
-vectors('cross2') = -cross(vectors('CE'), vectors('cross1'));
+vectors('cross2') = sign*cross(vectors('CE'), vectors('cross1'));
 
 height = 2*heron(arms_lengths('CD'), arms_lengths('DE'), arms_lengths('CE'))/arms_lengths('CE');
 
@@ -56,11 +59,20 @@ vectors('CD') = vectors('CG')+vectors('GD');
 
 points('D') = points('C')+vectors('CD');
 
-plot_board(cx, cy, cz, w, board_theta, holez, r);
-if IK_conditions(points, arms_lengths, 1, plane, board, ppoint, r) ~= 1 %Checks line intersection and negative points
-    txt = [points('A'); points('B'); points('C'); points('D'); points('E'); points('F')];
-    disp(txt);
-    %error("NOT POSSIBLE 2");
+check = IK_conditions(points, arms_lengths, 1);
+if check ~= 1
+    print_points(points);
+    if check == -1
+        error("LENGTH");
+    elseif check == -2
+        error("TRIANGLE INEQUALITY");
+    elseif check == -3
+        error("OVERLAP SEGMENTS");
+    elseif check == -4
+        error("NEGATIVE");
+    elseif check == -5
+        error("BOARD INTERSECTION");
+    end
 end
 
 angles = containers.Map();

@@ -1,4 +1,4 @@
-function[] = move_z0(points, z0, new_z0, angles, p, n)
+function[points, new_z0] = move_z0(points, z0, new_z0, angles, p, n)
     %% Constants 
     grid on ;
     axis manual;

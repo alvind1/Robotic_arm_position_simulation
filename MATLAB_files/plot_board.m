@@ -1,4 +1,6 @@
-function[] = plot_board(x0, y0, z0, w, board_theta, holez, r)
+function[] = plot_board()
+    [x0, y0, z0, w, board_theta, holez, r, ~, ~, ~] = get_boardhole_coords(); 
+    
     rx(1:4) = [x0-sin(board_theta)*w, x0+sin(board_theta)*w, x0+sin(board_theta)*w, x0-sin(board_theta)*w];
     ry = [w*cos(board_theta), -w*cos(board_theta), -w*cos(board_theta), w*cos(board_theta)];
     rz = [0, 0, z0, z0];

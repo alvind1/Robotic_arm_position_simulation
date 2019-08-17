@@ -1,8 +1,6 @@
 function[] = check_animation_errors(angles, points, temp_z0, it, k)   
     global arms_lengths;
 
-    [~, ~, ~, ~, ~, ~, r, plane, ppoint, board] = get_boardhole_coords();
-
     %%
     if ismissing(points(k{it}))
         txt = [angles('C'), angles('D'), angles('E'), angles('T'), temp_z0, it];
@@ -16,7 +14,7 @@ function[] = check_animation_errors(angles, points, temp_z0, it, k)
         error("ARM LENGTH OFF");
     end
 
-    if it ~= 6 && check_segmentboard_intersection(plane, ppoint, points(k{it}), points(k{it+1})-points(k{it}), board, r) == -1
+    if it ~= 6 && check_segmentboard_intersection(points(k{it}), points(k{it+1})-points(k{it})) == -1
         txt = [points(k{it}), "B", points(k{it+1})-points(k{it}), "B", it, k{it+1}];
         disp(txt);
         txt = [points('A'); points('B'); points('C'); points('D'); points('E'); points('F')];

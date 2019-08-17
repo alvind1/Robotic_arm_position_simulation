@@ -12,7 +12,8 @@ z0 =11;
 scenario = 0; %Not given
 
 set_arms_lengths(z0);
-global arms_lengths ax;
+get_ax_dim();
+global arms_lengths;
 
 %% Start of FK Function
 points = containers.Map();
