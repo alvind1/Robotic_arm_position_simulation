@@ -1,5 +1,7 @@
 function[points, scenario] = FK(angles, z0)
     global arms_lengths;
+    arms_lengths('AB') = z0;
+    
     points = containers.Map();
     points('A') = [0, 0, 0];
     points('B') = [0, 0, z0];
@@ -98,8 +100,6 @@ function[points, scenario] = FK(angles, z0)
         end
     end
 
-
-
     arms_lengths('CF') = cosine_law_side(arms_lengths('CE'), arms_lengths('EF'), temp3_angle);
 
     if scenario == 1
@@ -109,5 +109,14 @@ function[points, scenario] = FK(angles, z0)
     end
 
     points('F') = [arms_lengths('CF')*cos(angles('temp2'))+arms_lengths('BC'), arms_lengths('CF')*sin(angles('temp2'))*cos(angles('T')), arms_lengths('CF')*sin(angles('temp2'))*sin(angles('T'))+z0];
+    
+    remove(arms_lengths, 'CE');
+    remove(arms_lengths, 'CF');
+    
+    check = checkFK(points, angles);
+    if check <= -100
+        points = -100;
+        scenario = -100;
+    end
     %End of FK function
 end

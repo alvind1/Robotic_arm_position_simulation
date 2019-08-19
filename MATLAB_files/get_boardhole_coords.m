@@ -1,5 +1,5 @@
 function[cx, cy, cz, w, board_theta, holez, r, plane, ppoint, board] = get_boardhole_coords()
-    cx = 12; %x coord of board centre
+    cx = 102; %x coord of board centre
     cy = 0; %y coord of board centre
     cz = 15;% z coord
     w = 3; %width

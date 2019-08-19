@@ -18,6 +18,7 @@ function[] = animate_by_angle(start_angles, end_angles, start_z0, z0, p, n)
         x_val = zeros(1, 6);
         y_val = zeros(1, 6);
         z_val = zeros(1, 6);
+        splt = zeros(1, 6);
         
         k = keys(points);
         val = values(points);
@@ -26,9 +27,9 @@ function[] = animate_by_angle(start_angles, end_angles, start_z0, z0, p, n)
         for i = 1:length(points)
             check_animation_errors(temp_angles, points, temp_z0, i, k);
             
-            x_val(end+1) = val{i}(1);
-            y_val(end+1) = val{i}(2);
-            z_val(end+1) = val{i}(3);
+            x_val(i) = val{i}(1);
+            y_val(i) = val{i}(2);
+            z_val(i) = val{i}(3);
             splt(i) = scatter3(x_val, y_val, z_val); %Draw
 
             if(i ~= 1) %Print lengths

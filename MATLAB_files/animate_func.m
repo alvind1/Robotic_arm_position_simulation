@@ -43,7 +43,7 @@ function[] = animate_func(temp_angles, points, temp_z0, j, p, n)
     zlabel('Z');
 
     drawnow;
-
+    
      if j ~= n || (p == 0 && j == n)
          delete(plt);
          delete(splt);

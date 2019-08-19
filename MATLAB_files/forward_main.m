@@ -1,16 +1,19 @@
 %Givens
 angles = containers.Map();
-angles('C') = pi/2; %Range: 0 <= theta <= pi
-angles('D') = -pi/2; %Range: 0 <= theta <= pi
-angles('E') = pi/2; %Range: 0 <= theta <= pi
-angles('T') = pi/2;  %Range: 0 <= theta <= pi/2
-z0 =11;
+angles('C') = 0.4; %Range: 0 <= theta <= pi
+angles('D') = -0.3; %Range: 0 <= theta <= pi
+angles('E') = 0.7; %Range: 0 <= theta <= pi
+angles('T') = 0.3;  %Range: 0 <= theta <= pi/2
+z0 = 5;
 
 %All positive angles works
 %All positive & angles('E') < 0 works
 
 scenario = 0; %Not given
 
+figure(2);
+[cx, cy, cz, w, board_theta, holez, r, plane, ppoint, board] = get_boardhole_coords();
+plot_board();
 set_arms_lengths(z0);
 get_ax_dim();
 global arms_lengths;
@@ -148,7 +151,17 @@ plot_points(points, angles,'FK');
 remove(arms_lengths, 'CE');
 remove(arms_lengths, 'CF');
 
-checkFK(points, angles);
+check = checkFK(points, angles);
+if check <= -100
+    if check == -100
+        disp("LENGTH ERROR");
+    elseif check == -200
+        disp("ANGLE ERROR");
+    elseif check == -300
+        disp("HIT BOARD");
+    end
+end
+
 txt_points = [points('A'); points('B'); points('C'); points('D'); points('E'); points('F')];
 disp(txt_points);
 
