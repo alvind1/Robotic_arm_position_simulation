@@ -36,8 +36,7 @@ start_z0 = start_z-start_y*tan(start_theta_x);
 n = 100;
 
 [cx, cy, cz, w, board_theta, holez, r, plane, ppoint, board] = get_boardhole_coords();
-plot_board(cx, cy, cz, w, board_theta, holez, r);
-
+plot_board();
 
 hold on;
 
@@ -48,9 +47,12 @@ for j = 0:n
     %disp(txt);
     [points, scenario] = FK(temp_angles, temp_z0);
         
-    x_val = [];
-    y_val = [];
-    z_val = [];
+    x_val = zeros(1, 6);
+    y_val = zeros(1, 6);
+    z_val = zeros(1, 6);
+    splt = zeros(1, 6);
+    tplt = zeros(3, 6);
+    
 
     k = keys(points);
     val = values(points);
@@ -65,9 +67,9 @@ for j = 0:n
             error("A");
         end
         
-        x_val(end+1) = val{i}(1);
-        y_val(end+1) = val{i}(2);
-        z_val(end+1) = val{i}(3);
+        x_val(i) = val{i}(1);
+        y_val(i) = val{i}(2);
+        z_val(i) = val{i}(3);
         splt(i) = scatter3(x_val, y_val, z_val); %Draw
         
         if(i ~= 1) %Print lengths
@@ -91,7 +93,7 @@ for j = 0:n
             error("DE OFF");
         end 
        
-        if i ~= 6 && check_segmentboard_intersection(plane, ppoint, points(k{i}), points(k{i+1})-points(k{i}), board, r) == -1
+        if i ~= 6 && check_segmentboard_intersection(points(k{i}), points(k{i+1})-points(k{i})) == -1
 %             txt = [plane, "B", ppoint, "B",  points(k{i}), "B", points(k{i+1})-points(k{i}), "B", board, "B", i, k{i+1}, "B", points('E')];
 %             disp(txt);
 %             txt = [points('A'); points('B'); points('C'); points('D'); points('E'); points('F')];

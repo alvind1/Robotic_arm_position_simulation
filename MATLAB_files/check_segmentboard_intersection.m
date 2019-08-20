@@ -1,6 +1,8 @@
 function[check] = check_segmentboard_intersection(lpoint, v)
     [~, ~, ~, ~, ~, ~, r, plane, ppoint, board] = get_boardhole_coords();
     
+    safety_net = 0.05;
+    
     a = plane(1);
     b = plane(2);
     c = plane(3);
@@ -9,16 +11,16 @@ function[check] = check_segmentboard_intersection(lpoint, v)
     
     if t == Inf || isnan(t)
         check = 1;
-    elseif t < 0 || t > 1
+    elseif t < 0-safety_net || t > 1+safety_net
         check = 1;
     else
         p = lpoint+v*t;
         
-        if p(3) > board(3) || p(3) < 0
+        if p(3) > board(3)+safety_net || p(3) < 0-safety_net
             check = 1;
-        elseif p(2) > board(2) || p(2) < -board(2)
+        elseif p(2) > board(2)+safety_net || p(2) < -board(2)-safety_net
             check = 1;
-        elseif p(1) > ppoint(1)+board(1) || p(1) < ppoint(1)-board(1)
+        elseif p(1) > ppoint(1)+board(1)+safety_net || p(1) < ppoint(1)-board(1)-safety_net
             check = 1;
         elseif norm(p-ppoint) <= r
             check = 1;

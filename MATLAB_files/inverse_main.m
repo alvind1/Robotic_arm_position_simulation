@@ -3,8 +3,13 @@ grid on;
 
 [cx, cy, cz, w, board_theta, holez, r, plane, ppoint, board] = get_boardhole_coords();
 [x, y, z, theta_x, theta_y, z0] = get_inverse_inputs();
-plot_board();
-set_arms_lengths(z0);
+
+%plot_board();
+plot_real_board();
+
+%set_arms_lengths(z0);
+set_real_arms_lengths(z0);
+
 get_ax_dim();
 sign = 1;
 global arms_lengths;

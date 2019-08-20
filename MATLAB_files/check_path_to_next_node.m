@@ -1,6 +1,6 @@
 function[pointF] = check_path_to_next_node(cur_node, next_node)
-    global arms_lengths;
-    n = ceil(norm(next_node-cur_node)/0.1);
+    global arms_lengths step_size;
+    n = ceil(norm(next_node-cur_node)/step_size);
     v = next_node-cur_node;
     
     temp_angles = containers.Map();
@@ -15,10 +15,24 @@ function[pointF] = check_path_to_next_node(cur_node, next_node)
        arms_lengths('AB') = temp_node(5);
        
        [points, ~] = FK(temp_angles, temp_z0);
-       if points <= -100
+       if ~isa(points, 'containers.Map')
            pointF = -100;
            return;
        end
     end
+    
+    temp_angles('C') = next_node(1);
+    temp_angles('D') = next_node(2);
+    temp_angles('E') = next_node(3);
+    temp_angles('T') = next_node(4);
+    temp_z0 = next_node(5);
+    
+    arms_lengths('AB') = temp_z0;
+    [points, ~] = FK(temp_angles, temp_z0);
+    if ~isa(points, 'containers.Map')
+        pointF = -100;
+        return;
+    end
+    
     pointF = points('F');
 end

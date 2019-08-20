@@ -43,3 +43,5 @@ function[check] = IK_conditions(points, arms_lengths, num)
         end
     end
 end
+
+%TODO: Add x coordinate limit

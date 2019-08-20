@@ -115,8 +115,8 @@ function[points, scenario] = FK(angles, z0)
     
     check = checkFK(points, angles);
     if check <= -100
-        points = -100;
-        scenario = -100;
+        points = check;
+        scenario = check;
     end
     %End of FK function
 end

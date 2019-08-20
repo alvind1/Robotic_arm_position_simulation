@@ -1,10 +1,10 @@
 %Givens
 angles = containers.Map();
-angles('C') = 0.4; %Range: 0 <= theta <= pi
-angles('D') = -0.3; %Range: 0 <= theta <= pi
-angles('E') = 0.7; %Range: 0 <= theta <= pi
-angles('T') = 0.3;  %Range: 0 <= theta <= pi/2
-z0 = 5;
+angles('C') = 2.5; %Range: 0 <= theta <= pi
+angles('D') = -1.8; %Range: 0 <= theta <= pi
+angles('E') = -1.9; %Range: 0 <= theta <= pi
+angles('T') = pi/2;  %Range: 0 <= theta <= pi/2
+z0 = 7;
 
 %All positive angles works
 %All positive & angles('E') < 0 works
