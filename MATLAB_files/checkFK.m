@@ -40,7 +40,7 @@ function[check] = checkFK(points, angles)
         end
         
         if i ~= 1
-            if v_points{i}(3) < 0.01 || (v_points{i}(1) < 0.01 && i ~= 2)
+            if v_points{i}(3) < 0.01
                 check = -400;
                 return;
             end

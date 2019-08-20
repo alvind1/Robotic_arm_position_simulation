@@ -1,4 +1,4 @@
-function[closest_node, closest_it] = get_closest_node(nodes, target)
+function[closest_node, closest_it] = get_closest_angle_node(nodes, target)
     global node_it;
     max_dist = 1000000; %May need to check
     
