@@ -2,7 +2,7 @@ function[inter_coord] = gen_tree_angles(nodes, target)
     global node_it num_nodes ax;
     max_z = 10; %FIXME: Check
     splt = zeros(1, num_nodes);
-    prob = 0.6;
+    prob = 0.2;
     
     hold on;
     
@@ -16,9 +16,9 @@ function[inter_coord] = gen_tree_angles(nodes, target)
            temp_target = [rand*2*pi-pi, rand*2*pi-pi, rand*2*pi-pi, rand*2*pi-pi, rand*max_z+1];
        end
        
-       [closest_node, closest_it] = get_closest_angle_node(nodes, temp_target);
-       next_node = extend_tree(closest_node(1:5), temp_target);
-        
+       [closest_node, closest_it] = get_closest_angle_node(nodes, temp_target(1:5));
+       next_node = extend_tree(closest_node(1:5), temp_target(1:5));
+
        if next_node == -100
            continue;
        else           

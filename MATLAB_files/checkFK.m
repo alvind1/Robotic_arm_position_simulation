@@ -33,7 +33,7 @@ function[check] = checkFK(points, angles)
 %         end
         
         if i ~= 6
-            if check_segmentboard_intersection(v_points{i}, v_points{i+1}-v_points{i}) == -1
+            if check_segmentboard_intersection(v_points{i}, v_points{i+1}-v_points{i}, i) == -1
                 check = -300;
                 return;
             end

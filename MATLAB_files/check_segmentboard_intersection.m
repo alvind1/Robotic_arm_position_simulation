@@ -1,7 +1,7 @@
-function[check] = check_segmentboard_intersection(lpoint, v)
+function[check] = check_segmentboard_intersection(lpoint, v, it)
     [~, ~, ~, ~, ~, ~, r, plane, ppoint, board] = get_boardhole_coords();
     
-    safety_net = 0.05;
+    safety_net = 0.1;
     
     a = plane(1);
     b = plane(2);

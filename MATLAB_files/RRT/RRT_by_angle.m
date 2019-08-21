@@ -4,29 +4,36 @@ get_ax_dim();
 global num_nodes node_it arms_lengths;
 
 nodes = zeros(num_nodes, 9); %3 joint angles, 1 plane rotation angle, 1 z0, 1 point F (for plotting), 1 node index
-closest_to_target_nodes = zeros(num_nodes, 6); %3 joint angles, 1 angleT, 1 z0, idx of node in nodes
 
+%[start_angles, start_z0] = get_starting_angles();
 start_angles = containers.Map();
-start_angles('C') = pi/2;
-start_angles('D') = 0;
-start_angles('E') = 0;
-start_angles('T') = pi/2;
-start_z0 = 5;
+start_angles('C') = 1.0589;
+start_angles('D') = -2.3596;
+start_angles('E') = 1.1007;
+start_angles('T') = 1.5;
+start_z0 = 10;
+
 arms_lengths('AB') = [0, 0, start_z0];
 [start_points, ~] = FK(start_angles, start_z0);
 
 hold on;
 animate_func(start_angles, start_points, start_z0, 1, 0, 1);
 
+% global test_nodes; 
+% test_nodes = zeros(num_nodes, 5);
+% test_nodes(1, :) = [1.4383, -2, 1, 1.5394, 10];
+% test_nodes(2, :) = [1.3583, -2, 0.8, 1.5394, 10];
+
 nodes(node_it, :) = [start_angles('C'), start_angles('D'), start_angles('E'), start_angles('T'), start_z0, start_points('F'), 1];
 node_it = node_it+1;
 
+
 end_angles = containers.Map(); %TODO: Replace with angles got from IK
-end_angles('C') = 2.5;
-end_angles('D') = -1.8;
-end_angles('E') = -1.9;
-end_angles('T') = pi/2;
-end_z0 = 5;
+end_angles('C') = 0.4;
+end_angles('D') = -1.5309;
+end_angles('E') = 0.5846;
+end_angles('T') = 1.5;
+end_z0 = 10;
 arms_lengths('AB') = [0, 0, end_z0];
 [end_points, ~] = FK(end_angles, end_z0);
 %plot_points(end_points, end_angles, "FINISH");
@@ -56,6 +63,9 @@ end
 % Add pointF to target pointF in checking closest distance
 %Make bidirectional RRT
 %TODO: Put safety net around obstacle 
-%TODO: weight the distances
+%TODO: weight the angle changes when it comes to distance cost
 %TODO: Find 5d sphere in which there can be a solution found in < 1000 or
 %2000 nodes
+%TODO: Bug -> path hits obstacle (hard to detect since it is only at a
+%point and stepsize may be too big to check), need to add safety net in
+%front and behind obstacle as well

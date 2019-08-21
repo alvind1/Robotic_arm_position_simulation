@@ -1,8 +1,9 @@
-function[] = plot_points(points, angles, words)
+function[] = plot_points(points, rad_angles, words)
     global ax;
 
     k = keys(points);
     val = values(points); 
+    deg_angles = containers.Map();
     
     x_val = zeros(1, 6);
     y_val = zeros(1, 6);
@@ -19,13 +20,15 @@ function[] = plot_points(points, angles, words)
             text((val{i}(1)+val{i-1}(1))/2, (val{i}(2)+val{i-1}(2))/2, (val{i}(3)+val{i-1}(3))/2, num2str(norm(points(k{i})-points(k{i-1}))));
         end
 
-        if(i ~= 1 && i ~= 2 && i ~= 6 && angles ~= -100)
-            text(val{i}(1)+0.5, val{i}(2)+0.5, val{i}(3)+0.5, num2str(angles(k{i})), 'Color', 'r');
+        if(i ~= 1 && i ~= 2 && i ~= 6 && deg_angles ~= -100)
+            deg_angles(k{i}) = rad_angles(k{i})*180/pi;
+            text(val{i}(1)-0.5, val{i}(2)-0.5, val{i}(3)-0.5, num2str(deg_angles(k{i})), 'Color', 'r');
         end 
 
-        if (i == 3 && angles ~= -100)
-            txt = ["Plane rotation", num2str(angles('T'))];
-            text(val{i}(1)-1, val{i}(2)-1, val{i}(3)-1, txt);
+        if (i == 3 && deg_angles ~= -100)
+            deg_angles('T') = rad_angles('T')*180/pi;
+            txt = ["", num2str(deg_angles('T'))];
+            text(val{i}(1)-1, val{i}(2)-1, val{i}(3)-3, txt);
         end 
 
         hold on;

@@ -26,10 +26,10 @@ function[] = plot_real_board()
     patch(cx, cy, cz, 'Green');
     
     %LIMITING PLANE %FIXME make it adjustable for approaching on angle
-    px(1:4) = [x0+3.5, x0+3.5, x0+3.5, x0+3.5];
-    py(1:4) = [-100, 100, 100, -100];
-    pz(1:4) = [0, 0, 100, 100];
-    pp = patch(px, py, pz, 'Black');
+%     px(1:4) = [x0+3.5, x0+3.5, x0+3.5, x0+3.5];
+%     py(1:4) = [-100, 100, 100, -100];
+%     pz(1:4) = [0, 0, 100, 100];
+%     pp = patch(px, py, pz, 'Black');
     
     plot_rivets(x0, y0, 3, board_theta);
 

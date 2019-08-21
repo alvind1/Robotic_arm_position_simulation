@@ -1,18 +1,20 @@
 %% GIVENS
 grid on;
 
-[cx, cy, cz, w, board_theta, holez, r, plane, ppoint, board] = get_boardhole_coords();
+%set_arms_lengths(5); %arbitrary z0 since we will reset it later
+set_real_arms_lengths(z0);
+global arms_lengths;
+
+%[cx, cy, cz, w, board_theta, holez, r, plane, ppoint, board] = get_boardhole_coords();
+%[x, y, z, theta_x, theta_y, z0] = get_inverse_inputs();
 [x, y, z, theta_x, theta_y, z0] = get_inverse_inputs();
+arms_lengths('AB') = z0;
 
 %plot_board();
 plot_real_board();
 
-%set_arms_lengths(z0);
-set_real_arms_lengths(z0);
-
 get_ax_dim();
-sign = 1;
-global arms_lengths;
+sign = -1; 
 
 %% CALCULATIONS
 points = containers.Map();
@@ -76,7 +78,8 @@ if check ~= 1
     elseif check == -4
         error("NEGATIVE");
     elseif check == -5
-        error("BOARD INTERSECTION");
+        %error("BOARD INTERSECTION");
+        disp("BOARD INTERSECTION");
     end
 end
 
@@ -95,10 +98,10 @@ angles('T') = theta_x;
 figure(1);
 plot_points(points, angles, 'IK');
 
-txt = [angles('C'), angles('D'), angles('E'), angles('T'), z0];
+txt = [angles('C'), angles('D'), angles('E'), angles('T'), z0]; %FOR FORWARD_MAIN USE
 disp(txt);
-txt_points = [points('A'); points('B'); points('C'); points('D'); points('E'); points('F')];
-disp(txt_points);
+txt = [angles('C')*180/pi, angles('D')*180/pi, angles('E')*180/pi, angles('T')*180/pi-90, z0]; %FOR ROBOT USE
+disp(txt);
+print_points(points);
 
 %% To Dos
-%TODO: Fix some cases in IK using givens from FK

@@ -20,16 +20,16 @@ function[] = animate_func(temp_angles, points, temp_z0, j, p, n)
         splt(i) = scatter3(x_val, y_val, z_val); %Draw
 
         if(i ~= 1) %Print lengths
-            tplt(1, i) = text((val{i}(1)+val{i-1}(1))/2, (val{i}(2)+val{i-1}(2))/2, (val{i}(3)+val{i-1}(3))/2, num2str(norm(points(k{i})-points(k{i-1}))));
+            %tplt(1, i) = text((val{i}(1)+val{i-1}(1))/2, (val{i}(2)+val{i-1}(2))/2, (val{i}(3)+val{i-1}(3))/2, num2str(norm(points(k{i})-points(k{i-1}))));
         end
 
         if(i ~= 1 && i ~= 2 && i ~= 6) %Print angles
-            tplt(2,  i) = text(val{i}(1)+0.5, val{i}(2)+0.5, val{i}(3)+0.5, num2str(temp_angles(k{i})), 'Color', 'r');
+            %tplt(2,  i) = text(val{i}(1)+0.5, val{i}(2)+0.5, val{i}(3)+0.5, num2str(temp_angles(k{i})), 'Color', 'r');
         end 
 
         if (i == 3)
-            txt = ["Plane rotation", num2str(temp_angles('T'))];
-            tplt(3, i) = text(val{i}(1)-1, val{i}(2)-1, val{i}(3)-1, txt, 'Color', 'black');
+            %txt = ["Plane rotation", num2str(temp_angles('T'))];
+            %tplt(3, i) = text(val{i}(1)-1, val{i}(2)-1, val{i}(3)-1, txt, 'Color', 'black');
         end 
 
 
@@ -47,6 +47,6 @@ function[] = animate_func(temp_angles, points, temp_z0, j, p, n)
      if j ~= n || (p == 0 && j == n)
          delete(plt);
          delete(splt);
-         delete(tplt);
+%          delete(tplt);
      end
 end

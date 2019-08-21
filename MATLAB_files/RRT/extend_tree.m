@@ -10,5 +10,5 @@ function[next_node] = extend_tree(cur_node, target_node)
         return;
     end
     
-    next_node = [cur_node+v*step_length_3D, pointF]; 
+    next_node = [cur_node+step_length_3D*v/norm(v), pointF]; 
 end

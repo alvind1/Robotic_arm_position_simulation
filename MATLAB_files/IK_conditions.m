@@ -32,10 +32,10 @@ function[check] = IK_conditions(points, arms_lengths, num)
             end
             
             if i ~= 6
-                if check_segmentboard_intersection(points(k{i}), points(k{i+1})-points(k{i})) == -1
+                if check_segmentboard_intersection(points(k{i}), points(k{i+1})-points(k{i}), i) == -1
                     check = -5;
-                    disp(i);
-                    disp("PLANE INTERSECTION");
+%                     disp(i);
+%                     disp("PLANE INTERSECTION");
                     return;
                 end
             end

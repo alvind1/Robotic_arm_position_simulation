@@ -14,7 +14,7 @@ function[] = check_animation_errors(angles, points, temp_z0, it, k)
         error("ARM LENGTH OFF");
     end
 
-    if it ~= 6 && check_segmentboard_intersection(points(k{it}), points(k{it+1})-points(k{it})) == -1
+    if it ~= 6 && check_segmentboard_intersection(points(k{it}), points(k{it+1})-points(k{it}), it) == -1
         txt = [points(k{it}), "B", points(k{it+1})-points(k{it}), "B", it, k{it+1}];
         disp(txt);
         txt = [points('A'); points('B'); points('C'); points('D'); points('E'); points('F')];
