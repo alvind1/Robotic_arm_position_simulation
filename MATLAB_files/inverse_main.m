@@ -2,19 +2,19 @@
 grid on;
 
 %set_arms_lengths(5); %arbitrary z0 since we will reset it later
-set_real_arms_lengths(z0);
+set_real_arms_lengths(5);
 global arms_lengths;
 
 %[cx, cy, cz, w, board_theta, holez, r, plane, ppoint, board] = get_boardhole_coords();
 %[x, y, z, theta_x, theta_y, z0] = get_inverse_inputs();
-[x, y, z, theta_x, theta_y, z0] = get_inverse_inputs();
+[x, y, z, theta_x, theta_y, z0] = get_real_inverse_inputs();
 arms_lengths('AB') = z0;
 
 %plot_board();
-plot_real_board();
+%plot_real_board();
 
 get_ax_dim();
-sign = -1; 
+sign = 1; 
 
 %% CALCULATIONS
 points = containers.Map();
@@ -27,7 +27,7 @@ points('F') = [x, y, z];
 
 arms_lengths('CE') = norm(points('E')-points('C'));
 
-check = IK_conditions(points, arms_lengths, 0);
+check = IK_conditions(points, 0);
 if check ~= 1
     print_points(points);
     if check == -1
@@ -66,7 +66,7 @@ vectors('CD') = vectors('CG')+vectors('GD');
 
 points('D') = points('C')+vectors('CD');
 
-check = IK_conditions(points, arms_lengths, 1);
+check = IK_conditions(points, 1);
 if check ~= 1
     print_points(points);
     if check == -1

@@ -1,9 +1,9 @@
 %Givens
 angles = containers.Map();
-angles('C') = 0.4; %Range: 0 <= theta <= pi
-angles('D') = -1.5309; %Range: 0 <= theta <= pi
-angles('E') = 0.5846; %Range: 0 <= theta <= pi
-angles('T') = 1.5;  %Range: 0 <= theta <= pi/2
+angles('C') = pi/2; %Range: 0 <= theta <= pi
+angles('D') = 0; %Range: 0 <= theta <= pi
+angles('E') = 0; %Range: 0 <= theta <= pi
+angles('T') = pi/2-0.2;  %Range: 0 <= theta <= pi/2
 z0 = 10;
 
 %All positive angles works
@@ -14,7 +14,7 @@ scenario = 0; %Not given
 figure(2);
 [cx, cy, cz, w, board_theta, holez, r, plane, ppoint, board] = get_boardhole_coords();
 plot_board();
-set_arms_lengths(z0);
+set_real_arms_lengths(z0);
 get_ax_dim();
 global arms_lengths;
 
@@ -133,8 +133,8 @@ points('F') = [arms_lengths('CF')*cos(angles('temp2'))+arms_lengths('BC'), arms_
 %% 
 e = points('E');
 f = points('F');
-theta_y = acos(abs((f(1)-e(1)))/arms_lengths('EF'));
-sign = angle_direction(points, z0, 2);
+theta_y = acos(abs(f(1)-e(1))/arms_lengths('EF'));
+sign = angle_direction(points, z0, 2); %FIXME
 if sign == 2
     theta_y = pi-theta_y;
 elseif sign == 3
@@ -144,6 +144,7 @@ elseif sign == 4
 end
 
 output = [points('F'), angles('T'), theta_y]
+output = [points('F'), angles('T')*180/pi, theta_y*180/pi];
 grid on;
 figure(2);
 plot_points(points, angles,'FK'); 

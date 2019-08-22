@@ -22,7 +22,7 @@ function[] = plot_points(points, rad_angles, words)
 
         if(i ~= 1 && i ~= 2 && i ~= 6 && deg_angles ~= -100)
             deg_angles(k{i}) = rad_angles(k{i})*180/pi;
-            text(val{i}(1)-0.5, val{i}(2)-0.5, val{i}(3)-0.5, num2str(deg_angles(k{i})), 'Color', 'r');
+            %text(val{i}(1)-0.5, val{i}(2)-0.5, val{i}(3)-0.5, num2str(deg_angles(k{i})), 'Color', 'r');
         end 
 
         if (i == 3 && deg_angles ~= -100)

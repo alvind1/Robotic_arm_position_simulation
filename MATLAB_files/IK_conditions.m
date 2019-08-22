@@ -1,4 +1,6 @@
-function[check] = IK_conditions(points, arms_lengths, num)
+function[check] = IK_conditions(points, num)
+    global arms_lengths;
+    
     check = 1;
     if(norm(points('F')-points('C')) > arms_lengths('CD')+arms_lengths('DE')+arms_lengths('EF'))
         check = -1;

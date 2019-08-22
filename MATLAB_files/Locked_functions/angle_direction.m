@@ -8,6 +8,7 @@ function[sign] = angle_direction(points, z0, num)
     
     c = points('C');
     x0 = c(1);
+    
     for i=4:length(points)
         coord = val{i};
         r = norm(val{i}-points('C'));
@@ -50,13 +51,13 @@ function[sign] = angle_direction(points, z0, num)
         end
     else
         temp = rotated_points('E')-rotated_points('F');
-        if temp(1) < 0 && temp(3) > 0
+        if temp(1) <= 0 && temp(3) >= 0
             sign = 1;
-        elseif temp(1) < 0 && temp(3) < 0
+        elseif temp(1) <= 0 && temp(3) <= 0
             sign = 4;
-        elseif temp(1) > 0 && temp(3) < 0
+        elseif temp(1) >= 0 && temp(3) <= 0
             sign = 3;
-        else
+        elseif temp(1) >- 0 && temp(3) >= 0
             sign = 2;
         end
     end
