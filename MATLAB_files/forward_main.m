@@ -1,20 +1,21 @@
 %Givens
 angles = containers.Map();
-angles('C') = pi/2; %Range: 0 <= theta <= pi
-angles('D') = 0; %Range: 0 <= theta <= pi
-angles('E') = 0; %Range: 0 <= theta <= pi
-angles('T') = pi/2-0.2;  %Range: 0 <= theta <= pi/2
+angles('C') = 0.4; %Range: 0 <= theta <= pi IN RADIANS
+angles('D') = -1.5309; %Range: 0 <= theta <= pi
+angles('E') = 0.5846; %Range: 0 <= theta <= pi
+angles('T') = 1.5;  %Range: 0 <= theta <= pi/2
 z0 = 10;
 
-%All positive angles works
-%All positive & angles('E') < 0 works
-
-scenario = 0; %Not given
+scenario = 0; %FOR CASE USE
 
 figure(2);
-[cx, cy, cz, w, board_theta, holez, r, plane, ppoint, board] = get_boardhole_coords();
+
 plot_board();
-set_real_arms_lengths(z0);
+%plot_real_board();
+
+set_arms_lengths(z0);
+%set_real_arms_lengths(z0);
+
 get_ax_dim();
 global arms_lengths;
 
@@ -31,11 +32,9 @@ if angles('D') == 0
     angles('temp1') = angles('C');
 end
 points('E') = [arms_lengths('CE')*cos(angles('temp1'))+arms_lengths('BC'), arms_lengths('CE')*sin(angles('temp1'))*cos(angles('T')), arms_lengths('CE')*sin(angles('temp1'))*sin(angles('T'))+z0];
-%DONE up to here
 
-%Should all work
-if angles('C') >= 0 %Works
-    if angles('D') >= 0 %Works
+if angles('C') >= 0 
+    if angles('D') >= 0 
         if angles('E') >= 0
             if abs(angles('E'))+cosine_law_angle(arms_lengths('CE'), arms_lengths('DE'), arms_lengths('CD')) < pi
                 temp3_angle =  pi-abs(angles('E'))-cosine_law_angle(arms_lengths('CE'), arms_lengths('DE'), arms_lengths('CD'));
@@ -51,13 +50,13 @@ if angles('C') >= 0 %Works
             elseif abs(angles('E'))+cosine_law_angle(arms_lengths('CE'), arms_lengths('DE'), arms_lengths('CD')) > pi
                 temp3_angle = -abs(angles('E'))+cosine_law_angle(arms_lengths('CE'), arms_lengths('DE'), arms_lengths('CD')) + pi;
                 scenario = 2;
-            else %in between previous cases
+            else 
                 temp3_angle = pi-abs(angles('E'))+cosine_law_angle(arms_lengths('CE'), arms_lengths('DE'), arms_lengths('CD'));
                 scenario = 2;
             end
         end
     else
-        if angles('E') >= 0 %Works
+        if angles('E') >= 0 
             if angles('E') <= cosine_law_angle(arms_lengths('CE'), arms_lengths('DE'), arms_lengths('CD'))
                 temp3_angle = pi-cosine_law_angle(arms_lengths('CE'), arms_lengths('DE'), arms_lengths('CD'))+abs(angles('E'));
                 scenario = 2;
@@ -65,7 +64,7 @@ if angles('C') >= 0 %Works
                 temp3_angle = pi-abs(angles('E'))+cosine_law_angle(arms_lengths('CE'), arms_lengths('DE'), arms_lengths('CD'));
                 scenario = 1;
             end
-        else %Works
+        else 
             if abs(angles('E'))+cosine_law_angle(arms_lengths('CE'), arms_lengths('DE'), arms_lengths('CD')) <= pi
                 temp3_angle = pi-abs(angles('E'))-cosine_law_angle(arms_lengths('CE'), arms_lengths('DE'), arms_lengths('CD'));
                 scenario = 2;
@@ -86,14 +85,13 @@ else
                 scenario = 2;
             end
         elseif angles('E') < 0
-            disp("A");
             if abs(angles('E')) <= cosine_law_angle(arms_lengths('CE'), arms_lengths('DE'), arms_lengths('CD'))
                 temp3_angle = pi+abs(angles('E'))-cosine_law_angle(arms_lengths('CE'), arms_lengths('DE'), arms_lengths('CD'));
                 scenario = 1;
             elseif abs(angles('E'))+cosine_law_angle(arms_lengths('CE'), arms_lengths('DE'), arms_lengths('CD')) > pi
                 temp3_angle = -abs(angles('E'))+cosine_law_angle(arms_lengths('CE'), arms_lengths('DE'), arms_lengths('CD')) + pi;
                 scenario = 2;
-            else %in between previous cases
+            else 
                 temp3_angle = pi-abs(angles('E'))+cosine_law_angle(arms_lengths('CE'), arms_lengths('DE'), arms_lengths('CD'));
                 scenario = 2;
             end
@@ -134,7 +132,7 @@ points('F') = [arms_lengths('CF')*cos(angles('temp2'))+arms_lengths('BC'), arms_
 e = points('E');
 f = points('F');
 theta_y = acos(abs(f(1)-e(1))/arms_lengths('EF'));
-sign = angle_direction(points, z0, 2); %FIXME
+sign = angle_direction(points, z0, 2); 
 if sign == 2
     theta_y = pi-theta_y;
 elseif sign == 3
@@ -145,11 +143,11 @@ end
 
 output = [points('F'), angles('T'), theta_y]
 output = [points('F'), angles('T')*180/pi, theta_y*180/pi];
-grid on;
+
 figure(2);
 plot_points(points, angles,'FK'); 
 
-remove(arms_lengths, 'CE');
+remove(arms_lengths, 'CE'); %Must be removed to use CHECKFK
 remove(arms_lengths, 'CF');
 
 check = checkFK(points, angles);

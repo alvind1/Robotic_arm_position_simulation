@@ -1,10 +1,10 @@
 function[x, y, z, theta_x ,theta_y, z0] = get_real_inverse_inputs()
     %[cx, cy, ~, ~, ~, holez, ~, ~, ~, ~] = get_boardhole_coords();
-    x = 34.82; %Target Coordinates in inches
-    y = 11.605; %If y is 0, there are multiple solutions for z0
+    x = 34.79; %Target Coordinates in inches
+    y = 10.619; %If y is 0, there are multiple solutions for z0
     
     adjustment_to_b_axis = 29.75-25.745;
-    z = 17.828-adjustment_to_b_axis;
+    z = 16.472-adjustment_to_b_axis;
     
     theta_x = 0.70*180/pi; %degrees 
     theta_y = -90; %degrees

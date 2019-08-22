@@ -15,9 +15,8 @@ function[points, scenario] = FK(angles, z0)
     end
     points('E') = [arms_lengths('CE')*cos(angles('temp1'))+arms_lengths('BC'), arms_lengths('CE')*sin(angles('temp1'))*cos(angles('T')), arms_lengths('CE')*sin(angles('temp1'))*sin(angles('T'))+z0];
     
-    %Should all work
-    if angles('C') >= 0 %Works
-        if angles('D') >= 0 %Works
+    if angles('C') >= 0 
+        if angles('D') >= 0 
             if angles('E') >= 0
                 if abs(angles('E'))+cosine_law_angle(arms_lengths('CE'), arms_lengths('DE'), arms_lengths('CD')) < pi
                     temp3_angle =  pi-abs(angles('E'))-cosine_law_angle(arms_lengths('CE'), arms_lengths('DE'), arms_lengths('CD'));
@@ -33,13 +32,13 @@ function[points, scenario] = FK(angles, z0)
                 elseif abs(angles('E'))+cosine_law_angle(arms_lengths('CE'), arms_lengths('DE'), arms_lengths('CD')) > pi
                     temp3_angle = -abs(angles('E'))+cosine_law_angle(arms_lengths('CE'), arms_lengths('DE'), arms_lengths('CD')) + pi;
                     scenario = 2;
-                else %in between previous cases
+                else 
                     temp3_angle = pi-abs(angles('E'))+cosine_law_angle(arms_lengths('CE'), arms_lengths('DE'), arms_lengths('CD'));
                     scenario = 2;
                 end
             end
         else
-            if angles('E') >= 0 %Works
+            if angles('E') >= 0 
                 if angles('E') <= cosine_law_angle(arms_lengths('CE'), arms_lengths('DE'), arms_lengths('CD'))
                     temp3_angle = pi-cosine_law_angle(arms_lengths('CE'), arms_lengths('DE'), arms_lengths('CD'))+abs(angles('E'));
                     scenario = 2;
@@ -47,7 +46,7 @@ function[points, scenario] = FK(angles, z0)
                     temp3_angle = pi-abs(angles('E'))+cosine_law_angle(arms_lengths('CE'), arms_lengths('DE'), arms_lengths('CD'));
                     scenario = 1;
                 end
-            else %Works
+            else 
                 if abs(angles('E'))+cosine_law_angle(arms_lengths('CE'), arms_lengths('DE'), arms_lengths('CD')) <= pi
                     temp3_angle = pi-abs(angles('E'))-cosine_law_angle(arms_lengths('CE'), arms_lengths('DE'), arms_lengths('CD'));
                     scenario = 2;
@@ -74,7 +73,7 @@ function[points, scenario] = FK(angles, z0)
                 elseif abs(angles('E'))+cosine_law_angle(arms_lengths('CE'), arms_lengths('DE'), arms_lengths('CD')) > pi
                     temp3_angle = -abs(angles('E'))+cosine_law_angle(arms_lengths('CE'), arms_lengths('DE'), arms_lengths('CD')) + pi;
                     scenario = 2;
-                else %in between previous cases
+                else
                     temp3_angle = pi-abs(angles('E'))+cosine_law_angle(arms_lengths('CE'), arms_lengths('DE'), arms_lengths('CD'));
                     scenario = 2;
                 end

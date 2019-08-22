@@ -2,7 +2,7 @@ function[inter_coord] = gen_tree_angles(nodes, target)
     global node_it num_nodes ax;
     max_z = 10; %FIXME: Check
     splt = zeros(1, num_nodes);
-    prob = 0.2;
+    prob = 0.8;
     
     hold on;
     
@@ -16,7 +16,7 @@ function[inter_coord] = gen_tree_angles(nodes, target)
            temp_target = [rand*2*pi-pi, rand*2*pi-pi, rand*2*pi-pi, rand*2*pi-pi, rand*max_z+1];
        end
        
-       [closest_node, closest_it] = get_closest_angle_node(nodes, temp_target(1:5));
+       [closest_node, closest_it] = get_closest_angle_node(nodes, temp_target);
        next_node = extend_tree(closest_node(1:5), temp_target(1:5));
 
        if next_node == -100
@@ -29,7 +29,7 @@ function[inter_coord] = gen_tree_angles(nodes, target)
            drawnow;
            disp(node_it);
            
-           if (norm(nodes(node_it, 1:5)-target) <= 0.5 && ~isscalar(check_path_to_next_node(nodes(node_it, 1:5), target))) %FIXME: Change vicinity
+           if (norm(nodes(node_it, 1:5)-target(1:5)) <= 0.5 && ~isscalar(check_path_to_next_node(nodes(node_it, 1:5), target(1:5)))) %FIXME: Change vicinity
                disp("FOUND");
                delete(splt);
                inter_coord = backtrack_3D(nodes);

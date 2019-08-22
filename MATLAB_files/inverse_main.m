@@ -1,11 +1,10 @@
 %% GIVENS
 grid on;
 
-%set_arms_lengths(5); %arbitrary z0 since we will reset it later
+%set_arms_lengths(5); %5 is an arbitrary z0 since we will reset it later
 set_real_arms_lengths(5);
 global arms_lengths;
 
-%[cx, cy, cz, w, board_theta, holez, r, plane, ppoint, board] = get_boardhole_coords();
 %[x, y, z, theta_x, theta_y, z0] = get_inverse_inputs();
 [x, y, z, theta_x, theta_y, z0] = get_real_inverse_inputs();
 arms_lengths('AB') = z0;
@@ -14,7 +13,7 @@ arms_lengths('AB') = z0;
 %plot_real_board();
 
 get_ax_dim();
-sign = 1; 
+sign = 1; %Could be +- 1 since for every x, y, z, theta_x, theta_y there are two solutions
 
 %% CALCULATIONS
 points = containers.Map();
@@ -27,7 +26,7 @@ points('F') = [x, y, z];
 
 arms_lengths('CE') = norm(points('E')-points('C'));
 
-check = IK_conditions(points, 0);
+check = IK_conditions(points, 0); %Checks the length is reachable and the triangle inequality is satisfied by givens
 if check ~= 1
     print_points(points);
     if check == -1
@@ -46,7 +45,7 @@ end
 vectors = containers.Map();
 vectors('CE') = points('E') - points('C');
 vectors('CF') = points('F') - points('C');
-vectors('cross1') = [0, cos(pi/2+theta_x), sin(pi/2+theta_x)]; %cross(vectors('CE'), vectors('CF'));
+vectors('cross1') = [0, cos(pi/2+theta_x), sin(pi/2+theta_x)]; %cross(vectors('CE'), vectors('CF')); 
 vectors('cross2') = sign*cross(vectors('CE'), vectors('cross1'));
 
 height = 2*heron(arms_lengths('CD'), arms_lengths('DE'), arms_lengths('CE'))/arms_lengths('CE');
@@ -98,9 +97,9 @@ angles('T') = theta_x;
 figure(1);
 plot_points(points, angles, 'IK');
 
-txt = [angles('C'), angles('D'), angles('E'), angles('T'), z0]; %FOR FORWARD_MAIN USE
+txt = [angles('C'), angles('D'), angles('E'), angles('T'), z0]; %FOR FORWARD_MAIN USE IN RADIANS
 disp(txt);
-txt = [angles('C')*180/pi, angles('D')*180/pi, angles('E')*180/pi, angles('T')*180/pi-90, z0]; %FOR ROBOT USE
+txt = [angles('C')*180/pi, angles('D')*180/pi, angles('E')*180/pi, angles('T')*180/pi-90, z0]; %FOR ROBOT USE IN DEGREES
 disp(txt);
 print_points(points);
 

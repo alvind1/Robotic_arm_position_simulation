@@ -1,7 +1,10 @@
 function[] = animate_func(temp_angles, points, temp_z0, j, p, n)
     %%
     global ax;
-
+    
+    grid on;
+    hold on;
+    
     k = keys(points);
     val = values(points);
     
@@ -28,10 +31,9 @@ function[] = animate_func(temp_angles, points, temp_z0, j, p, n)
         end 
 
         if (i == 3)
-            %txt = ["Plane rotation", num2str(temp_angles('T'))];
+            txt = ["Plane rotation", num2str(temp_angles('T'))];
             %tplt(3, i) = text(val{i}(1)-1, val{i}(2)-1, val{i}(3)-1, txt, 'Color', 'black');
         end 
-
 
     end
 
@@ -47,6 +49,6 @@ function[] = animate_func(temp_angles, points, temp_z0, j, p, n)
      if j ~= n || (p == 0 && j == n)
          delete(plt);
          delete(splt);
-%          delete(tplt);
+         %delete(tplt);
      end
 end
