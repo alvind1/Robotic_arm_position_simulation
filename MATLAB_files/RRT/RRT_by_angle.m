@@ -9,9 +9,9 @@ nodes = zeros(num_nodes, 9); %3 joint angles, 1 plane rotation angle, 1 z0, 1 po
 start_angles = containers.Map();
 start_angles('C') = pi/2;
 start_angles('D') = 0;
-start_angles('E') = 0;
+start_angles('E') = -pi/2;
 start_angles('T') = pi/2;
-start_z0 = 12;
+start_z0 = 8;
 
 arms_lengths('AB') = [0, 0, start_z0];
 [start_points, ~] = FK(start_angles, start_z0);
@@ -30,10 +30,10 @@ node_it = node_it+1;
 
 end_angles = containers.Map(); %TODO: Replace with angles got from IK
 end_angles('C') = pi/2;
-end_angles('D') = 0;
-end_angles('E') = -pi/2;
+end_angles('D') = -pi/2;
+end_angles('E') = 0;
 end_angles('T') = pi/2;
-end_z0 = 8;
+end_z0 = 12;
 arms_lengths('AB') = [0, 0, end_z0];
 [end_points, ~] = FK(end_angles, end_z0);
 %plot_points(end_points, end_angles, "FINISH");

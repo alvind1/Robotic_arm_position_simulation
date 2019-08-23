@@ -17,14 +17,14 @@ function[inter_coord] = backtrack_3D(nodes)
     
     inter_coord = flipud(vertices(1:c, :));
     
-    for i = 1:c
-        temp_angles = containers.Map();
-        temp_angles('C') = inter_coord(i, 1);
-        temp_angles('D') = inter_coord(i, 2);
-        temp_angles('E') = inter_coord(i, 3);
-        temp_angles('T') = inter_coord(i, 4);
-        temp_z0 = inter_coord(i, 5);
-        [points, ~] = FK(temp_angles, temp_z0);
-        animate_func(temp_angles, points, temp_z0, i, 0, c);
-    end
+%     for i = 1:c
+%         temp_angles = containers.Map();
+%         temp_angles('C') = inter_coord(i, 1);
+%         temp_angles('D') = inter_coord(i, 2);
+%         temp_angles('E') = inter_coord(i, 3);
+%         temp_angles('T') = inter_coord(i, 4);
+%         temp_z0 = inter_coord(i, 5);
+%         [points, ~] = FK(temp_angles, temp_z0);
+%         animate_func(temp_angles, points, temp_z0, i, 0, c);
+%     end
 end

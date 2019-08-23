@@ -16,6 +16,6 @@ function[] = animate_rrt(cur_point, next_point, p)
         if points <= -100
             error("ERROR");
         end
-        animate_func(temp_angles, points, temp_z0, 1, 1, 1);
+        animate_func(temp_angles, points, temp_z0, i, p, n);
     end
 end

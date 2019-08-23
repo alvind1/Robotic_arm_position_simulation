@@ -39,7 +39,9 @@ function[inter_coord] = gen_tree_angles(nodes, target)
            node_it = node_it+1;
        end
     end
+    
     if inter_coord == -100
-        error("DID NOT FIND");
+        delete(splt);
+        disp("DID NOT FIND");
     end
 end

@@ -1,10 +1,10 @@
 %Givens
 angles = containers.Map();
 angles('C') = pi/2; %Range: 0 <= theta <= pi IN RADIANS
-angles('D') = 0; %Range: 0 <= theta <= pi
-angles('E') = -pi/2; %Range: 0 <= theta <= pi
+angles('D') = -pi/2; %Range: 0 <= theta <= pi
+angles('E') = 0; %Range: 0 <= theta <= pi
 angles('T') = pi/2;  %Range: 0 <= theta <= pi/2
-z0 = 8;
+z0 = 12;
 
 scenario = 0; %FOR CASE USE
 
@@ -132,7 +132,7 @@ points('F') = [arms_lengths('CF')*cos(angles('temp2'))+arms_lengths('BC'), arms_
 e = points('E');
 f = points('F');
 theta_y = acos(abs(f(1)-e(1))/arms_lengths('EF'));
-sign = angle_direction(points, z0, 2); 
+sign = angle_direction(points, angles('T'), z0, 2); 
 if sign == 2
     theta_y = pi-theta_y;
 elseif sign == 3

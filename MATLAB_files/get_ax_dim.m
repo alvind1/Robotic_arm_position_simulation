@@ -1,10 +1,10 @@
 function[] = get_ax_dim()
     global ax arms_lengths;
-    xmin = 0;
-    xmax = arms_lengths('BC')+arms_lengths('CD')+arms_lengths('DE')+arms_lengths('EF');
-    ymin = -(arms_lengths('BC')+arms_lengths('CD')+arms_lengths('DE')+arms_lengths('EF'));
-    ymax = arms_lengths('BC')+arms_lengths('CD')+arms_lengths('DE')+arms_lengths('EF');
+    xmin = -20;
+    xmax = 20;
+    ymin = -20;
+    ymax = 20;
     zmin = 0;
-    zmax = 50;
+    zmax = 20;
     ax = ([xmin, xmax, ymin, ymax, zmin, zmax]);
 end

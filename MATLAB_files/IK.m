@@ -42,7 +42,7 @@ function[angles, points] = IK(x, y, z, theta_x, theta_y, z0, sign)
     points('D') = points('C')+vectors('CD');
 
     angles = containers.Map();
-    signs = angle_direction(points, z0, 1);
+    signs = angle_direction(points, theta_x, z0, 1);
 
     angles('C') = pi-cosine_law_angle(norm(points('C')-points('B')), arms_lengths('CD'), norm(points('D')-points('B')));
     angles('C') = angles('C')*signs('C');

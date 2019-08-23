@@ -1,24 +1,25 @@
-function[sign] = angle_direction(points, z0, num)
+function[sign] = angle_direction(points, theta_x, z0, num)
     val = values(points);
     k = keys(points);
     sign = containers.Map();
     
-    rotated_points = containers.Map();
-    rotated_points('C') = points('C');
+    rotated_points = containers.Map(points.keys, points.values);
     
-    c = points('C');
-    x0 = c(1);
-    
-    for i=4:length(points)
-        coord = val{i};
-        r = norm(val{i}-points('C'));
-        z = sqrt(r^2-(coord(1)-x0)^2);
-        if coord(2) < 0
-            z = -z+z0;
-        else
-            z = z+z0;
+    if theta_x ~= pi/2 && theta_x ~= -pi/2
+        c = points('C');
+        x0 = c(1);
+
+        for i=4:length(points)
+            coord = val{i};
+            r = norm(val{i}-points('C'));
+            z = sqrt(r^2-(coord(1)-x0)^2);
+            if coord(2) < 0
+                z = -z+z0;
+            else
+                z = z+z0;
+            end
+            rotated_points(k{i}) = [coord(1), 0, z];
         end
-        rotated_points(k{i}) = [coord(1), 0, z];
     end
      
     if num == 1

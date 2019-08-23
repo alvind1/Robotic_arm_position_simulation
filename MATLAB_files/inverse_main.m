@@ -1,15 +1,15 @@
 %% GIVENS
 grid on;
 
-%set_arms_lengths(5); %5 is an arbitrary z0 since we will reset it later
-set_real_arms_lengths(5);
+set_arms_lengths(5); %5 is an arbitrary z0 since we will reset it later
+%set_real_arms_lengths(5);
 global arms_lengths;
 
-%[x, y, z, theta_x, theta_y, z0] = get_inverse_inputs();
-[x, y, z, theta_x, theta_y, z0] = get_real_inverse_inputs();
+[x, y, z, theta_x, theta_y, z0] = get_inverse_inputs();
+%[x, y, z, theta_x, theta_y, z0] = get_real_inverse_inputs();
 arms_lengths('AB') = z0;
 
-%plot_board();
+plot_board();
 %plot_real_board();
 
 get_ax_dim();
@@ -83,7 +83,7 @@ if check ~= 1
 end
 
 angles = containers.Map();
-signs = angle_direction(points, z0, 1);
+signs = angle_direction(points, theta_x, z0, 1);
 
 angles('C') = pi-cosine_law_angle(norm(points('C')-points('B')), arms_lengths('CD'), norm(points('D')-points('B')));
 angles('C') = angles('C')*signs('C');
