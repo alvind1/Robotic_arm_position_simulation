@@ -1,4 +1,4 @@
-function[cx, cy, cz, w, board_theta, holez, r, plane, ppoint, board] = get_boardhole_coords()
+function[cx, cy, cz, w, board_theta, holez, r, plane, ppoint, board] = get_board_coords()
     %PRACTICE COORDINATES
     cx = 10; %x coord of board centre
     cy = 0; %y coord of board centre

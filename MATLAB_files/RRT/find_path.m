@@ -1,7 +1,13 @@
 set_RRT_globals();
-set_arms_lengths(5); %Arbitrary z0
+global real_scenario node_it num_nodes;
+real_scenario = 1;
+
+if real_scenario == 0
+    set_arms_lengths(5); %Arbitrary z0
+else
+    set_real_arms_lengths(5);
+end
 get_ax_dim();
-global node_it num_nodes;
 
 way_angles = {};
 way_z0 = {};

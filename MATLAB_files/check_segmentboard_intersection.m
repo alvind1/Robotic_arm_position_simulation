@@ -1,5 +1,13 @@
 function[check] = check_segmentboard_intersection(lpoint, v, it)
-    [~, ~, ~, ~, ~, ~, r, plane, ppoint, board] = get_boardhole_coords();
+    global real_scenario;
+    
+    if real_scenario == 0
+        [~, ~, ~, ~, ~, ~, r, plane, ppoint, board] = get_board_coords();
+        min_axis = r;
+        maj_axis = r;
+    else
+        [~, ~, ~, ~, ~, ~, min_axis, maj_axis, tri_h, plane, ppoint, board] = get_real_board_coords();
+    end
     
     safety_net = 0.1;
     
@@ -16,13 +24,21 @@ function[check] = check_segmentboard_intersection(lpoint, v, it)
     else
         p = lpoint+v*t;
         
+        if p(3) >= board(3) -safety_net && p(3) <= board(3)+tri_h+safety_net && p(2) <= board(2)+safety_net && p(2) >= -board(2)-safety_net
+            y_dist = abs(p(2)-board(2));
+            if p(3)-board(3) <= -y_dist*3.5/19.102 + 3.5
+                check = -1;
+                return;
+            end
+        end
+        
         if p(3) > board(3)+safety_net || p(3) < 0-safety_net
             check = 1;
         elseif p(2) > board(2)+safety_net || p(2) < -board(2)-safety_net
             check = 1;
         elseif p(1) > ppoint(1)+board(1)+safety_net || p(1) < ppoint(1)-board(1)-safety_net
             check = 1;
-        elseif norm(p-ppoint) <= r
+        elseif (p(2)-ppoint(2))^2/(maj_axis/2)^2 + (p(3)-ppoint(3))^2/(min_axis/2)^2 <= 1
             check = 1;
         else
             %disp(ppoint);

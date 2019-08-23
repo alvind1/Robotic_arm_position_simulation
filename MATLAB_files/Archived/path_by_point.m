@@ -8,7 +8,7 @@ target_points = {};
 target_theta_x = {};
 target_theta_y = {};
 
-[cx, cy, cz, w, board_theta, holez, r, plane, ppoint, board] = get_boardhole_coords();
+[cx, cy, cz, w, board_theta, holez, r, plane, ppoint, board] = get_board_coords();
 plot_board();
 [x, y, z, theta_x, theta_y, z0] = get_inverse_inputs();
 set_arms_lengths(z0);
@@ -39,11 +39,11 @@ arms_lengths('AB') = start_z0;
 
 %% Algo
 
-start_point = [10, 11, 11];
+start_point = [10, 3, 11];
 start_theta_x = 0;
 start_theta_y = -0.4; 
 
-end_point = [cx-2, cy, holez];
+end_point = [10, -3, 11];
 end_theta_x = 0;
 end_theta_y = 0.4;
 follow_line(start_point, start_theta_x, start_theta_y, end_point, end_theta_x, end_theta_y, 0, 10); %Slow

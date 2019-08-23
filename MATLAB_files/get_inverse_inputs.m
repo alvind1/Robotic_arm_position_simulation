@@ -1,5 +1,5 @@
 function[x, y, z, theta_x ,theta_y, z0] = get_inverse_inputs()
-    %[cx, cy, ~, ~, ~, holez, ~, ~, ~, ~] = get_boardhole_coords();
+    %[cx, cy, ~, ~, ~, holez, ~, ~, ~, ~] = get_board_coords();
     x = 10+0.4; %Target Coordinates
     y = 0;
     z = 11.5;

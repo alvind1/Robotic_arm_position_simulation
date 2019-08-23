@@ -1,20 +1,29 @@
 %Givens
+global real_scenario;
+real_scenario = 1;
+
 angles = containers.Map();
 angles('C') = pi/2; %Range: 0 <= theta <= pi IN RADIANS
-angles('D') = -pi/2; %Range: 0 <= theta <= pi
-angles('E') = 0; %Range: 0 <= theta <= pi
+angles('D') = 0; %Range: 0 <= theta <= pi
+angles('E') = -pi/2; %Range: 0 <= theta <= pi
 angles('T') = pi/2;  %Range: 0 <= theta <= pi/2
-z0 = 12;
+z0 = 16;
 
 scenario = 0; %FOR CASE USE
 
 figure(2);
 
-plot_board();
-%plot_real_board();
+if real_scenario == 0
+    plot_board();
+else
+    plot_real_board(); %SWITCH TO REAL BOARD COORDS IN CHECK BOARD INTS
+end
 
-set_arms_lengths(z0);
-%set_real_arms_lengths(z0);
+if real_scenario == 0
+    set_arms_lengths(z0);
+else
+    set_real_arms_lengths(z0);
+end
 
 get_ax_dim();
 global arms_lengths;
@@ -158,6 +167,8 @@ if check <= -100
         disp("ANGLE ERROR");
     elseif check == -300
         disp("HIT BOARD");
+    elseif check == -400
+        disp("NEGATIVE Z OR TOO FAR IN X");
     end
 end
 

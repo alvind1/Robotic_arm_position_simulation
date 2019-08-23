@@ -6,6 +6,8 @@ function[check] = checkFK(points, angles)
     v_lengths = values(arms_lengths);
     v_angles = values(angles);
     
+    [cx, ~, ~, ~, ~, ~, ~, ~, ~, ~, ~, ~] = get_real_board_coords();
+    
     for i = 1:length(points)
         if (i~=1)
             if(abs(norm(v_points{i}-v_points{i-1}) - v_lengths{i-1}) > 0.01) 
@@ -40,7 +42,7 @@ function[check] = checkFK(points, angles)
         end
         
         if i ~= 1
-            if v_points{i}(3) < 0.01
+            if v_points{i}(3) < 0.01 || v_points{i}(1) > cx+3.5
                 check = -400;
                 return;
             end

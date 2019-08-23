@@ -1,5 +1,5 @@
 function[] = plot_board()
-    [x0, y0, z0, w, board_theta, holez, r, ~, ~, ~] = get_boardhole_coords(); 
+    [x0, y0, z0, w, board_theta, holez, r, ~, ~, ~] = get_board_coords(); 
     
     %BOARD
     rx(1:4) = [x0-sin(board_theta)*w, x0+sin(board_theta)*w, x0+sin(board_theta)*w, x0-sin(board_theta)*w];

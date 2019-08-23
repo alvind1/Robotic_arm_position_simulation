@@ -1,5 +1,5 @@
-function[] = RRT_by_angle_func(start_angles, start_z0, end_angles, end_z0, p)
-    global num_nodes node_it arms_lengths;
+function[inter_coord] = RRT_by_angle_func(start_angles, start_z0, end_angles, end_z0, p)
+    global num_nodes node_it arms_lengths real_scenario;
 
     nodes = zeros(num_nodes, 9); %3 joint angles, 1 plane rotation angle, 1 z0, 1 point F (for plotting), 1 node index
 
@@ -15,9 +15,19 @@ function[] = RRT_by_angle_func(start_angles, start_z0, end_angles, end_z0, p)
     arms_lengths('AB') = [0, 0, end_z0];
     [end_points, ~] = FK(end_angles, end_z0);
     %plot_points(end_points, end_angles, "FINISH");
-
-    plot_board();
+    
+    if real_scenario == 0
+        plot_board();
+    else
+        plot_real_board();
+    end
+    
     inter_coord = gen_tree_angles(nodes, [end_angles('C'), end_angles('D'), end_angles('E'), end_angles('T'), end_z0, end_points('F')]);
+    
+    if inter_coord == -100
+        return;
+    end
+    
     inter_coord(end+1, :) = [end_angles('C'), end_angles('D'), end_angles('E'), end_angles('T'), end_z0, end_points('F')];
 
     [m, n] = size(inter_coord);
@@ -29,4 +39,6 @@ function[] = RRT_by_angle_func(start_angles, start_z0, end_angles, end_z0, p)
         end
         animate_rrt(inter_coord(i, :), inter_coord(i+1, :), q);
     end
+    
+    inter_coord = 1;
 end

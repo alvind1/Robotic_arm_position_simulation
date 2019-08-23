@@ -1,6 +1,6 @@
 function[cx, cy, cz, w, board_theta, holez, min_axis, maj_axis, triangle_h, plane, ppoint, board] = get_real_boardhole_coords()
     %REAL COORDINATES
-    cx = 35; %x coord of board centre
+    cx = 34; %x coord of board centre
     cy = 0; %y coord of board centre
     cz = 37.25;% z coord
     w = 19.102/2; %width

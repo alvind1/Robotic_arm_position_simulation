@@ -1,5 +1,12 @@
 set_RRT_globals();
-set_arms_lengths(5); %Arbitrary z0
+global real_scenario;
+real_scenario = 1;
+if real_scenario == 0
+    set_arms_lengths(5); %Arbitrary z0
+else
+    set_real_arms_lengths(5);
+end
+
 get_ax_dim();
 global num_nodes node_it arms_lengths;
 
@@ -9,9 +16,9 @@ nodes = zeros(num_nodes, 9); %3 joint angles, 1 plane rotation angle, 1 z0, 1 po
 start_angles = containers.Map();
 start_angles('C') = pi/2;
 start_angles('D') = 0;
-start_angles('E') = -pi/2;
+start_angles('E') = 0;
 start_angles('T') = pi/2;
-start_z0 = 8;
+start_z0 = 12;
 
 arms_lengths('AB') = [0, 0, start_z0];
 [start_points, ~] = FK(start_angles, start_z0);
@@ -27,18 +34,21 @@ animate_func(start_angles, start_points, start_z0, 1, 1, 1);
 nodes(node_it, :) = [start_angles('C'), start_angles('D'), start_angles('E'), start_angles('T'), start_z0, start_points('F'), 1];
 node_it = node_it+1;
 
-
 end_angles = containers.Map(); %TODO: Replace with angles got from IK
 end_angles('C') = pi/2;
-end_angles('D') = -pi/2;
-end_angles('E') = 0;
+end_angles('D') = 0;
+end_angles('E') = -pi/2;
 end_angles('T') = pi/2;
 end_z0 = 12;
 arms_lengths('AB') = [0, 0, end_z0];
 [end_points, ~] = FK(end_angles, end_z0);
 %plot_points(end_points, end_angles, "FINISH");
 
-plot_board();
+if real_scenario == 0
+    plot_board();
+else
+    plot_real_board();
+end
 inter_coord = gen_tree_angles(nodes, [end_angles('C'), end_angles('D'), end_angles('E'), end_angles('T'), end_z0, end_points('F')]);
 inter_coord(end+1, :) = [end_angles('C'), end_angles('D'), end_angles('E'), end_angles('T'), end_z0, end_points('F')];
 
@@ -53,7 +63,7 @@ for i= 1:m-1
 end
 
 %% OPTIMIZING Solution Possibilities
-% Implement KD instead of a linear search for closest node *HIGH PRIORITY
+% Implement KD tree instead of a linear search for closest node *HIGH PRIORITY
 % Create another array of possible closest node for target instead of
 % repeatedly checking a node that has been already checked *DIDN'T WORK
 % Find optimal probability and step size
@@ -62,7 +72,7 @@ end
 % Create list of known way points to help process
 % Add pointF to target pointF in checking closest distance
 % Make bidirectional RRT
-%TODO: Put safety net around obstacle 
+%TODO: Put safety net around obstacle and hole
 %TODO: weight the angle changes when it comes to distance cost
 %TODO: Find 5d sphere in which there can be a solution found in < 1000 or
 %2000 nodes

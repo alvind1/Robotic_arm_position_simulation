@@ -1,16 +1,28 @@
 %% GIVENS
 grid on;
+global real_scenario;
+real_scenario = 0;
 
-set_arms_lengths(5); %5 is an arbitrary z0 since we will reset it later
-%set_real_arms_lengths(5);
+if real_scenario == 0
+    set_arms_lengths(5); %5 is an arbitrary z0 since we will reset it later
+else
+    set_real_arms_lengths(5);
+end
+
 global arms_lengths;
 
-[x, y, z, theta_x, theta_y, z0] = get_inverse_inputs();
-%[x, y, z, theta_x, theta_y, z0] = get_real_inverse_inputs();
+if real_scenario == 0
+    [x, y, z, theta_x, theta_y, z0] = get_inverse_inputs();
+else
+    [x, y, z, theta_x, theta_y, z0] = get_real_inverse_inputs();
+end
 arms_lengths('AB') = z0;
 
-plot_board();
-%plot_real_board();
+if real_scenario == 0
+    plot_board();
+else
+    plot_real_board(); %SWITCH TO REAL BOARD COORDINATES IN CHECK SEGMENT INTS
+end
 
 get_ax_dim();
 sign = -1; %Could be +- 1 since for every x, y, z, theta_x, theta_y there are two solutions
