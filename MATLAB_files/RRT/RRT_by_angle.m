@@ -7,11 +7,11 @@ nodes = zeros(num_nodes, 9); %3 joint angles, 1 plane rotation angle, 1 z0, 1 po
 
 %[start_angles, start_z0] = get_starting_angles();
 start_angles = containers.Map();
-start_angles('C') = 1.0589;
-start_angles('D') = -2.3596;
-start_angles('E') = 1.1007;
-start_angles('T') = 1.5;
-start_z0 = 10;
+start_angles('C') = pi/2;
+start_angles('D') = 0;
+start_angles('E') = 0;
+start_angles('T') = pi/2;
+start_z0 = 12;
 
 arms_lengths('AB') = [0, 0, start_z0];
 [start_points, ~] = FK(start_angles, start_z0);
@@ -29,11 +29,11 @@ node_it = node_it+1;
 
 
 end_angles = containers.Map(); %TODO: Replace with angles got from IK
-end_angles('C') = 0.4;
-end_angles('D') = -1.5309;
-end_angles('E') = 0.5846;
-end_angles('T') = 1.5;
-end_z0 = 10;
+end_angles('C') = pi/2;
+end_angles('D') = 0;
+end_angles('E') = -pi/2;
+end_angles('T') = pi/2;
+end_z0 = 8;
 arms_lengths('AB') = [0, 0, end_z0];
 [end_points, ~] = FK(end_angles, end_z0);
 %plot_points(end_points, end_angles, "FINISH");
@@ -69,6 +69,7 @@ end
 %TODO: Bug -> path hits obstacle (hard to detect since it is only at a
 %point and stepsize may be too big to check), need to add safety net in
 %front and behind obstacle as well
+%FIXME: Check why the random sampling is +y oriented
 
 %1. Implement KD tree
 %2. Bidirectional RRT or RRT-connect

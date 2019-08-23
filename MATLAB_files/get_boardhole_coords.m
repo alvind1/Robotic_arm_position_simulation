@@ -1,11 +1,11 @@
 function[cx, cy, cz, w, board_theta, holez, r, plane, ppoint, board] = get_boardhole_coords()
     %PRACTICE COORDINATES
-    cx = 12; %x coord of board centre
+    cx = 10; %x coord of board centre
     cy = 0; %y coord of board centre
-    cz = 15;% z coord
+    cz = 20;% z coord
     w = 3; %width
     board_theta = 0;
-    holez = 10; %height of centre of hole
+    holez = 16; %height of centre of hole
     r = 2;  
     
     plane = [1*cos(board_theta), 1*sin(board_theta), 0]; %Normal vector of plane

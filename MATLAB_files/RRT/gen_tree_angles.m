@@ -2,7 +2,7 @@ function[inter_coord] = gen_tree_angles(nodes, target)
     global node_it num_nodes ax;
     max_z = 10; %FIXME: Check
     splt = zeros(1, num_nodes);
-    prob = 0.8;
+    prob = 0.1;
     
     hold on;
     

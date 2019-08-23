@@ -1,10 +1,10 @@
 %Givens
 angles = containers.Map();
-angles('C') = 0.4; %Range: 0 <= theta <= pi IN RADIANS
-angles('D') = -1.5309; %Range: 0 <= theta <= pi
-angles('E') = 0.5846; %Range: 0 <= theta <= pi
-angles('T') = 1.5;  %Range: 0 <= theta <= pi/2
-z0 = 10;
+angles('C') = pi/2; %Range: 0 <= theta <= pi IN RADIANS
+angles('D') = 0; %Range: 0 <= theta <= pi
+angles('E') = -pi/2; %Range: 0 <= theta <= pi
+angles('T') = pi/2;  %Range: 0 <= theta <= pi/2
+z0 = 8;
 
 scenario = 0; %FOR CASE USE
 

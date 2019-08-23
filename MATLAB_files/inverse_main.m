@@ -13,7 +13,7 @@ arms_lengths('AB') = z0;
 %plot_real_board();
 
 get_ax_dim();
-sign = 1; %Could be +- 1 since for every x, y, z, theta_x, theta_y there are two solutions
+sign = -1; %Could be +- 1 since for every x, y, z, theta_x, theta_y there are two solutions
 
 %% CALCULATIONS
 points = containers.Map();
